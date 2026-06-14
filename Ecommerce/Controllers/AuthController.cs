@@ -1,4 +1,7 @@
 ﻿using Ecommerce.Abstractions;
+using Ecommerce.Contracts.Common;
+using Ecommerce.Contracts.Products;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Ecommerce.Controllers;
 
@@ -10,28 +13,30 @@ public class AuthController(IAuthService authService) : ControllerBase
     private readonly IAuthService _authService = authService;
 
     [HttpPost("register")]
-    public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> RegisterAsync([FromForm] RegisterRequest request, CancellationToken cancellationToken)
     {
         var authResult = await _authService.RegisterAsync(request, cancellationToken);
-
-        return authResult.IsSuccess
-            ? Ok(authResult.Value)
-            : authResult.ToProblem(StatusCodes.Status400BadRequest);
+        if (!authResult.IsSuccess)
+        {
+            var errorResponse = new ApiResponse<object>(StatusCodes.Status400BadRequest,"");
+            return NotFound(errorResponse);
+        }
+        var response = new ApiResponse<object>(StatusCodes.Status200OK, "Register Sucessed.", authResult.Value);
+        return Ok(response);
     }
 
-    [HttpPost("")]
-    public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request, CancellationToken cancellationToken)
+    [HttpPost("Login")]
+    public async Task<IActionResult> LoginAsync([FromForm] LoginRequest request, CancellationToken cancellationToken)
     {
         var authResult = await _authService.GetTokenAsync(request.Email, request.Password, cancellationToken);
 
-        return authResult.IsSuccess
-            ? Ok(authResult.Value)
-            : authResult.ToProblem(StatusCodes.Status400BadRequest);
-
-        //return authResult.Match(
-        //    Ok,
-        //    error => Problem(statusCode: StatusCodes.Status400BadRequest, title: error.Code, detail: error.Description)
-        //);
+        if (!authResult.IsSuccess)
+        {
+            var errorResponse = new ApiResponse<object>(StatusCodes.Status400BadRequest, "");
+            return NotFound(errorResponse);
+        }
+        var response = new ApiResponse<object>(StatusCodes.Status200OK, "Login Sucessed.", authResult.Value);
+        return Ok(response);
     }
 
     [HttpPost("refresh")]

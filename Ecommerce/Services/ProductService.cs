@@ -18,9 +18,9 @@ public class ProductService(ApplicationDbContext context) : IProductService
     public async Task<Result<ProductResponse>> GetAsync(long id, CancellationToken cancellationToken = default)
     {
         var product = await _context.Products.FindAsync(new object[] { id }, cancellationToken);
-        return product is not null
-            ? Result.Success(product.Adapt<ProductResponse>())
-            : Result.Failure<ProductResponse>(ProductErrors.ProductNotFound);
+        return product is not null ?
+            Result.Success(product.Adapt<ProductResponse>()) :
+            Result.Failure<ProductResponse>(ProductErrors.ProductNotFound);
     }
 
     public async Task<Result<ProductResponse>> AddAsync(ProductRequest request, CancellationToken cancellationToken = default)
@@ -39,20 +39,20 @@ public class ProductService(ApplicationDbContext context) : IProductService
         return Result.Success(product.Adapt<ProductResponse>());
     }
 
-    public async Task<Result> UpdateAsync(long id, ProductRequest request, CancellationToken cancellationToken = default)
+    public async Task<Result<ProductResponse>> UpdateAsync(long id, ProductRequest request, CancellationToken cancellationToken = default)
     {
         var isSkuExists = await _context.Products.AnyAsync(x => x.Sku == request.Sku && x.Id != id, cancellationToken);
         if (isSkuExists)
-            return Result.Failure(ProductErrors.DuplicatedProductSku);
+            return Result.Failure<ProductResponse>(ProductErrors.DuplicatedProductSku);
 
         var product = await _context.Products.FindAsync(new object[] { id }, cancellationToken);
         if (product is null)
-            return Result.Failure(ProductErrors.ProductNotFound);
+            return Result.Failure<ProductResponse>(ProductErrors.ProductNotFound);
 
         request.Adapt(product);
 
         await _context.SaveChangesAsync(cancellationToken);
-        return Result.Success();
+        return Result.Success(product.Adapt<ProductResponse>());
     }
 
     public async Task<Result> DeleteAsync(long id, CancellationToken cancellationToken = default)

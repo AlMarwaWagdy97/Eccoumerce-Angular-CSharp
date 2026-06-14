@@ -26,7 +26,7 @@
 
         private async Task<bool> CategoryExists(long? parentId, CancellationToken cancellationToken)
         {
-            return await _context.Categories.AnyAsync(x => x.Id == parentId, cancellationToken);
+            return await _context.Categories.AnyAsync(x => x.Id == parentId && x.ParentId == null, cancellationToken);
         }
     }
 }

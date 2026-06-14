@@ -12,9 +12,9 @@ public class CategoryService(ApplicationDbContext context) : ICategoryService
     public async Task<Result<CategoryResponse>> GetAsync(long id, CancellationToken cancellationToken = default)
     {
         var category = await _context.Categories.FindAsync(new object[] { id }, cancellationToken);
-        return category is not null
-            ? Result.Success(category.Adapt<CategoryResponse>())
-            : Result.Failure<CategoryResponse>(CategoryErrors.CategoryNotFound);
+        return category is not null?
+            Result.Success(category.Adapt<CategoryResponse>()):
+            Result.Failure<CategoryResponse>(CategoryErrors.CategoryNotFound);
     }
 
     public async Task<Result<CategoryResponse>> AddAsync(CategoryRequest request, CancellationToken cancellationToken = default)
@@ -34,20 +34,20 @@ public class CategoryService(ApplicationDbContext context) : ICategoryService
         return Result.Success(category.Adapt<CategoryResponse>());
     }
 
-    public async Task<Result> UpdateAsync(long id, CategoryRequest request, CancellationToken cancellationToken = default)
+    public async Task<Result<CategoryResponse>> UpdateAsync(long id, CategoryRequest request, CancellationToken cancellationToken = default)
     {
         var isSlugExists = await _context.Categories.AnyAsync(x => x.Slug == request.Slug && x.Id != id, cancellationToken);
         if (isSlugExists)
-            return Result.Failure(CategoryErrors.DuplicatedCategorySlug);
+            return Result.Failure<CategoryResponse>(CategoryErrors.DuplicatedCategorySlug);
 
         var category = await _context.Categories.FindAsync(new object[] { id }, cancellationToken);
         if (category is null)
-            return Result.Failure(CategoryErrors.CategoryNotFound);
+            return Result.Failure<CategoryResponse>(CategoryErrors.CategoryNotFound);
 
-        request.Adapt(category); // تحديث الحقول مباشرة باستخدام Mapster
+        request.Adapt(category); 
 
         await _context.SaveChangesAsync(cancellationToken);
-        return Result.Success();
+        return Result.Success(category.Adapt<CategoryResponse>());
     }
 
     public async Task<Result> DeleteAsync(long id, CancellationToken cancellationToken = default)
@@ -55,7 +55,7 @@ public class CategoryService(ApplicationDbContext context) : ICategoryService
         var category = await _context.Categories.FindAsync(new object[] { id }, cancellationToken);
         if (category is null)
             return Result.Failure(CategoryErrors.CategoryNotFound);
-
+        
         _context.Remove(category);
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success();

@@ -8,6 +8,8 @@
         string? Image,
         int? Sort,
         string? MetaDescription,
-        string? MetaKey
+        string? MetaKey,
+        bool? Feature = false,
+        bool? Status = true
     );
 }
