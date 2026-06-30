@@ -1,0 +1,90 @@
+<div class="d-flex flex-column min-vh-100 bg-light">
+  
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm fixed-top">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-uppercase tracking-wide" href="#">
+        <i class="bi bi-speedometer2 text-primary"></i> ShopDemo
+      </a>
+      <span class="navbar-text text-muted d-none d-sm-inline fs-7">
+        One-Stop Shop for Quality Products
+      </span>
+      
+      <div class="ms-auto d-flex align-items-center gap-3">
+        <div class="dropdown">
+          <button class="btn btn-outline-light btn-sm dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+            <i class="bi bi-person-circle"></i> AlMarwa
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow">
+            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i> Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="d-flex flex-grow-1" style="margin-top: 56px;">
+    
+    <aside class="bg-white border-end d-none d-md-flex flex-column p-3 position-fixed h-100 shadow-sm" style="width: 240px; z-index: 1000;">
+      <ul class="nav nav-pills flex-column gap-1 w-100">
+        <li class="nav-item">
+          <a class="nav-link active d-flex align-items-center gap-3 py-2-5" href="#">
+            <i class="bi bi-grid-1x2-fill"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-secondary d-flex align-items-center gap-3 py-2-5" href="#">
+            <i class="bi bi-tags-fill"></i> Categories
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-secondary d-flex align-items-center gap-3 py-2-5" href="#">
+            <i class="bi bi-folder-fill"></i> Projects Management
+          </a>
+        </li>
+      </ul>
+      
+      <div class="mt-auto border-top pt-3 text-center text-muted fs-7">
+        <span class="badge bg-success-subtle text-success w-100 py-2">System Version 1.0</span>
+      </div>
+    </aside>
+
+    <main class="flex-grow-1 d-flex flex-column ms-0 ms-md-5" style="padding-left: 0; padding-left: 240px; min-width: 0;">
+      
+      <div class="container-fluid p-4 p-lg-5 flex-grow-1">
+        
+        <div class="card border-0 bg-gradient bg-primary text-white p-4 shadow-sm rounded-4 mb-4">
+          <div class="card-body">
+            <h2 class="fw-bold mb-1">Welcome Back, Admin!</h2>
+            <p class="mb-0 opacity-75">Here is the real-time overview of your current ShopDemo categories and development projects metrics.</p>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="border border-2 border-dashed border-secondary-subtle rounded-4 p-5 text-center bg-white">
+              <h5 class="text-secondary mb-0">Main Page Routing Context Display Area</h5>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <footer class="bg-white border-top py-3 text-center text-secondary fs-7 mt-auto">
+        <div class="container-fluid px-4 d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+          <div>
+            &copy; 2026 <span class="fw-semibold text-dark">ShopDemo Suite</span>. All rights reserved.
+          </div>
+          <div class="d-flex gap-3">
+            <a href="#" class="text-decoration-none text-muted hover-dark">Privacy Policy</a>
+            <span class="text-muted">|</span>
+            <a href="#" class="text-decoration-none text-muted hover-dark">API Documentation</a>
+          </div>
+        </div>
+      </footer>
+
+    </main>
+
+  </div>
+</div>

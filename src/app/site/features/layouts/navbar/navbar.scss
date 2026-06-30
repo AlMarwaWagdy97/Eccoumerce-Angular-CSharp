@@ -1,0 +1,38 @@
+.navbar {
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  
+  .logo-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 1.1rem;
+    font-weight: 950;
+    background-color: var(--primary-teal);
+  }
+
+  .nav-link {
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+
+    &:hover, &.active {
+      color: var(--primary-teal) !important; // بيقرا من الألوان العالمية
+    }
+  }
+
+  .form-control {
+    font-size: 0.9rem;
+    &:focus {
+      box-shadow: none;
+      background-color: #f1f5f9 !important;
+    }
+  }
+
+  .bi {
+    transition: transform 0.2s ease, color 0.2s ease;
+    &:hover {
+      transform: scale(1.1);
+      color: var(--primary-teal) !important;
+    }
+  }
+}

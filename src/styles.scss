@@ -1,0 +1,21 @@
+@import './app/site/shared/scss/variables.scss';
+
+$theme-colors: (
+  "primary": $primary-teal,
+  "secondary": $text-muted,
+  "success": #10b981,
+  "danger": $danger-red,
+  "warning": $warning-yellow,
+  "light": $bg-light,
+  "dark": $text-main
+);
+
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--text-main);
+  background-color: var(--white);
+}
+
+.fs-7 { font-size: 0.8rem !important; }
+.max-w-md { max-width: 450px; }
