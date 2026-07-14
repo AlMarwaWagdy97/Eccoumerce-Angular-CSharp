@@ -1,1 +1,109 @@
-<p>cart works!</p>
+<div class="cart-page" style="margin-top: 90px;">
+  <div class="container py-4">
+
+    <div class="mb-4">
+      <h1 class="fw-bold h2 m-0">Shopping Cart</h1>
+      <p class="text-muted small m-0">{{ cart.count() }} item(s) in your cart</p>
+    </div>
+
+    @if (cart.items().length === 0) {
+      <div class="text-center py-5 my-5">
+        <i class="bi bi-cart-x fs-1 text-secondary d-block mb-3"></i>
+        <h5 class="fw-bold text-dark">Your cart is empty</h5>
+        <p class="text-muted mb-4">Looks like you haven't added anything yet.</p>
+        <a routerLink="/products" class="btn btn-teal-action text-white rounded-3 px-4 py-2">Continue Shopping</a>
+      </div>
+    } @else {
+      <div class="row g-4">
+
+        <div class="col-lg-8">
+          <div class="d-flex flex-column gap-3">
+            @for (item of cart.items(); track item.id) {
+              <div class="cart-item d-flex align-items-center gap-3 bg-white rounded-4 border border-light p-3">
+
+                <a [routerLink]="['/products', item.slug]" class="cart-item-img rounded-3 bg-light d-flex align-items-center justify-content-center p-2 flex-shrink-0">
+                  <img [src]="item.image || 'assets/placeholder.png'" class="img-fluid" [alt]="item.title">
+                </a>
+
+                <div class="flex-grow-1">
+                  <a [routerLink]="['/products', item.slug]" class="text-decoration-none">
+                    <h6 class="fw-semibold text-dark mb-1">{{ item.title }}</h6>
+                  </a>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="fw-bold text-dark">{{ item.price | currency }}</span>
+                    @if (item.originalPrice && item.originalPrice > item.price) {
+                      <span class="text-muted text-decoration-line-through fs-7">{{ item.originalPrice | currency }}</span>
+                    }
+                  </div>
+                </div>
+
+                <div class="quantity-picker d-flex align-items-center bg-light rounded-3 px-2 py-1 flex-shrink-0">
+                  <button class="btn btn-sm border-0 px-2 text-secondary" (click)="cart.decrement(item.id)" aria-label="Decrease quantity">
+                    <i class="bi bi-dash"></i>
+                  </button>
+                  <span class="px-3 fw-bold text-dark">{{ item.quantity }}</span>
+                  <button class="btn btn-sm border-0 px-2 text-secondary" (click)="cart.increment(item.id)" aria-label="Increase quantity">
+                    <i class="bi bi-plus"></i>
+                  </button>
+                </div>
+
+                <div class="text-end flex-shrink-0" style="min-width: 90px;">
+                  <div class="fw-bold text-dark">{{ item.price * item.quantity | currency }}</div>
+                </div>
+
+                <button class="btn btn-sm border-0 text-secondary flex-shrink-0" (click)="cart.remove(item.id)" aria-label="Remove item">
+                  <i class="bi bi-trash3 fs-6"></i>
+                </button>
+
+              </div>
+            }
+          </div>
+
+          <a routerLink="/products" class="d-inline-flex align-items-center gap-2 text-decoration-none text-muted small mt-4 hover-teal">
+            <i class="bi bi-arrow-left"></i> Continue Shopping
+          </a>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="summary-card bg-white rounded-4 border border-light p-4">
+            <h5 class="fw-bold text-dark mb-4">Order Summary</h5>
+
+            <div class="d-flex justify-content-between mb-2 small">
+              <span class="text-muted">Subtotal</span>
+              <span class="text-dark fw-medium">{{ cart.subtotal() | currency }}</span>
+            </div>
+
+            @if (cart.discount() > 0) {
+              <div class="d-flex justify-content-between mb-2 small">
+                <span class="text-muted">Discount</span>
+                <span class="text-success fw-medium">-{{ cart.discount() | currency }}</span>
+              </div>
+            }
+
+            <div class="d-flex justify-content-between mb-2 small">
+              <span class="text-muted">Shipping</span>
+              @if (cart.shipping() === 0) {
+                <span class="text-success fw-medium">Free</span>
+              } @else {
+                <span class="text-dark fw-medium">{{ cart.shipping() | currency }}</span>
+              }
+            </div>
+
+            <hr class="my-3 text-muted">
+
+            <div class="d-flex justify-content-between mb-4">
+              <span class="fw-bold text-dark">Total</span>
+              <span class="fw-bold text-dark h5 m-0">{{ cart.total() | currency }}</span>
+            </div>
+
+            <a routerLink="/checkout" class="btn btn-teal-action text-white w-100 rounded-3 py-2 fw-medium d-flex align-items-center justify-content-center gap-2">
+              Proceed to Checkout <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    }
+
+  </div>
+</div>

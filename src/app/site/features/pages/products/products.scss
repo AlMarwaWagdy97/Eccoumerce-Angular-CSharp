@@ -11,7 +11,7 @@ $transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     
     .filter-group {
       &:not(:last-child) {
-        border-bottom: 1px solid #f1f5f9;
+        border-bottom: 1px solid var(--border-subtle);
         padding-bottom: 1.5rem;
       }
     }
@@ -31,7 +31,7 @@ $transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
     .form-control {
       font-size: 0.85rem;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--border-subtle);
       
       &:focus {
         box-shadow: none;
@@ -51,7 +51,9 @@ $transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .btn-light.active {
-    background-color: #e2e8f0 !important;
+    background-color: var(--primary-teal-light) !important;
+
+    .bi { color: var(--primary-teal) !important; }
   }
 
   // Modern Product Grid Display Card Properties

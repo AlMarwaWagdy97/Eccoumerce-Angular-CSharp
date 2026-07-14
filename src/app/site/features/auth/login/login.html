@@ -1,1 +1,43 @@
-<p>login works!</p>
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-visual">
+      <span class="eyebrow">Welcome back</span>
+      <h1>Sign in to your personal dashboard</h1>
+      <p>Access your favorites, review your orders, and stay on top of every delivery with a single account.</p>
+      <div class="pill-list">
+        <span>Secure checkout</span>
+        <span>Order tracking</span>
+        <span>Wishlist access</span>
+      </div>
+    </div>
+
+    <div class="auth-form">
+      <div class="brand">ShopDemo</div>
+      <h2>Welcome back</h2>
+      <p>Enter your details to continue where you left off.</p>
+
+      @if (error()) {
+        <div class="alert">{{ error() }}</div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="mt-4">
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input formControlName="email" type="email" class="form-control rounded-3" placeholder="you@example.com">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input formControlName="password" type="password" class="form-control rounded-3" placeholder="********">
+        </div>
+        <button type="submit" class="btn btn-dark w-100 rounded-3" [disabled]="loading()">
+          @if (loading()) { <span class="me-2"><i class="bi bi-arrow-repeat"></i></span> }
+          Sign In
+        </button>
+      </form>
+
+      <p class="switch-text">
+        New here? <a routerLink="/auth/register">Create an account</a>
+      </p>
+    </div>
+  </div>
+</div>

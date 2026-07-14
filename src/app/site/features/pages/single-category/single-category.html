@@ -1,1 +1,38 @@
-<p>single-category works!</p>
+<div class="single-category-page" style="margin-top: 90px;">
+  <div class="container py-4">
+
+    <nav class="small mb-4 text-muted">
+      <a routerLink="/home" class="text-decoration-none text-muted hover-teal">Home</a> /
+      <a routerLink="/categories" class="text-decoration-none text-muted hover-teal">Categories</a> /
+      <span class="text-dark fw-medium">{{ category()?.title || 'Category' }}</span>
+    </nav>
+
+    <div class="mb-4">
+      <h1 class="fw-bold h2 m-0">{{ category()?.title || 'Category' }}</h1>
+      @if (category()?.description) {
+        <p class="text-muted small m-0">{{ category()?.description }}</p>
+      } @else {
+        <p class="text-muted small m-0">{{ products().length }} products</p>
+      }
+    </div>
+
+    @if (loading()) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-teal" role="status"><span class="visually-hidden">Loading...</span></div>
+      </div>
+    } @else {
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        @for (product of products(); track product.id) {
+          <div class="col">
+            <app-product-card [product]="product" />
+          </div>
+        } @empty {
+          <div class="col-12">
+            <p class="text-muted text-center py-5 m-0">No products in this category yet.</p>
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+</div>

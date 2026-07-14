@@ -1,0 +1,56 @@
+<div class="page-shell">
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Order tracking</p>
+      <h1>Your shipment status</h1>
+      <p>Check the latest updates on your order and see where it is in the process.</p>
+    </div>
+    <a routerLink="/orders" class="btn btn-outline-dark rounded-3">Back to orders</a>
+  </section>
+
+  @if (loading()) {
+    <div class="state-card">Loading tracking info…</div>
+  } @else if (tracking()) {
+    <div class="tracking-card">
+      <div class="tracking-top">
+        <div>
+          <p class="tracking-label">Live update</p>
+          <h3>{{ tracking().orderNumber }}</h3>
+        </div>
+        <span class="status-pill">{{ tracking().status }}</span>
+      </div>
+
+      <div class="meta-grid">
+        <div>
+          <span>Order number</span>
+          <strong>{{ tracking().orderNumber }}</strong>
+        </div>
+        <div>
+          <span>Status</span>
+          <strong>{{ tracking().status }}</strong>
+        </div>
+        <div>
+          <span>Placed</span>
+          <strong>{{ tracking().createdOn | date }}</strong>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-step active">
+          <span>1</span>
+          <p>Order placed</p>
+        </div>
+        <div class="timeline-step active">
+          <span>2</span>
+          <p>Processing</p>
+        </div>
+        <div class="timeline-step">
+          <span>3</span>
+          <p>Out for delivery</p>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="state-card">We could not find tracking details for that order.</div>
+  }
+</div>

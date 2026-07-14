@@ -1,0 +1,52 @@
+.product-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.08);
+  }
+
+  .img-container {
+    height: 200px;
+
+    img {
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform 0.25s ease;
+    }
+  }
+
+  &:hover .img-container img {
+    transform: scale(1.05);
+  }
+
+  .add-to-cart-btn {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    color: var(--primary-teal);
+    background-color: var(--primary-teal-light);
+    border: none;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+
+    .bi {
+      font-size: 1.05rem;
+      line-height: 1;
+    }
+
+    &:hover {
+      background-color: var(--primary-teal);
+      color: #fff;
+      transform: scale(1.08);
+    }
+
+    &:active {
+      transform: scale(0.96);
+    }
+
+    &.added {
+      background-color: var(--primary-teal);
+      color: #fff;
+    }
+  }
+}

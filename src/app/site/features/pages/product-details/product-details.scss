@@ -27,7 +27,7 @@ $teal-dark: var(--primary-teal-dark);
       width: 70px;
       height: 70px;
       background-color: var(--bg-light);
-      border-color: #e2e8f0 !important;
+      border-color: var(--border-subtle) !important;
 
       img {
         width: 100%;
@@ -63,7 +63,7 @@ $teal-dark: var(--primary-teal-dark);
 
   .btn-outline-light-custom {
     background-color: var(--white);
-    border-color: #e2e8f0 !important;
+    border-color: var(--border-subtle) !important;
     transition: background-color 0.2s ease;
     
     &:hover {
@@ -94,7 +94,7 @@ $teal-dark: var(--primary-teal-dark);
 
   // Form Components Formatting Inside Active Tabs
   .form-control {
-    border-color: #e2e8f0;
+    border-color: var(--border-subtle);
     &:focus {
       box-shadow: none;
       border-color: $teal-color;

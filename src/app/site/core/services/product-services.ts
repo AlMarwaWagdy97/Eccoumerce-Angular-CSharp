@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Service } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { ProductInterface } from '../../shared/interface/productInterface';
+import { ProductDetailsInterface } from '../../shared/interface/productDetailsInterface';
 import { ApiResponseInterface } from '../../shared/interface/apiResponseInterface';
-
-// @Service()
 
 @Injectable ({
   providedIn: 'root'
@@ -21,7 +20,17 @@ export class ProductServices {
     );
   }
 
-  getProductById(id: number): Observable<any> {
-    return this.http.get<any>(`/products/${id}`);
+  getProductById(id: number): Observable<ProductDetailsInterface> {
+    return this.http.get<any>(`/products/${id}`).pipe(
+      // detail endpoint may return the object directly or wrapped in { data }
+      map(response => (response?.data ?? response) as ProductDetailsInterface)
+    );
+  }
+
+  // NOTE: adjust this route to match the real backend slug endpoint if different.
+  getProductBySlug(slug: string): Observable<ProductDetailsInterface> {
+    return this.http.get<any>(`/products/${slug}`).pipe(
+      map(response => (response?.data ?? response) as ProductDetailsInterface)
+    );
   }
 }
