@@ -1,0 +1,190 @@
+$account-green: #2c5545;
+$account-text: #1a1a1a;
+$account-muted: #6b7280;
+$account-input-bg: #f2ede2;
+$account-radius: 10px;
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-weight: 700;
+  font-size: 1.35rem;
+  color: $account-text;
+  margin-bottom: 0;
+}
+
+.add-btn {
+  background: $account-green;
+  color: #fff;
+  border: none;
+  border-radius: $account-radius;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.state-message {
+  color: $account-muted;
+  padding: 1rem 0;
+}
+
+.address-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.address-card {
+  position: relative;
+  background: #f7f4ee;
+  border-radius: 14px;
+  padding: 1.25rem;
+}
+
+.default-badge {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  background: $account-green;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.address-name {
+  font-weight: 700;
+  color: $account-text;
+  margin-bottom: 0.35rem;
+}
+
+.address-line {
+  color: $account-muted;
+  font-size: 0.9rem;
+  margin-bottom: 0.15rem;
+}
+
+.address-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+
+  button {
+    border: none;
+    background: none;
+    color: $account-green;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0;
+
+    &.danger {
+      color: #b3261e;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+}
+
+.address-form {
+  max-width: 520px;
+}
+
+.field-group {
+  margin-bottom: 1.1rem;
+  flex: 1;
+}
+
+.field-row {
+  display: flex;
+  gap: 1rem;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: $account-text;
+  margin-bottom: 0.4rem;
+}
+
+.form-control {
+  width: 100%;
+  background: $account-input-bg;
+  border: 1px solid transparent;
+  border-radius: $account-radius;
+  padding: 0.6rem 0.9rem;
+  color: $account-text;
+
+  &:focus {
+    outline: none;
+    border-color: $account-green;
+    background: #fff;
+  }
+}
+
+.checkbox-field {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+
+  input {
+    width: auto;
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.save-btn {
+  background: $account-green;
+  color: #fff;
+  border: none;
+  border-radius: $account-radius;
+  padding: 0.65rem 1.4rem;
+  font-weight: 600;
+
+  &:disabled {
+    opacity: 0.7;
+  }
+}
+
+.cancel-btn {
+  background: transparent;
+  border: 1px solid #ddd;
+  border-radius: $account-radius;
+  padding: 0.65rem 1.4rem;
+  font-weight: 600;
+  color: $account-text;
+}
+
+.alert-error {
+  background: #fdecea;
+  color: #b3261e;
+  border-radius: $account-radius;
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 575.98px) {
+  .address-list {
+    grid-template-columns: 1fr;
+  }
+
+  .field-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}

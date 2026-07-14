@@ -1,45 +1,17 @@
-.page-shell {
-  padding: 2.5rem 1rem 4rem;
-  max-width: 1180px;
-  margin: 0 auto;
-}
+$account-green: #2c5545;
+$account-text: #1a1a1a;
+$account-muted: #6b7280;
 
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  gap: 1rem;
+.section-title {
+  font-weight: 700;
+  font-size: 1.35rem;
+  color: $account-text;
   margin-bottom: 1.5rem;
 }
 
-.page-header h1 {
-  font-size: clamp(1.6rem, 2.1vw, 2.2rem);
-  font-weight: 700;
-  margin-bottom: 0.35rem;
-}
-
-.page-header p {
-  color: var(--text-muted);
-  margin-bottom: 0;
-}
-
-.eyebrow {
-  display: inline-block;
-  margin-bottom: 0.6rem;
-  color: var(--primary-teal);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.state-card {
-  padding: 1.5rem;
-  background: var(--white);
-  border: 1px solid var(--border-subtle);
-  border-radius: 1.5rem;
-  color: var(--text-muted);
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.05);
+.state-message {
+  color: $account-muted;
+  padding: 1rem 0;
 }
 
 .favorites-grid {
@@ -49,32 +21,52 @@
 }
 
 .favorite-card {
-  background: var(--white);
-  border: 1px solid var(--border-subtle);
-  border-radius: 1.35rem;
-  padding: 1.4rem;
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.05);
+  position: relative;
+  background: #f7f4ee;
+  border-radius: 14px;
+  padding: 1.25rem;
 }
 
-.favorite-top h3 {
-  font-size: 1.1rem;
+.favorite-card h3 {
+  font-size: 1.05rem;
   font-weight: 700;
-  margin-bottom: 0.3rem;
-}
-
-.favorite-label {
-  margin-bottom: 0.45rem;
-  color: var(--primary-teal);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+  color: $account-text;
+  padding-right: 1.5rem;
 }
 
 .favorite-price {
-  color: var(--text-main);
+  color: $account-text;
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.view-link {
+  color: $account-green;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.remove-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  border: none;
+  background: transparent;
+  color: $account-muted;
+  font-size: 0.85rem;
+
+  &:hover {
+    color: #b3261e;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
 }
 
 @media (max-width: 900px) {
@@ -83,12 +75,7 @@
   }
 }
 
-@media (max-width: 640px) {
-  .page-header {
-    flex-direction: column;
-    align-items: start;
-  }
-
+@media (max-width: 575.98px) {
   .favorites-grid {
     grid-template-columns: 1fr;
   }

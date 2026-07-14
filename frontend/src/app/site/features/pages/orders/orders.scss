@@ -1,73 +1,97 @@
-.page-shell {
-  padding: 2.5rem 1rem 4rem;
-  max-width: 1180px;
-  margin: 0 auto;
-}
+$account-green: #2c5545;
+$account-text: #1a1a1a;
+$account-muted: #6b7280;
 
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  gap: 1rem;
+.section-title {
+  font-weight: 700;
+  font-size: 1.35rem;
+  color: $account-text;
   margin-bottom: 1.5rem;
 }
 
-.page-header h1 {
-  font-size: clamp(1.6rem, 2.1vw, 2.2rem);
-  font-weight: 700;
-  margin-bottom: 0.35rem;
+.state-message {
+  color: $account-muted;
+  padding: 1rem 0;
 }
 
-.page-header p {
-  color: var(--text-muted);
-  margin-bottom: 0;
+.orders-table {
+  display: flex;
+  flex-direction: column;
 }
 
-.eyebrow {
-  display: inline-block;
-  margin-bottom: 0.6rem;
-  color: var(--primary-teal);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
+.orders-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr 1fr 0.7fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid #eee;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.orders-head {
+  color: $account-muted;
+  font-size: 0.82rem;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
 }
 
-.state-card,
-.content-card {
-  background: var(--white);
-  border: 1px solid var(--border-subtle);
-  border-radius: 1.5rem;
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.05);
+.order-number {
+  font-weight: 600;
+  color: $account-text;
 }
 
-.state-card {
-  padding: 1.5rem;
-  color: var(--text-muted);
-}
-
-.content-card {
-  padding: 1.5rem;
-}
-
-.status-pill {
+.status-badge {
   display: inline-flex;
-  padding: 0.35rem 0.7rem;
+  padding: 0.3rem 0.65rem;
   border-radius: 999px;
-  background: var(--primary-teal-light);
-  color: var(--primary-teal);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
+  background: #f2ede2;
+  color: $account-text;
 }
 
-.table th {
-  color: var(--text-muted);
-  font-weight: 600;
+.status-delivered {
+  background: #e6f4ea;
+  color: #1e7e34;
 }
 
-@media (max-width: 768px) {
-  .page-header {
-    flex-direction: column;
-    align-items: start;
+.status-shipped {
+  background: #e8f0fe;
+  color: #1a56db;
+}
+
+.status-pending {
+  background: #fff4e5;
+  color: #b06a00;
+}
+
+.status-cancelled {
+  background: #fdecea;
+  color: #b3261e;
+}
+
+.track-link {
+  color: $account-green;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .orders-row {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 0.35rem;
+  }
+
+  .orders-head {
+    display: none;
   }
 }

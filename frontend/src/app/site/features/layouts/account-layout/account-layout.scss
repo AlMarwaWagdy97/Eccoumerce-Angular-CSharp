@@ -1,0 +1,125 @@
+$account-bg: #f7f4ee;
+$account-green: #2c5545;
+$account-green-hover: #234435;
+$account-text: #1a1a1a;
+$account-muted: #6b7280;
+$account-card-bg: #ffffff;
+$account-radius: 14px;
+
+.account-layout {
+  background: $account-bg;
+  min-height: 100vh;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.account-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.account-title {
+  font-weight: 800;
+  font-size: 2rem;
+  color: $account-text;
+  margin-bottom: 1.75rem;
+}
+
+.account-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 1.75rem;
+
+  @media (max-width: 767.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.account-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: $account-radius;
+  color: $account-muted;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: rgba($account-green, 0.08);
+    color: $account-text;
+  }
+
+  &.active {
+    background: $account-green;
+    color: #fff;
+
+    .sidebar-link-icon,
+    .sidebar-link-chevron {
+      color: #fff;
+    }
+
+    &:hover {
+      background: $account-green-hover;
+    }
+  }
+}
+
+.sidebar-link-icon {
+  display: inline-flex;
+  width: 1.25rem;
+  justify-content: center;
+  color: inherit;
+}
+
+.sidebar-link-label {
+  flex: 1;
+}
+
+.sidebar-link-chevron {
+  font-size: 0.8rem;
+  color: $account-muted;
+}
+
+.sidebar-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  margin-top: 0.75rem;
+  border: none;
+  background: transparent;
+  border-radius: $account-radius;
+  color: #b3261e;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(#b3261e, 0.08);
+  }
+}
+
+.account-content {
+  background: $account-card-bg;
+  border-radius: 18px;
+  padding: 2rem;
+  min-height: 320px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+
+  @media (max-width: 575.98px) {
+    padding: 1.25rem;
+  }
+}

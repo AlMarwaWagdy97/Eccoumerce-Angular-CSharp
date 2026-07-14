@@ -1,29 +1,20 @@
-<div class="page-shell">
-  <section class="page-header">
-    <div>
-      <p class="eyebrow">My favorites</p>
-      <h1>Products you have saved for later</h1>
-      <p>Come back anytime to revisit the pieces you loved most.</p>
-    </div>
-    <a routerLink="/profile" class="btn btn-outline-dark rounded-3">Back to profile</a>
-  </section>
+<h2 class="section-title">My Favorites</h2>
 
-  @if (loading()) {
-    <div class="state-card">Loading favorites…</div>
-  } @else if (favorites().length === 0) {
-    <div class="state-card">No favorites yet. Save a product to see it here.</div>
-  } @else {
-    <div class="favorites-grid">
-      @for (item of favorites(); track item.id) {
-        <article class="favorite-card">
-          <div class="favorite-top">
-            <p class="favorite-label">Saved item</p>
-            <h3>{{ item.productTitle }}</h3>
-          </div>
-          <p class="favorite-price">{{ item.price | currency }}</p>
-          <a [routerLink]="['/products', item.slug]" class="btn btn-dark rounded-3">View product</a>
-        </article>
-      }
-    </div>
-  }
-</div>
+@if (loading()) {
+  <div class="state-message">Loading favorites…</div>
+} @else if (favorites().length === 0) {
+  <div class="state-message">No favorites yet. Save a product to see it here.</div>
+} @else {
+  <div class="favorites-grid">
+    @for (item of favorites(); track item.id) {
+      <article class="favorite-card">
+        <button type="button" class="remove-btn" (click)="remove(item)" [disabled]="removingId() === item.id" aria-label="Remove from favorites">
+          <i class="bi bi-x-lg"></i>
+        </button>
+        <h3>{{ item.productTitle }}</h3>
+        <p class="favorite-price">{{ item.price | currency }}</p>
+        <a [routerLink]="['/products', item.slug]" class="view-link">View product</a>
+      </article>
+    }
+  </div>
+}

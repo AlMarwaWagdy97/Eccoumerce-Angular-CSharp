@@ -5,8 +5,12 @@
       <div class="text-center py-5 my-5">
         <i class="bi bi-check-circle-fill fs-1 text-success d-block mb-3"></i>
         <h3 class="fw-bold text-dark">Thank you for your order!</h3>
-        <p class="text-muted mb-4">Your order has been placed successfully. A confirmation will be sent to your email.</p>
-        <a routerLink="/products" class="btn btn-teal-action text-white rounded-3 px-4 py-2">Continue Shopping</a>
+        <p class="text-muted mb-1">Your order <strong>{{ placedOrderNumber() }}</strong> has been placed successfully.</p>
+        <p class="text-muted mb-4">A confirmation will be sent to your email.</p>
+        <div class="d-flex justify-content-center gap-2">
+          <a [routerLink]="['/account/orders', placedOrderNumber()]" class="btn btn-outline-dark rounded-3 px-4 py-2">Track Order</a>
+          <a routerLink="/products" class="btn btn-teal-action text-white rounded-3 px-4 py-2">Continue Shopping</a>
+        </div>
       </div>
     } @else if (cart.items().length === 0) {
       <div class="text-center py-5 my-5">
@@ -60,11 +64,17 @@
                          [class.is-invalid]="invalid('address')" placeholder="123 Main St">
                   <div class="invalid-feedback">Address is required.</div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-5">
                   <label class="form-label small fw-medium text-secondary">City</label>
                   <input type="text" formControlName="city" class="form-control rounded-3"
                          [class.is-invalid]="invalid('city')" placeholder="New York">
                   <div class="invalid-feedback">City is required.</div>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label small fw-medium text-secondary">State</label>
+                  <input type="text" formControlName="state" class="form-control rounded-3"
+                         [class.is-invalid]="invalid('state')" placeholder="NY">
+                  <div class="invalid-feedback">State is required.</div>
                 </div>
                 <div class="col-md-4">
                   <label class="form-label small fw-medium text-secondary">Postal Code</label>
@@ -74,6 +84,16 @@
                 </div>
               </div>
             </div>
+
+            @if (!account.isLoggedIn()) {
+              <div class="alert alert-warning rounded-3 mt-4 d-flex align-items-center justify-content-between">
+                <span>Sign in to complete your order.</span>
+                <button type="button" class="btn btn-sm btn-dark rounded-3" (click)="goToLogin()">Sign In</button>
+              </div>
+            }
+            @if (error()) {
+              <div class="alert alert-danger rounded-3 mt-4">{{ error() }}</div>
+            }
 
             <div class="bg-white rounded-4 border border-light p-4">
               <h5 class="fw-bold text-dark mb-4">Payment Method</h5>

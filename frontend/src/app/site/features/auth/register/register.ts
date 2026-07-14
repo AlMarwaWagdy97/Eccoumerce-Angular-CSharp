@@ -34,7 +34,7 @@ export class RegisterComponent {
     this.loading.set(true);
     this.error.set('');
     this.accountService.register(this.form.getRawValue()).subscribe({
-      next: () => this.router.navigateByUrl('/profile'),
+      next: () => this.router.navigateByUrl('/account'),
       error: () => {
         this.error.set('We could not create your account right now.');
         this.loading.set(false);

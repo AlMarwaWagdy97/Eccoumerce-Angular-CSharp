@@ -1,43 +1,26 @@
-<div class="page-shell">
-  <section class="page-header">
-    <div>
-      <p class="eyebrow">My orders</p>
-      <h1>Everything you have ordered</h1>
-      <p>Review the status of your purchases and jump straight to tracking when it ships.</p>
-    </div>
-    <a routerLink="/profile" class="btn btn-outline-dark rounded-3">Back to profile</a>
-  </section>
+<h2 class="section-title">My Orders</h2>
 
-  @if (loading()) {
-    <div class="state-card">Loading orders…</div>
-  } @else if (orders().length === 0) {
-    <div class="state-card">No orders yet. Start shopping to see them here.</div>
-  } @else {
-    <div class="content-card">
-      <div class="table-responsive">
-        <table class="table align-middle mb-0">
-          <thead>
-            <tr>
-              <th>Order #</th>
-              <th>Status</th>
-              <th>Total</th>
-              <th>Date</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (order of orders(); track order.id) {
-              <tr>
-                <td class="fw-semibold">{{ order.orderNumber }}</td>
-                <td><span class="status-pill">{{ order.status }}</span></td>
-                <td>{{ order.total | currency }}</td>
-                <td>{{ order.createdOn | date }}</td>
-                <td><a [routerLink]="['/orders', order.orderNumber, 'tracking']" class="btn btn-sm btn-dark rounded-3">Track</a></td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
+@if (loading()) {
+  <div class="state-message">Loading orders…</div>
+} @else if (orders().length === 0) {
+  <div class="state-message">No orders yet. Start shopping to see them here.</div>
+} @else {
+  <div class="orders-table">
+    <div class="orders-row orders-head">
+      <span>Order #</span>
+      <span>Status</span>
+      <span>Total</span>
+      <span>Date</span>
+      <span></span>
     </div>
-  }
-</div>
+    @for (order of orders(); track order.id) {
+      <div class="orders-row">
+        <span class="order-number">{{ order.orderNumber }}</span>
+        <span><span [class]="statusClass(order.status)">{{ order.status }}</span></span>
+        <span>{{ order.total | currency }}</span>
+        <span>{{ order.createdOn | date:'mediumDate' }}</span>
+        <span><a [routerLink]="['/account/orders', order.orderNumber]" class="track-link">Track</a></span>
+      </div>
+    }
+  </div>
+}

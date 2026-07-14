@@ -21,7 +21,7 @@
     <div class="d-flex align-items-center gap-2 ms-auto">
       <button class="btn btn-outline-dark btn-sm px-3 rounded-3 fw-medium me-1">Switch to Admin</button>
 
-      <a routerLink="/favorites" routerLinkActive="active" class="icon-link" aria-label="Wishlist"><i class="bi bi-heart"></i></a>
+      <a routerLink="/account/favorites" routerLinkActive="active" class="icon-link" aria-label="Wishlist"><i class="bi bi-heart"></i></a>
 
       <a routerLink="/cart" routerLinkActive="active" class="icon-link cart-link" aria-label="Cart">
         <i class="bi bi-cart3"></i>
@@ -30,7 +30,11 @@
         }
       </a>
 
-      <a routerLink="/profile" routerLinkActive="active" class="icon-link" aria-label="Account"><i class="bi bi-person"></i></a>
+      @if (account.isLoggedIn()) {
+        <a routerLink="/account" routerLinkActive="active" class="icon-link" aria-label="Account"><i class="bi bi-person"></i></a>
+      } @else {
+        <a routerLink="/auth/login" routerLinkActive="active" class="icon-link" aria-label="Sign in"><i class="bi bi-box-arrow-in-right"></i></a>
+      }
     </div>
   </div>
 </nav>

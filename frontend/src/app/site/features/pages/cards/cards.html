@@ -1,0 +1,84 @@
+<div class="panel-header">
+  <h2 class="section-title">My Cards</h2>
+  @if (!showForm()) {
+    <button type="button" class="add-btn" (click)="startAdd()">+ Add Card</button>
+  }
+</div>
+
+@if (loading()) {
+  <div class="state-message">Loading cards…</div>
+} @else {
+  @if (!showForm() && cards().length === 0) {
+    <div class="state-message">No saved cards yet.</div>
+  }
+
+  @if (!showForm()) {
+    <div class="card-list">
+      @for (card of cards(); track card.id) {
+        <div class="card-tile">
+          @if (card.isDefault) {
+            <span class="default-badge">Default</span>
+          }
+          <p class="card-brand">{{ card.brand }}</p>
+          <p class="card-number">•••• •••• •••• {{ card.last4 }}</p>
+          <p class="card-meta">{{ card.cardholderName }} · Expires {{ card.expiryMonth.toString().padStart(2, '0') }}/{{ card.expiryYear }}</p>
+          <div class="card-actions">
+            @if (!card.isDefault) {
+              <button type="button" [disabled]="busyId() === card.id" (click)="setDefault(card)">Set as default</button>
+            }
+            <button type="button" class="danger" [disabled]="busyId() === card.id" (click)="remove(card)">Delete</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (showForm()) {
+    <p class="privacy-note">We only store your card's brand, last 4 digits, and expiry date — never the full card number.</p>
+
+    @if (error()) {
+      <div class="alert-error">{{ error() }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="save()" class="card-form">
+      <div class="field-group">
+        <label>Cardholder Name</label>
+        <input formControlName="cardholderName" type="text" class="form-control">
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label>Brand</label>
+          <select formControlName="brand" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="Mastercard">Mastercard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Last 4 Digits</label>
+          <input formControlName="last4" type="text" maxlength="4" class="form-control" placeholder="1234">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label>Expiry Month</label>
+          <input formControlName="expiryMonth" type="number" min="1" max="12" class="form-control">
+        </div>
+        <div class="field-group">
+          <label>Expiry Year</label>
+          <input formControlName="expiryYear" type="number" [min]="currentYear" class="form-control">
+        </div>
+      </div>
+      <label class="checkbox-field">
+        <input type="checkbox" formControlName="isDefault">
+        Set as default card
+      </label>
+
+      <div class="form-actions">
+        <button type="submit" class="save-btn" [disabled]="saving()">{{ saving() ? 'Saving…' : 'Save Card' }}</button>
+        <button type="button" class="cancel-btn" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  }
+}

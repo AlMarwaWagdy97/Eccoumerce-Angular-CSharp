@@ -1,0 +1,46 @@
+<div class="account-layout">
+  <div class="account-container">
+    <h1 class="account-title">My Account</h1>
+
+    <div class="account-grid">
+      <aside class="account-sidebar">
+        <nav class="sidebar-nav">
+          <a routerLink="." routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="sidebar-link">
+            <span class="sidebar-link-icon"><i class="bi bi-person"></i></span>
+            <span class="sidebar-link-label">Account</span>
+            <i class="bi bi-chevron-right sidebar-link-chevron"></i>
+          </a>
+          <a routerLink="orders" routerLinkActive="active" class="sidebar-link">
+            <span class="sidebar-link-icon"><i class="bi bi-box-seam"></i></span>
+            <span class="sidebar-link-label">Orders</span>
+            <i class="bi bi-chevron-right sidebar-link-chevron"></i>
+          </a>
+          <a routerLink="address" routerLinkActive="active" class="sidebar-link">
+            <span class="sidebar-link-icon"><i class="bi bi-geo-alt"></i></span>
+            <span class="sidebar-link-label">Address</span>
+            <i class="bi bi-chevron-right sidebar-link-chevron"></i>
+          </a>
+          <a routerLink="cards" routerLinkActive="active" class="sidebar-link">
+            <span class="sidebar-link-icon"><i class="bi bi-credit-card"></i></span>
+            <span class="sidebar-link-label">Cards</span>
+            <i class="bi bi-chevron-right sidebar-link-chevron"></i>
+          </a>
+          <a routerLink="favorites" routerLinkActive="active" class="sidebar-link">
+            <span class="sidebar-link-icon"><i class="bi bi-heart"></i></span>
+            <span class="sidebar-link-label">Favorites</span>
+            <i class="bi bi-chevron-right sidebar-link-chevron"></i>
+          </a>
+        </nav>
+
+        <button type="button" class="sidebar-logout" (click)="logout()">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Log out</span>
+        </button>
+      </aside>
+
+      <section class="account-content">
+        <router-outlet />
+      </section>
+    </div>
+  </div>
+</div>

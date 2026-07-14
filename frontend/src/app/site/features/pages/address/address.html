@@ -1,0 +1,91 @@
+<div class="panel-header">
+  <h2 class="section-title">My Addresses</h2>
+  @if (!showForm()) {
+    <button type="button" class="add-btn" (click)="startAdd()">+ Add Address</button>
+  }
+</div>
+
+@if (loading()) {
+  <div class="state-message">Loading addresses…</div>
+} @else {
+  @if (!showForm() && addresses().length === 0) {
+    <div class="state-message">No saved addresses yet.</div>
+  }
+
+  @if (!showForm()) {
+    <div class="address-list">
+      @for (address of addresses(); track address.id) {
+        <div class="address-card">
+          @if (address.isDefault) {
+            <span class="default-badge">Default</span>
+          }
+          <p class="address-name">{{ address.fullName }}</p>
+          <p class="address-line">{{ address.line1 }}@if (address.line2) {, {{ address.line2 }}}</p>
+          <p class="address-line">{{ address.city }}, {{ address.state }} {{ address.postalCode }}</p>
+          <p class="address-line">{{ address.country }} · {{ address.phone }}</p>
+          <div class="address-actions">
+            <button type="button" (click)="startEdit(address)">Edit</button>
+            @if (!address.isDefault) {
+              <button type="button" [disabled]="busyId() === address.id" (click)="setDefault(address)">Set as default</button>
+            }
+            <button type="button" class="danger" [disabled]="busyId() === address.id" (click)="remove(address)">Delete</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (showForm()) {
+    @if (error()) {
+      <div class="alert-error">{{ error() }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="save()" class="address-form">
+      <div class="field-group">
+        <label>Full Name</label>
+        <input formControlName="fullName" type="text" class="form-control">
+      </div>
+      <div class="field-group">
+        <label>Phone</label>
+        <input formControlName="phone" type="tel" class="form-control">
+      </div>
+      <div class="field-group">
+        <label>Address Line 1</label>
+        <input formControlName="line1" type="text" class="form-control">
+      </div>
+      <div class="field-group">
+        <label>Address Line 2 (optional)</label>
+        <input formControlName="line2" type="text" class="form-control">
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label>City</label>
+          <input formControlName="city" type="text" class="form-control">
+        </div>
+        <div class="field-group">
+          <label>State</label>
+          <input formControlName="state" type="text" class="form-control">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label>Country</label>
+          <input formControlName="country" type="text" class="form-control">
+        </div>
+        <div class="field-group">
+          <label>Postal Code</label>
+          <input formControlName="postalCode" type="text" class="form-control">
+        </div>
+      </div>
+      <label class="checkbox-field">
+        <input type="checkbox" formControlName="isDefault">
+        Set as default address
+      </label>
+
+      <div class="form-actions">
+        <button type="submit" class="save-btn" [disabled]="saving()">{{ saving() ? 'Saving…' : 'Save Address' }}</button>
+        <button type="button" class="cancel-btn" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  }
+}

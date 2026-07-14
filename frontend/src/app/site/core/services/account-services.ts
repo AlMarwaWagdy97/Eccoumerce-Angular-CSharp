@@ -1,7 +1,21 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
-import { ApiEnvelope, AuthResponseInterface, FavoriteInterface, OrderSummaryInterface, ProfileResponseInterface } from '../../shared/interface/account-interfaces';
+import { catchError, map, Observable, of } from 'rxjs';
+import {
+  AddressInterface,
+  AddressRequest,
+  ApiEnvelope,
+  AuthResponseInterface,
+  CardInterface,
+  CardRequest,
+  CreateOrderRequest,
+  FavoriteInterface,
+  OrderDetailInterface,
+  OrderSummaryInterface,
+  OrderTrackingInterface,
+  ProfileResponseInterface,
+  UpdateProfileRequest,
+} from '../../shared/interface/account-interfaces';
 
 @Injectable({ providedIn: 'root' })
 export class AccountServices {
@@ -9,6 +23,7 @@ export class AccountServices {
   private readonly storageKey = 'shopdemo_auth';
 
   readonly user = signal<AuthResponseInterface | null>(this.readStoredUser());
+  readonly isLoggedIn = computed(() => this.user() !== null);
 
   login(payload: { email: string; password: string }): Observable<AuthResponseInterface> {
     return this.http.post<ApiEnvelope<AuthResponseInterface>>('/Auth/login', payload).pipe(
@@ -23,33 +38,120 @@ export class AccountServices {
   }
 
   logout(): void {
+    const current = this.user();
+    this.clearSession();
+
+    if (!current) return;
+
+    // Best-effort: revoke the refresh token server-side. The client-side
+    // session is already cleared above regardless of whether this succeeds.
+    this.http.post('/Auth/logout', {}).pipe(catchError(() => of(null))).subscribe();
+  }
+
+  refreshToken(): Observable<AuthResponseInterface | null> {
+    const current = this.user();
+    if (!current) return of(null);
+
+    return this.http.post<ApiEnvelope<AuthResponseInterface>>('/Auth/refresh', {
+      token: current.token,
+      refreshToken: current.refreshToken,
+    }).pipe(
+      map(response => this.storeUser(response.data)),
+      catchError(() => {
+        this.clearSession();
+        return of(null);
+      })
+    );
+  }
+
+  clearSession(): void {
     localStorage.removeItem(this.storageKey);
     this.user.set(null);
   }
 
+  // ----- Profile -----
+
   getProfile(): Observable<ProfileResponseInterface> {
-    return this.http.get<ApiEnvelope<ProfileResponseInterface>>('/Auth/profile').pipe(map(response => response.data));
+    return this.http.get<ApiEnvelope<ProfileResponseInterface>>('/Profile').pipe(map(response => response.data));
   }
+
+  updateProfile(request: UpdateProfileRequest): Observable<ProfileResponseInterface> {
+    return this.http.put<ApiEnvelope<ProfileResponseInterface>>('/Profile', request).pipe(map(response => response.data));
+  }
+
+  // ----- Orders -----
 
   getOrders(): Observable<OrderSummaryInterface[]> {
-    return this.http.get<ApiEnvelope<OrderSummaryInterface[]>>('/Auth/orders').pipe(map(response => response.data));
+    return this.http.get<ApiEnvelope<OrderSummaryInterface[]>>('/Orders').pipe(map(response => response.data));
   }
 
-  getOrderTracking(orderNumber: string): Observable<{ orderNumber: string; status: string; createdOn: string }> {
-    return this.http.get<ApiEnvelope<{ orderNumber: string; status: string; createdOn: string }>>(`/Auth/orders/${orderNumber}/tracking`).pipe(map(response => response.data));
+  getOrder(orderNumber: string): Observable<OrderDetailInterface> {
+    return this.http.get<ApiEnvelope<OrderDetailInterface>>(`/Orders/${orderNumber}`).pipe(map(response => response.data));
   }
+
+  getOrderTracking(orderNumber: string): Observable<OrderTrackingInterface> {
+    return this.http.get<ApiEnvelope<OrderTrackingInterface>>(`/Orders/${orderNumber}/tracking`).pipe(map(response => response.data));
+  }
+
+  createOrder(request: CreateOrderRequest): Observable<OrderDetailInterface> {
+    return this.http.post<ApiEnvelope<OrderDetailInterface>>('/Orders', request).pipe(map(response => response.data));
+  }
+
+  // ----- Favorites -----
 
   getFavorites(): Observable<FavoriteInterface[]> {
-    return this.http.get<ApiEnvelope<FavoriteInterface[]>>('/Auth/favorites').pipe(map(response => response.data));
+    return this.http.get<ApiEnvelope<FavoriteInterface[]>>('/Favorites').pipe(map(response => response.data));
   }
 
   addFavorite(productId: number): Observable<void> {
-    return this.http.post<ApiEnvelope<unknown>>(`/Auth/favorites/${productId}`, {}).pipe(map(() => undefined));
+    return this.http.post<ApiEnvelope<unknown>>(`/Favorites/${productId}`, {}).pipe(map(() => undefined));
   }
 
   removeFavorite(productId: number): Observable<void> {
-    return this.http.delete<ApiEnvelope<unknown>>(`/Auth/favorites/${productId}`).pipe(map(() => undefined));
+    return this.http.delete<ApiEnvelope<unknown>>(`/Favorites/${productId}`).pipe(map(() => undefined));
   }
+
+  // ----- Addresses -----
+
+  getAddresses(): Observable<AddressInterface[]> {
+    return this.http.get<ApiEnvelope<AddressInterface[]>>('/Addresses').pipe(map(response => response.data));
+  }
+
+  addAddress(request: AddressRequest): Observable<AddressInterface> {
+    return this.http.post<ApiEnvelope<AddressInterface>>('/Addresses', request).pipe(map(response => response.data));
+  }
+
+  updateAddress(id: number, request: AddressRequest): Observable<AddressInterface> {
+    return this.http.put<ApiEnvelope<AddressInterface>>(`/Addresses/${id}`, request).pipe(map(response => response.data));
+  }
+
+  deleteAddress(id: number): Observable<void> {
+    return this.http.delete<ApiEnvelope<unknown>>(`/Addresses/${id}`).pipe(map(() => undefined));
+  }
+
+  setDefaultAddress(id: number): Observable<void> {
+    return this.http.put<ApiEnvelope<unknown>>(`/Addresses/${id}/default`, {}).pipe(map(() => undefined));
+  }
+
+  // ----- Cards -----
+
+  getCards(): Observable<CardInterface[]> {
+    return this.http.get<ApiEnvelope<CardInterface[]>>('/Cards').pipe(map(response => response.data));
+  }
+
+  addCard(request: CardRequest): Observable<CardInterface> {
+    return this.http.post<ApiEnvelope<CardInterface>>('/Cards', request).pipe(map(response => response.data));
+  }
+
+  deleteCard(id: number): Observable<void> {
+    return this.http.delete<ApiEnvelope<unknown>>(`/Cards/${id}`).pipe(map(() => undefined));
+  }
+
+  setDefaultCard(id: number): Observable<void> {
+    return this.http.put<ApiEnvelope<unknown>>(`/Cards/${id}/default`, {}).pipe(map(() => undefined));
+  }
+
+  // ----- Session storage -----
 
   private storeUser(payload: AuthResponseInterface | undefined | null): AuthResponseInterface | null {
     if (!payload) {

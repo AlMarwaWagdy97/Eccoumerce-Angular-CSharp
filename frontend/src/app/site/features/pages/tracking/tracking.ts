@@ -1,28 +1,40 @@
-import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, effect, inject, input, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { AccountServices } from '../../../core/services/account-services';
+import { OrderTrackingInterface } from '../../../shared/interface/account-interfaces';
 
 @Component({
   selector: 'app-tracking',
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink, DatePipe],
   templateUrl: './tracking.html',
   styleUrl: './tracking.scss',
 })
 export class TrackingComponent {
   private accountService = inject(AccountServices);
-  private route = inject(ActivatedRoute);
-  tracking = signal<any>(null);
+
+  orderNumber = input.required<string>();
+
+  tracking = signal<OrderTrackingInterface | null>(null);
   loading = signal(true);
+  notFound = signal(false);
 
   constructor() {
-    const orderNumber = this.route.snapshot.paramMap.get('orderNumber') ?? '';
-    this.accountService.getOrderTracking(orderNumber).subscribe({
-      next: data => {
-        this.tracking.set(data);
-        this.loading.set(false);
-      },
-      error: () => this.loading.set(false)
+    effect(() => {
+      const orderNumber = this.orderNumber();
+      this.loading.set(true);
+      this.notFound.set(false);
+
+      this.accountService.getOrderTracking(orderNumber).subscribe({
+        next: data => {
+          this.tracking.set(data);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.notFound.set(true);
+          this.loading.set(false);
+        },
+      });
     });
   }
 }

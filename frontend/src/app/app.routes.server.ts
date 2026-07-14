@@ -20,6 +20,34 @@ export const serverRoutes: ServerRoute[] = [
     path: 'checkout',
     renderMode: RenderMode.Client
   },
+  // The account area requires a logged-in user (localStorage token) and always
+  // fetches from the backend, so none of it can be prerendered.
+  {
+    path: 'account',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'account/orders',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'account/orders/:orderNumber',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'account/address',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'account/cards',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'account/favorites',
+    renderMode: RenderMode.Client
+  },
+  // Legacy redirect with a dynamic param — still needs its own render-mode
+  // entry even though app.routes.ts only uses it to redirect into /account/**.
   {
     path: 'orders/:orderNumber/tracking',
     renderMode: RenderMode.Client
