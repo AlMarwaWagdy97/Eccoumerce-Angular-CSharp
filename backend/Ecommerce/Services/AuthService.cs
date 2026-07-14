@@ -69,8 +69,8 @@ public class AuthService(UserManager<ApplicationUser> userManager, IJwtProvider 
 
         var isValidPassword = await _userManager.CheckPasswordAsync(user, password);
 
-        //if (!isValidPassword)
-        //    return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials); ;
+        if (!isValidPassword)
+            return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
 
         var (token, expiresIn) = _jwtProvider.GenerateToken(user);
         var refreshToken = GenerateRefreshToken();
@@ -170,6 +170,20 @@ public class AuthService(UserManager<ApplicationUser> userManager, IJwtProvider 
             return Result.Failure(UserErrors.InvalidRefreshToken);
 
         userRefreshToken.RevokedOn = DateTime.UtcNow;
+
+        await _userManager.UpdateAsync(user);
+
+        return Result.Success();
+    }
+
+    public async Task<Result> LogoutAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
+            return Result.Failure(UserErrors.InvalidJwtToken);
+
+        foreach (var refreshToken in user.RefreshTokens.Where(x => x.IsActive))
+            refreshToken.RevokedOn = DateTime.UtcNow;
 
         await _userManager.UpdateAsync(user);
 

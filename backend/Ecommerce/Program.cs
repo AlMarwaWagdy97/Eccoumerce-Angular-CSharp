@@ -17,6 +17,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+
+    await Ecommerce.Presistence.DataSeeder.SeedAsync(app.Services);
 }
 
 app.UseHttpsRedirection();

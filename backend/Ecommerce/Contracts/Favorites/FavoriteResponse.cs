@@ -1,4 +1,4 @@
-namespace Ecommerce.Contracts.Authentication;
+namespace Ecommerce.Contracts.Favorites;
 
 public record FavoriteResponse(
     long Id,

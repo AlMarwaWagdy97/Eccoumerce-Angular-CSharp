@@ -24,6 +24,7 @@ namespace Ecommerce.Presistence
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<Card> Cards { get; set; }
         public DbSet<NewsletterSubscription> NewsletterSubscriptions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

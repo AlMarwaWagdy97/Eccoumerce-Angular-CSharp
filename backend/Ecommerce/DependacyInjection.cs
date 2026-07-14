@@ -50,6 +50,11 @@ namespace Ecommerce
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IProfileService, ProfileService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IFavoriteService, FavoriteService>();
+            services.AddScoped<IAddressService, AddressService>();
+            services.AddScoped<ICardService, CardService>();
 
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();

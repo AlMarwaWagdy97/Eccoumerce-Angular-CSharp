@@ -1,9 +1,8 @@
-namespace Ecommerce.Contracts.Authentication;
+namespace Ecommerce.Contracts.Profile;
 
 public record ProfileResponse(
     string Id,
     string Email,
     string FirstName,
     string LastName,
-    string? PhoneNumber,
-    DateTime CreatedOn);
+    string? PhoneNumber);
