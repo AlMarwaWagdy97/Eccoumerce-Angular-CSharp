@@ -18,6 +18,16 @@ namespace Ecommerce
             services.AddControllers();
 
             services.AddCors(options =>
+            {
+                options.AddPolicy("AngularAppPolicy", policy =>
+                {
+                    policy.AllowAnyOrigin() // 👈 بيسمح لأي بورت يكلم الـ API بدون قيود في الـ Dev mode
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
+            services.AddCors(options =>
             options.AddDefaultPolicy(builder =>
             builder.AllowAnyMethod()
                    .AllowAnyHeader()
@@ -39,6 +49,7 @@ namespace Ecommerce
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICartService, CartService>();
 
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();

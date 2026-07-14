@@ -23,6 +23,27 @@ public class ProductService(ApplicationDbContext context) : IProductService
             Result.Failure<ProductResponse>(ProductErrors.ProductNotFound);
     }
 
+    public async Task<Result<ProductResponse>> GetByIdOrSlugAsync(string identifier, CancellationToken cancellationToken = default)
+    {
+        Product? product = null;
+
+        if (long.TryParse(identifier, out long id))
+        {
+            product = await _context.Products
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+        }
+        else
+        {
+            product = await _context.Products
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Slug == identifier, cancellationToken);
+        }
+        return product is not null ?
+            Result.Success(product.Adapt<ProductResponse>()) :
+            Result.Failure<ProductResponse>(ProductErrors.ProductNotFound);
+    }
+
     public async Task<Result<ProductResponse>> AddAsync(ProductRequest request, CancellationToken cancellationToken = default)
     {
         var isSkuExists = await _context.Products.AnyAsync(x => x.Sku == request.Sku, cancellationToken);

@@ -6,7 +6,7 @@ namespace Ecommerce.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class CategoriesController(ICategoryService categoryService) : ControllerBase
     {
         private readonly ICategoryService _categoryService = categoryService;
@@ -23,14 +23,14 @@ namespace Ecommerce.Controllers
         public async Task<IActionResult> Get([FromRoute] long id, CancellationToken cancellationToken)
         {
             var result = await _categoryService.GetAsync(id, cancellationToken);
-            if (!result.IsSuccess)
+            if (result.IsFailure)
             {
-                var errorResponse = new ApiResponse<object>(StatusCodes.Status404NotFound, result.Error.Description ?? "Category not found.");
-                return NotFound(errorResponse);
+                //var errorResponse = new ApiResponse<object>(StatusCodes.Status404NotFound, result.Error.Description ?? "Category not found.");
+                return NotFound(result);
             }
 
-            var response = new ApiResponse<CategoryResponse>(StatusCodes.Status200OK, "Category retrieved successfully.", result.Value);
-            return Ok(response);
+            //var response =  ApiResponse<CategoryResponse>(StatusCodes.Status200OK, "Category retrieved successfully.", result.Value);
+            return Ok(result);
         }
 
         [HttpPost("")]

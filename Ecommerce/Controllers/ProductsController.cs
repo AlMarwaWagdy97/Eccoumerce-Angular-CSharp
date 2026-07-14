@@ -5,7 +5,7 @@ namespace Ecommerce.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ProductsController(IProductService productService) : ControllerBase
     {
         private readonly IProductService _productService = productService;
@@ -18,10 +18,11 @@ namespace Ecommerce.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get([FromRoute] long id, CancellationToken cancellationToken)
+        [HttpGet("{slug}")]
+        public async Task<IActionResult> Get([FromRoute] string slug, CancellationToken cancellationToken)
         {
-            var result = await _productService.GetAsync(id, cancellationToken);
+            var result = await _productService.GetByIdOrSlugAsync(slug, cancellationToken);
+
             if (!result.IsSuccess)
             {
                 var errorResponse = new ApiResponse<object>(StatusCodes.Status404NotFound, result.Error.Description ?? "Product not found.");
