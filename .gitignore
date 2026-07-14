@@ -1,0 +1,5 @@
+# Cross-cutting editor/OS cruft not already covered by backend/.gitignore or frontend/.gitignore
+.vs/
+.idea/
+.DS_Store
+Thumbs.db
