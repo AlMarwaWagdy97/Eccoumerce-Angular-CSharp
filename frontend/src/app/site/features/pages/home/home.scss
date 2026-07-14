@@ -1,0 +1,61 @@
+$card-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+.home-page {
+  
+  .hero-section {
+    .btn-teal {
+      background-color: var(--primary-teal);
+      border: none;
+      box-shadow: 0 4px 12px rgba(17, 94, 89, 0.25);
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background-color: var(--primary-teal-dark);
+        transform: translateY(-1px);
+      }
+    }
+  }
+
+  .categories-section {
+    .category-card {
+      cursor: pointer;
+      transition: $card-transition;
+      
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
+        background-image: linear-gradient(transparent, rgba(0,0,0,0.9)) !important;
+      }
+    }
+  }
+
+  .products-section, .arrivals-section {
+    .product-card {
+      transition: $card-transition;
+      border: 1px solid transparent;
+      background-color: var(--bg-light);
+
+      .badge {
+        z-index: 2;
+      }
+      
+      img {
+        object-fit: contain;
+        height: 220px;
+        transition: transform 0.3s ease;
+        mix-blend-mode: multiply; 
+      }
+
+      &:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.06) !important;
+        background-color: var(--white) !important;
+        border-color: rgba(0, 0, 0, 0.05);
+
+        img {
+          transform: scale(1.02);
+        }
+      }
+    }
+  }
+}

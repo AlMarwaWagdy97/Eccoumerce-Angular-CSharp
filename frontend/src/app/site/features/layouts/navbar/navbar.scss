@@ -1,0 +1,68 @@
+.navbar {
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  
+  .logo-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 1.1rem;
+    font-weight: 950;
+    background-color: var(--primary-teal);
+  }
+
+  .nav-link {
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+
+    &:hover, &.active {
+      color: var(--primary-teal) !important; // بيقرا من الألوان العالمية
+    }
+  }
+
+  .form-control {
+    font-size: 0.9rem;
+    &:focus {
+      box-shadow: none;
+      background-color: #f1f5f9 !important;
+    }
+  }
+
+  // Circular icon buttons (wishlist / cart / account).
+  .icon-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: var(--text-main);
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    .bi {
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    &:hover,
+    &.active {
+      background-color: var(--primary-teal-light);
+      color: var(--primary-teal);
+    }
+  }
+
+  .cart-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    min-width: 18px;
+    padding: 0.15rem 0.3rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    background-color: var(--primary-teal);
+    box-shadow: 0 0 0 2px #fff;
+  }
+}

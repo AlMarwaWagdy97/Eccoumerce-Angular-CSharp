@@ -1,0 +1,160 @@
+<div class="checkout-page" style="margin-top: 90px;">
+  <div class="container py-4">
+
+    @if (orderPlaced()) {
+      <div class="text-center py-5 my-5">
+        <i class="bi bi-check-circle-fill fs-1 text-success d-block mb-3"></i>
+        <h3 class="fw-bold text-dark">Thank you for your order!</h3>
+        <p class="text-muted mb-4">Your order has been placed successfully. A confirmation will be sent to your email.</p>
+        <a routerLink="/products" class="btn btn-teal-action text-white rounded-3 px-4 py-2">Continue Shopping</a>
+      </div>
+    } @else if (cart.items().length === 0) {
+      <div class="text-center py-5 my-5">
+        <i class="bi bi-cart-x fs-1 text-secondary d-block mb-3"></i>
+        <h5 class="fw-bold text-dark">Your cart is empty</h5>
+        <p class="text-muted mb-4">Add some products before checking out.</p>
+        <a routerLink="/products" class="btn btn-teal-action text-white rounded-3 px-4 py-2">Continue Shopping</a>
+      </div>
+    } @else {
+
+      <div class="mb-4">
+        <h1 class="fw-bold h2 m-0">Checkout</h1>
+        <p class="text-muted small m-0">Complete your order</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="placeOrder()">
+        <div class="row g-4">
+
+          <div class="col-lg-7">
+            <div class="bg-white rounded-4 border border-light p-4 mb-4">
+              <h5 class="fw-bold text-dark mb-4">Contact & Shipping</h5>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label small fw-medium text-secondary">Full Name</label>
+                  <input type="text" formControlName="fullName" class="form-control rounded-3"
+                         [class.is-invalid]="invalid('fullName')" placeholder="John Doe">
+                  <div class="invalid-feedback">Full name is required.</div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-medium text-secondary">Email</label>
+                  <input type="email" formControlName="email" class="form-control rounded-3"
+                         [class.is-invalid]="invalid('email')" placeholder="john@example.com">
+                  <div class="invalid-feedback">A valid email is required.</div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-medium text-secondary">Phone</label>
+                  <input type="tel" formControlName="phone" class="form-control rounded-3"
+                         [class.is-invalid]="invalid('phone')" placeholder="+1 555 000 0000">
+                  <div class="invalid-feedback">Phone number is required.</div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-medium text-secondary">Country</label>
+                  <input type="text" formControlName="country" class="form-control rounded-3"
+                         [class.is-invalid]="invalid('country')" placeholder="United States">
+                  <div class="invalid-feedback">Country is required.</div>
+                </div>
+                <div class="col-12">
+                  <label class="form-label small fw-medium text-secondary">Address</label>
+                  <input type="text" formControlName="address" class="form-control rounded-3"
+                         [class.is-invalid]="invalid('address')" placeholder="123 Main St">
+                  <div class="invalid-feedback">Address is required.</div>
+                </div>
+                <div class="col-md-8">
+                  <label class="form-label small fw-medium text-secondary">City</label>
+                  <input type="text" formControlName="city" class="form-control rounded-3"
+                         [class.is-invalid]="invalid('city')" placeholder="New York">
+                  <div class="invalid-feedback">City is required.</div>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label small fw-medium text-secondary">Postal Code</label>
+                  <input type="text" formControlName="postalCode" class="form-control rounded-3"
+                         [class.is-invalid]="invalid('postalCode')" placeholder="10001">
+                  <div class="invalid-feedback">Postal code is required.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-4 border border-light p-4">
+              <h5 class="fw-bold text-dark mb-4">Payment Method</h5>
+              <div class="d-flex flex-column gap-2">
+                <label class="payment-option d-flex align-items-center gap-2 border border-light rounded-3 p-3 cursor-pointer">
+                  <input type="radio" formControlName="paymentMethod" value="cod" class="form-check-input mt-0">
+                  <i class="bi bi-cash-coin text-teal fs-5"></i>
+                  <span class="fw-medium text-dark small">Cash on Delivery</span>
+                </label>
+                <label class="payment-option d-flex align-items-center gap-2 border border-light rounded-3 p-3 cursor-pointer">
+                  <input type="radio" formControlName="paymentMethod" value="card" class="form-check-input mt-0">
+                  <i class="bi bi-credit-card text-teal fs-5"></i>
+                  <span class="fw-medium text-dark small">Credit / Debit Card</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-5">
+            <div class="summary-card bg-white rounded-4 border border-light p-4">
+              <h5 class="fw-bold text-dark mb-4">Order Summary</h5>
+
+              <div class="d-flex flex-column gap-3 mb-3">
+                @for (item of cart.items(); track item.id) {
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="summary-img rounded-3 bg-light d-flex align-items-center justify-content-center p-1 position-relative flex-shrink-0">
+                      <img [src]="item.image || 'assets/placeholder.png'" class="img-fluid" [alt]="item.title">
+                      <span class="badge bg-secondary rounded-circle position-absolute top-0 start-100 translate-middle">{{ item.quantity }}</span>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h6 class="fw-semibold text-dark mb-0 fs-7">{{ item.title }}</h6>
+                    </div>
+                    <span class="fw-bold text-dark small">{{ item.price * item.quantity | currency }}</span>
+                  </div>
+                }
+              </div>
+
+              <hr class="text-muted">
+
+              <div class="d-flex justify-content-between mb-2 small">
+                <span class="text-muted">Subtotal</span>
+                <span class="text-dark fw-medium">{{ cart.subtotal() | currency }}</span>
+              </div>
+
+              @if (cart.discount() > 0) {
+                <div class="d-flex justify-content-between mb-2 small">
+                  <span class="text-muted">Discount</span>
+                  <span class="text-success fw-medium">-{{ cart.discount() | currency }}</span>
+                </div>
+              }
+
+              <div class="d-flex justify-content-between mb-2 small">
+                <span class="text-muted">Shipping</span>
+                @if (cart.shipping() === 0) {
+                  <span class="text-success fw-medium">Free</span>
+                } @else {
+                  <span class="text-dark fw-medium">{{ cart.shipping() | currency }}</span>
+                }
+              </div>
+
+              <hr class="text-muted">
+
+              <div class="d-flex justify-content-between mb-4">
+                <span class="fw-bold text-dark">Total</span>
+                <span class="fw-bold text-dark h5 m-0">{{ cart.total() | currency }}</span>
+              </div>
+
+              <button type="submit" class="btn btn-teal-action text-white w-100 rounded-3 py-2 fw-medium" [disabled]="placing()">
+                @if (placing()) { Placing order... } @else { Place Order }
+              </button>
+
+              <a routerLink="/cart" class="d-block text-center text-decoration-none text-muted small mt-3 hover-teal">
+                Back to Cart
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </form>
+
+    }
+
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="categories-page" style="margin-top: 90px;">
+  <div class="container py-4">
+
+    <div class="mb-4">
+      <h1 class="fw-bold h2 m-0">Shop by Category</h1>
+      <p class="text-muted small m-0">Browse our curated collections</p>
+    </div>
+
+    @if (loading()) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-teal" role="status"><span class="visually-hidden">Loading...</span></div>
+      </div>
+    } @else {
+      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+        @for (category of categories(); track category.id) {
+          <div class="col">
+            <a [routerLink]="['/categories', category.id]" class="text-decoration-none">
+              <div class="category-card position-relative rounded-4 overflow-hidden h-100 shadow-sm text-white d-flex align-items-end p-3"
+                   [style.background-image]="'linear-gradient(transparent, rgba(0,0,0,0.8)), url(' + (category.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600') + ')'"
+                   style="height: 200px; background-size: cover; background-position: center;">
+                <div>
+                  <h6 class="fw-bold m-0">{{ category.title }}</h6>
+                  @if (category.description) {
+                    <small class="opacity-75 fs-7">{{ category.description }}</small>
+                  }
+                </div>
+              </div>
+            </a>
+          </div>
+        } @empty {
+          <div class="col-12">
+            <p class="text-muted text-center py-5 m-0">No categories available yet.</p>
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+</div>

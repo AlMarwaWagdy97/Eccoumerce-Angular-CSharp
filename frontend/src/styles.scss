@@ -1,0 +1,53 @@
+@import './app/site/shared/scss/variables.scss';
+
+$theme-colors: (
+  "primary": $primary-teal,
+  "secondary": $text-muted,
+  "success": #10b981,
+  "danger": $danger-red,
+  "warning": $warning-yellow,
+  "light": $bg-light,
+  "dark": $text-main
+);
+
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--text-main);
+  background-color: var(--white);
+}
+
+.fs-7 { font-size: 0.8rem !important; }
+.max-w-md { max-width: 450px; }
+
+/* ---------------------------------------------------------------------------
+   Brand teal utilities — global so they render consistently on every page.
+   (Previously .btn-teal-action / .text-teal / .hover-teal were only defined
+   inside product-details, leaving CTAs unstyled elsewhere.)
+--------------------------------------------------------------------------- */
+.text-teal { color: var(--primary-teal) !important; }
+.bg-teal { background-color: var(--primary-teal) !important; }
+.border-teal { border-color: var(--primary-teal) !important; }
+
+.hover-teal { transition: color 0.2s ease; }
+.hover-teal:hover { color: var(--primary-teal) !important; }
+
+.btn-teal,
+.btn-teal-action {
+  color: #fff;
+  background-color: var(--primary-teal);
+  border: none;
+  transition: background-color 0.2s ease;
+
+  &:hover,
+  &:focus {
+    color: #fff;
+    background-color: var(--primary-teal-dark);
+  }
+
+  &:disabled,
+  &.disabled {
+    background-color: var(--primary-teal);
+    opacity: 0.6;
+  }
+}

@@ -1,0 +1,133 @@
+.auth-page {
+  min-height: calc(100vh - 140px);
+  display: grid;
+  place-items: center;
+  padding: 3rem 1rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #eefdf8 100%);
+}
+
+.auth-card {
+  width: min(100%, 980px);
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  background: var(--white);
+  border: 1px solid var(--border-subtle);
+  border-radius: 2rem;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+.register-card .auth-visual {
+  background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+}
+
+.auth-visual {
+  padding: 3rem;
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-visual .eyebrow {
+  display: inline-block;
+  width: fit-content;
+  margin-bottom: 1rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.16);
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.auth-visual h1 {
+  font-size: clamp(1.7rem, 2.4vw, 2.4rem);
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+
+.auth-visual p {
+  color: rgba(255,255,255,0.86);
+  margin-bottom: 1.5rem;
+  max-width: 32rem;
+}
+
+.pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.pill-list span {
+  padding: 0.55rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.16);
+  font-size: 0.92rem;
+}
+
+.auth-form {
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.brand {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary-teal);
+  margin-bottom: 0.4rem;
+}
+
+.auth-form h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.auth-form p {
+  color: var(--text-muted);
+  margin-bottom: 0;
+}
+
+.alert {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 0.9rem;
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.form-control {
+  border-color: var(--border-subtle);
+  padding: 0.8rem 0.95rem;
+}
+
+.form-control:focus {
+  border-color: var(--primary-teal);
+  box-shadow: 0 0 0 0.2rem rgba(17, 94, 89, 0.15);
+}
+
+.switch-text {
+  margin-top: 1.25rem;
+  text-align: center;
+}
+
+.switch-text a {
+  color: var(--primary-teal);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+@media (max-width: 860px) {
+  .auth-card {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-visual,
+  .auth-form {
+    padding: 2rem;
+  }
+}

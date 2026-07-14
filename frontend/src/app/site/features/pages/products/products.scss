@@ -1,0 +1,105 @@
+$sidebar-bg: var(--white);
+$hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+$transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+.shop-page {
+  
+  // Sidebar Container Custom Styling
+  .filter-sidebar {
+    background-color: $sidebar-bg;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    
+    .filter-group {
+      &:not(:last-child) {
+        border-bottom: 1px solid var(--border-subtle);
+        padding-bottom: 1.5rem;
+      }
+    }
+
+    .filter-option {
+      transition: color 0.2s ease;
+      
+      input[type="radio"]:checked + span {
+        color: var(--primary-teal);
+        font-weight: 600;
+      }
+
+      &:hover {
+        color: var(--primary-teal);
+      }
+    }
+
+    .form-control {
+      font-size: 0.85rem;
+      border: 1px solid var(--border-subtle);
+      
+      &:focus {
+        box-shadow: none;
+        border-color: var(--primary-teal);
+      }
+    }
+  }
+
+  // Top Control Toolbar Custom Styles
+  .form-select {
+    font-size: 0.85rem;
+    cursor: pointer;
+    &:focus {
+      box-shadow: none;
+      border-color: rgba(0,0,0,0.1);
+    }
+  }
+
+  .btn-light.active {
+    background-color: var(--primary-teal-light) !important;
+
+    .bi { color: var(--primary-teal) !important; }
+  }
+
+  // Modern Product Grid Display Card Properties
+  .product-card {
+    transition: $transition-smooth;
+    border: 1px solid transparent;
+    cursor: pointer;
+
+    .img-container {
+      background-color: var(--bg-light);
+      height: 240px;
+      overflow: hidden;
+      
+      img {
+        max-height: 100%;
+        object-fit: contain;
+        transition: transform 0.3s ease;
+        mix-blend-mode: multiply; // لدمج حواف صور المنتجات ذات الخلفية البيضاء مع الكارد الملون
+      }
+    }
+
+    .card-body {
+      transition: background-color 0.2s ease;
+    }
+
+    &:hover {
+      transform: translateY(-6px);
+      box-shadow: $hover-shadow !important;
+      background-color: var(--white) !important;
+      border-color: rgba(0, 0, 0, 0.05);
+
+      .card-body {
+        background-color: var(--white);
+      }
+
+      img {
+        transform: scale(1.03);
+      }
+    }
+  }
+}
+
+// Global Class Overrides for Grid Consistency
+.cursor-pointer {
+  cursor: pointer;
+}
+.fs-7 {
+  font-size: 0.8rem !important;
+}

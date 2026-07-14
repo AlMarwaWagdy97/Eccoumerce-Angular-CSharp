@@ -1,0 +1,54 @@
+<div class="account-page">
+  <section class="page-hero">
+    <div class="hero-copy">
+      <p class="eyebrow">My account</p>
+      <h1>Welcome back to your personal space</h1>
+      <p>Manage your favorites, monitor your orders, and keep your shopping life organized in one place.</p>
+    </div>
+    <div class="hero-actions">
+      <a routerLink="/orders" class="btn btn-dark rounded-3">My Orders</a>
+      <a routerLink="/favorites" class="btn btn-outline-dark rounded-3">My Favorites</a>
+    </div>
+  </section>
+
+  <div class="account-grid">
+    <div class="profile-card primary-card">
+      @if (loading()) {
+        <div class="state-card">Loading profile…</div>
+      } @else if (profile()) {
+        <div class="profile-badge">Member since {{ profile().createdOn | date:'yyyy' }}</div>
+        <h3>{{ profile().firstName }} {{ profile().lastName }}</h3>
+        <p class="profile-email">{{ profile().email }}</p>
+        <p class="profile-help">Your account is ready for a smoother shopping experience.</p>
+        <div class="meta-grid">
+          <div>
+            <span>Phone</span>
+            <strong>{{ profile().phoneNumber || 'Not provided' }}</strong>
+          </div>
+          <div>
+            <span>Delivery</span>
+            <strong>Tracked updates</strong>
+          </div>
+        </div>
+      } @else {
+        <div class="state-card">Please sign in to view your profile.</div>
+      }
+    </div>
+
+    <div class="info-stack">
+      <div class="info-card">
+        <div class="card-icon">🛍️</div>
+        <h3>Orders</h3>
+        <p>Track recent purchases and follow every shipment from one dashboard.</p>
+        <a routerLink="/orders" class="text-link">View orders</a>
+      </div>
+
+      <div class="info-card">
+        <div class="card-icon">♡</div>
+        <h3>Favorites</h3>
+        <p>Save the items you love and revisit them anytime you are ready.</p>
+        <a routerLink="/favorites" class="text-link">Open favorites</a>
+      </div>
+    </div>
+  </div>
+</div>

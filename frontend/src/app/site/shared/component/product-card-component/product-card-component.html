@@ -1,0 +1,33 @@
+<a [routerLink]="['/products', product().slug]" class="text-decoration-none d-block h-100">
+  <div class="product-card card border-0 bg-light rounded-4 overflow-hidden position-relative h-100">
+    @if (product().sale) {
+      <span class="badge bg-danger text-white position-absolute top-0 start-0 m-3 rounded-2 px-2 py-1 small fw-medium">-{{ product().sale }}%</span>
+    }
+
+    <div class="img-container p-3 d-flex align-items-center justify-content-center">
+      <img [src]="product().image || 'assets/placeholder.png'" class="img-fluid" [alt]="product().title">
+    </div>
+
+    <div class="card-body bg-white pt-2">
+      <h6 class="card-title fw-semibold text-dark mb-2 text-truncate">{{ product().title }}</h6>
+      <div class="d-flex align-items-center justify-content-between gap-2">
+        <div class="d-flex align-items-center gap-2">
+          <span class="fw-bold text-dark">{{ (product().priceAfterSale ?? product().price) | currency }}</span>
+          @if (product().priceAfterSale && product().priceAfterSale! < product().price) {
+            <span class="text-muted text-decoration-line-through fs-7">{{ product().price | currency }}</span>
+          }
+        </div>
+
+        <button
+          type="button"
+          class="btn add-to-cart-btn d-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+          [class.added]="justAdded()"
+          (click)="addToCart($event)"
+          [attr.aria-label]="'Add ' + product().title + ' to cart'"
+          title="Add to cart">
+          <i class="bi" [class.bi-cart-plus]="!justAdded()" [class.bi-check-lg]="justAdded()"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</a>
