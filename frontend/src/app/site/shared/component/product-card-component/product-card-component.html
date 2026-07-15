@@ -4,6 +4,16 @@
       <span class="badge bg-danger text-white position-absolute top-0 start-0 m-3 rounded-2 px-2 py-1 small fw-medium">-{{ product().sale }}%</span>
     }
 
+    <button
+      type="button"
+      class="btn favorite-btn d-flex align-items-center justify-content-center rounded-circle position-absolute top-0 end-0 m-3"
+      [class.favorited]="account.isFavorite(product().id)"
+      (click)="toggleFavorite($event)"
+      [attr.aria-label]="(account.isFavorite(product().id) ? 'Remove ' : 'Add ') + product().title + ' from favorites'"
+      [title]="account.isFavorite(product().id) ? 'Remove from favorites' : 'Add to favorites'">
+      <i class="bi" [class.bi-heart]="!account.isFavorite(product().id)" [class.bi-heart-fill]="account.isFavorite(product().id)"></i>
+    </button>
+
     <div class="img-container p-3 d-flex align-items-center justify-content-center">
       <img [src]="product().image || 'assets/placeholder.png'" class="img-fluid" [alt]="product().title">
     </div>

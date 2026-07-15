@@ -89,8 +89,13 @@
             <i class="bi bi-cart3"></i> Add to Cart
           </button>
 
-          <button class="btn btn-outline-light-custom p-2-5 rounded-3 border">
-            <i class="bi bi-heart text-dark fs-5"></i>
+          <button
+            type="button"
+            class="btn btn-outline-light-custom p-2-5 rounded-3 border"
+            [class.favorited]="account.isFavorite(p.id)"
+            (click)="toggleFavorite()"
+            [attr.aria-label]="(account.isFavorite(p.id) ? 'Remove ' : 'Add ') + p.title + ' from favorites'">
+            <i class="bi fs-5" [class.bi-heart]="!account.isFavorite(p.id)" [class.bi-heart-fill]="account.isFavorite(p.id)" [class.text-dark]="!account.isFavorite(p.id)"></i>
           </button>
         </div>
 

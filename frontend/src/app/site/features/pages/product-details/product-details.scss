@@ -65,9 +65,13 @@ $teal-dark: var(--primary-teal-dark);
     background-color: var(--white);
     border-color: var(--border-subtle) !important;
     transition: background-color 0.2s ease;
-    
+
     &:hover {
       background-color: var(--bg-light);
+    }
+
+    &.favorited i {
+      color: #e11d48 !important;
     }
   }
 

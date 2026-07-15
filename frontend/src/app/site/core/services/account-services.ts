@@ -25,6 +25,11 @@ export class AccountServices {
   readonly user = signal<AuthResponseInterface | null>(this.readStoredUser());
   readonly isLoggedIn = computed(() => this.user() !== null);
 
+  // Cache of favorited product IDs so product cards/detail pages can show
+  // favorite state without an extra request per card.
+  readonly favoriteProductIds = signal<Set<number>>(new Set());
+  private favoritesLoaded = false;
+
   login(payload: { email: string; password: string }): Observable<AuthResponseInterface> {
     return this.http.post<ApiEnvelope<AuthResponseInterface>>('/Auth/login', payload).pipe(
       map(response => this.storeUser(response.data) as AuthResponseInterface)
@@ -67,6 +72,8 @@ export class AccountServices {
   clearSession(): void {
     localStorage.removeItem(this.storageKey);
     this.user.set(null);
+    this.favoriteProductIds.set(new Set());
+    this.favoritesLoaded = false;
   }
 
   // ----- Profile -----
@@ -109,6 +116,39 @@ export class AccountServices {
 
   removeFavorite(productId: number): Observable<void> {
     return this.http.delete<ApiEnvelope<unknown>>(`/Favorites/${productId}`).pipe(map(() => undefined));
+  }
+
+  // Populates favoriteProductIds once per session so product cards can show
+  // filled/outline heart state; safe to call from every card's constructor.
+  ensureFavoritesLoaded(): void {
+    if (!this.isLoggedIn() || this.favoritesLoaded) return;
+    this.favoritesLoaded = true;
+
+    this.getFavorites().subscribe({
+      next: items => this.favoriteProductIds.set(new Set(items.map(i => i.productId))),
+      error: () => { this.favoritesLoaded = false; },
+    });
+  }
+
+  isFavorite(productId: number): boolean {
+    return this.favoriteProductIds().has(productId);
+  }
+
+  toggleFavorite(productId: number): void {
+    if (!this.isLoggedIn()) return;
+
+    const wasFavorite = this.isFavorite(productId);
+    const request$ = wasFavorite ? this.removeFavorite(productId) : this.addFavorite(productId);
+
+    request$.subscribe({
+      next: () => {
+        this.favoriteProductIds.update(ids => {
+          const next = new Set(ids);
+          wasFavorite ? next.delete(productId) : next.add(productId);
+          return next;
+        });
+      },
+    });
   }
 
   // ----- Addresses -----
@@ -161,6 +201,7 @@ export class AccountServices {
 
     localStorage.setItem(this.storageKey, JSON.stringify(payload));
     this.user.set(payload);
+    this.favoritesLoaded = false;
     return payload;
   }
 

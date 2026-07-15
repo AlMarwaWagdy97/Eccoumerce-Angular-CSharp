@@ -1,8 +1,9 @@
 import { Component, inject, input, signal } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ProductInterface } from '../../interface/productInterface';
 import { CartServices } from '../../../core/services/cart-services';
+import { AccountServices } from '../../../core/services/account-services';
 
 @Component({
   selector: 'app-product-card',
@@ -14,9 +15,15 @@ export class ProductCardComponent {
   product = input.required<ProductInterface>();
 
   private cart = inject(CartServices);
+  protected account = inject(AccountServices);
+  private router = inject(Router);
 
   // Brief "Added ✓" feedback after a click.
   justAdded = signal(false);
+
+  constructor() {
+    this.account.ensureFavoritesLoaded();
+  }
 
   addToCart(event: Event): void {
     // The card is wrapped in a routerLink — don't navigate when adding.
@@ -37,5 +44,17 @@ export class ProductCardComponent {
 
     this.justAdded.set(true);
     setTimeout(() => this.justAdded.set(false), 1500);
+  }
+
+  toggleFavorite(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!this.account.isLoggedIn()) {
+      this.router.navigate(['/auth/login'], { queryParams: { returnUrl: '/products' } });
+      return;
+    }
+
+    this.account.toggleFavorite(this.product().id);
   }
 }

@@ -1,8 +1,9 @@
 import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ProductServices } from '../../../core/services/product-services';
 import { CartServices } from '../../../core/services/cart-services';
+import { AccountServices } from '../../../core/services/account-services';
 import { ProductDetailsInterface } from '../../../shared/interface/productDetailsInterface';
 import { ProductInterface } from '../../../shared/interface/productInterface';
 
@@ -15,6 +16,8 @@ import { ProductInterface } from '../../../shared/interface/productInterface';
 export class ProductDetailsComponent {
   private productServices = inject(ProductServices);
   private cart = inject(CartServices);
+  protected account = inject(AccountServices);
+  private router = inject(Router);
 
   // Bound from the /products/:slug route via withComponentInputBinding().
   slug = input.required<string>();
@@ -52,6 +55,8 @@ export class ProductDetailsComponent {
   inStock = computed(() => (this.product()?.stockQuantity ?? 0) > 0);
 
   constructor() {
+    this.account.ensureFavoritesLoaded();
+
     // Re-fetch whenever the route slug changes.
     effect(() => {
       const slug = this.slug();
@@ -114,5 +119,17 @@ export class ProductDetailsComponent {
       },
       this.quantity()
     );
+  }
+
+  toggleFavorite(): void {
+    const p = this.product();
+    if (!p) return;
+
+    if (!this.account.isLoggedIn()) {
+      this.router.navigate(['/auth/login'], { queryParams: { returnUrl: `/products/${p.slug}` } });
+      return;
+    }
+
+    this.account.toggleFavorite(p.id);
   }
 }
