@@ -1,0 +1,116 @@
+- generic [active] [ref=f15e1]:
+  - generic [ref=f15e2]:
+    - region "Notifications (F8)":
+      - list
+    - region "Notifications alt+T"
+    - generic [ref=f15e354]:
+      - complementary [ref=f15e356]:
+        - generic [ref=f15e357]:
+          - generic [ref=f15e358]:
+            - generic [ref=f15e359]: S
+            - generic [ref=f15e361]: Admin Panel
+          - button [ref=f15e362] [cursor=pointer]
+        - navigation [ref=f15e363]:
+          - link "Dashboard" [ref=f15e364] [cursor=pointer]:
+            - /url: /admin
+          - link "Categories" [ref=f15e371] [cursor=pointer]:
+            - /url: /admin/categories
+          - link "Products" [ref=f15e375] [cursor=pointer]:
+            - /url: /admin/products
+          - link "Orders" [ref=f15e381] [cursor=pointer]:
+            - /url: /admin/orders
+          - link "Sliders" [ref=f15e386] [cursor=pointer]:
+            - /url: /admin/sliders
+          - link "Customers" [ref=f15e392] [cursor=pointer]:
+            - /url: /admin/customers
+          - link "Users" [ref=f15e399] [cursor=pointer]:
+            - /url: /admin/users
+        - generic [ref=f15e403]:
+          - generic [ref=f15e404]:
+            - paragraph [ref=f15e405]: Admin User
+            - paragraph [ref=f15e406]: admin@store.com
+          - button "Switch to Customer" [ref=f15e407] [cursor=pointer]
+      - main [ref=f15e409]:
+        - generic [ref=f15e411]:
+          - generic [ref=f15e412]:
+            - heading "Dashboard" [level=1] [ref=f15e413]
+            - paragraph [ref=f15e414]: Welcome back! Here's what's happening with your store.
+          - generic [ref=f15e415]:
+            - generic [ref=f15e416]:
+              - heading "Total Revenue" [level=3] [ref=f15e418]
+              - generic [ref=f15e421]:
+                - generic [ref=f15e422]: $12,548.00
+                - generic [ref=f15e423]: +12.5% from last month
+            - generic [ref=f15e427]:
+              - heading "Total Orders" [level=3] [ref=f15e429]
+              - generic [ref=f15e433]:
+                - generic [ref=f15e434]: "3"
+                - generic [ref=f15e435]: +8.2% from last month
+            - generic [ref=f15e439]:
+              - heading "Total Products" [level=3] [ref=f15e441]
+              - generic [ref=f15e446]:
+                - generic [ref=f15e447]: "8"
+                - generic [ref=f15e448]: +5.1% from last month
+            - generic [ref=f15e452]:
+              - heading "Total Customers" [level=3] [ref=f15e454]
+              - generic [ref=f15e460]:
+                - generic [ref=f15e461]: "3"
+                - generic [ref=f15e462]: +15.3% from last month
+          - generic [ref=f15e466]:
+            - generic [ref=f15e467]:
+              - heading "Recent Orders" [level=3] [ref=f15e469]
+              - generic [ref=f15e471]:
+                - generic [ref=f15e472]:
+                  - generic [ref=f15e473]:
+                    - paragraph [ref=f15e474]: "#ORD001"
+                    - paragraph [ref=f15e475]: John Doe
+                  - generic [ref=f15e476]:
+                    - paragraph [ref=f15e477]: $312.36
+                    - paragraph [ref=f15e478]: delivered
+                - generic [ref=f15e479]:
+                  - generic [ref=f15e480]:
+                    - paragraph [ref=f15e481]: "#ORD002"
+                    - paragraph [ref=f15e482]: Jane Smith
+                  - generic [ref=f15e483]:
+                    - paragraph [ref=f15e484]: $205.19
+                    - paragraph [ref=f15e485]: shipped
+                - generic [ref=f15e486]:
+                  - generic [ref=f15e487]:
+                    - paragraph [ref=f15e488]: "#ORD003"
+                    - paragraph [ref=f15e489]: Mike Johnson
+                  - generic [ref=f15e490]:
+                    - paragraph [ref=f15e491]: $398.77
+                    - paragraph [ref=f15e492]: paid
+            - generic [ref=f15e493]:
+              - heading "Top Categories" [level=3] [ref=f15e495]
+              - generic [ref=f15e497]:
+                - generic [ref=f15e498]:
+                  - img "Electronics" [ref=f15e500]
+                  - generic [ref=f15e501]:
+                    - paragraph [ref=f15e502]: Electronics
+                    - paragraph [ref=f15e503]: 24 products
+                - generic [ref=f15e507]:
+                  - img "Fashion" [ref=f15e509]
+                  - generic [ref=f15e510]:
+                    - paragraph [ref=f15e511]: Fashion
+                    - paragraph [ref=f15e512]: 56 products
+                - generic [ref=f15e516]:
+                  - img "Home & Living" [ref=f15e518]
+                  - generic [ref=f15e519]:
+                    - paragraph [ref=f15e520]: Home & Living
+                    - paragraph [ref=f15e521]: 38 products
+                - generic [ref=f15e525]:
+                  - img "Sports" [ref=f15e527]
+                  - generic [ref=f15e528]:
+                    - paragraph [ref=f15e529]: Sports
+                    - paragraph [ref=f15e530]: 42 products
+                - generic [ref=f15e534]:
+                  - img "Beauty" [ref=f15e536]
+                  - generic [ref=f15e537]:
+                    - paragraph [ref=f15e538]: Beauty
+                    - paragraph [ref=f15e539]: 31 products
+  - complementary "Edit with Lovable" [ref=f15e327]:
+    - link "Edit with Lovable" [ref=f15e328] [cursor=pointer]:
+      - /url: https://lovable.dev/projects/lovp_6pmq67ybcs9hzbytv4jn1fmjcp?utm_source=lovable-badge
+      - generic [ref=f15e329]: Edit with
+    - button "Dismiss" [ref=f15e335] [cursor=pointer]

@@ -1,0 +1,189 @@
+- generic:
+  - generic:
+    - list
+    - region "Notifications alt+T"
+    - generic:
+      - generic:
+        - complementary:
+          - generic:
+            - generic:
+              - generic: S
+              - generic: Admin Panel
+            - button
+          - navigation:
+            - link:
+              - /url: /admin
+              - generic: Dashboard
+            - link:
+              - /url: /admin/categories
+              - generic: Categories
+            - link:
+              - /url: /admin/products
+              - generic: Products
+            - link:
+              - /url: /admin/orders
+              - generic: Orders
+            - link:
+              - /url: /admin/sliders
+              - generic: Sliders
+            - link:
+              - /url: /admin/customers
+              - generic: Customers
+            - link:
+              - /url: /admin/users
+              - generic: Users
+          - generic:
+            - generic:
+              - paragraph: Admin User
+              - paragraph: admin@store.com
+            - button:
+              - generic: Switch to Customer
+      - main:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=1]: Users
+                - paragraph: Manage system users and roles
+              - button [expanded]: Add User
+            - generic:
+              - generic:
+                - textbox:
+                  - /placeholder: Search users...
+              - combobox:
+                - generic: All Roles
+            - generic:
+              - generic:
+                - table:
+                  - rowgroup:
+                    - row:
+                      - columnheader: User
+                      - columnheader: Contact
+                      - columnheader: Role
+                      - columnheader: Status
+                      - columnheader: Joined
+                      - columnheader: Actions
+                  - rowgroup:
+                    - row:
+                      - cell:
+                        - generic:
+                          - generic: A
+                          - generic: Admin User
+                      - cell:
+                        - generic:
+                          - generic: admin@store.com
+                          - generic: "+1234567890"
+                      - cell:
+                        - generic: admin
+                      - cell:
+                        - generic:
+                          - switch [checked]
+                          - generic: Active
+                      - cell: 2024-01-01
+                      - cell:
+                        - generic:
+                          - button
+                          - button
+                    - row:
+                      - cell:
+                        - generic:
+                          - generic: J
+                          - generic: John Doe
+                      - cell:
+                        - generic:
+                          - generic: john@example.com
+                          - generic: "+1234567891"
+                      - cell:
+                        - generic: customer
+                      - cell:
+                        - generic:
+                          - switch [checked]
+                          - generic: Active
+                      - cell: 2024-01-15
+                      - cell:
+                        - generic:
+                          - button
+                          - button
+                    - row:
+                      - cell:
+                        - generic:
+                          - generic: J
+                          - generic: Jane Smith
+                      - cell:
+                        - generic:
+                          - generic: jane@example.com
+                          - generic: "+1234567892"
+                      - cell:
+                        - generic: customer
+                      - cell:
+                        - generic:
+                          - switch [checked]
+                          - generic: Active
+                      - cell: 2024-02-01
+                      - cell:
+                        - generic:
+                          - button
+                          - button
+                    - row:
+                      - cell:
+                        - generic:
+                          - generic: M
+                          - generic: Mike Johnson
+                      - cell:
+                        - generic:
+                          - generic: mike@example.com
+                          - generic: "+1234567893"
+                      - cell:
+                        - generic: customer
+                      - cell:
+                        - generic:
+                          - switch
+                          - generic: Inactive
+                      - cell: 2024-02-15
+                      - cell:
+                        - generic:
+                          - button
+                          - button
+                    - row:
+                      - cell:
+                        - generic:
+                          - generic: M
+                          - generic: Manager User
+                      - cell:
+                        - generic:
+                          - generic: manager@store.com
+                          - generic: "+1234567894"
+                      - cell:
+                        - generic: admin
+                      - cell:
+                        - generic:
+                          - switch [checked]
+                          - generic: Active
+                      - cell: 2024-01-05
+                      - cell:
+                        - generic:
+                          - button
+                          - button
+  - complementary:
+    - link:
+      - /url: https://lovable.dev/projects/lovp_6pmq67ybcs9hzbytv4jn1fmjcp?utm_source=lovable-badge
+      - generic: Edit with
+    - button
+  - dialog [ref=f17e715]:
+    - heading "Add User" [level=2] [ref=f17e717]
+    - generic [ref=f17e718]:
+      - generic [ref=f17e719]:
+        - text: Full Name *
+        - textbox "John Doe" [active] [ref=f17e720]
+      - generic [ref=f17e721]:
+        - text: Email *
+        - textbox "john@example.com" [ref=f17e722]
+      - generic [ref=f17e723]:
+        - text: Phone
+        - textbox "+1234567890" [ref=f17e724]
+      - generic [ref=f17e725]:
+        - text: Role *
+        - combobox [ref=f17e726] [cursor=pointer]:
+          - generic: Customer
+      - button "Create User" [ref=f17e729] [cursor=pointer]
+    - button "Close" [ref=f17e730] [cursor=pointer]

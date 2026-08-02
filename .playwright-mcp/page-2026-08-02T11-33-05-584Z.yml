@@ -1,0 +1,162 @@
+- generic [ref=f12e3]:
+  - navigation [ref=f12e4]:
+    - generic [ref=f12e5]:
+      - link "S ShopDemo" [ref=f12e6] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=f12e7]: S
+        - text: ShopDemo
+      - list [ref=f12e9]:
+        - listitem [ref=f12e10]:
+          - link "Home" [ref=f12e11] [cursor=pointer]:
+            - /url: /home
+        - listitem [ref=f12e12]:
+          - link "Shop" [ref=f12e13] [cursor=pointer]:
+            - /url: /products
+        - listitem [ref=f12e14]:
+          - link "Categories" [ref=f12e15] [cursor=pointer]:
+            - /url: /categories
+      - generic [ref=f12e16]:
+        - textbox "Search products..." [ref=f12e17]
+        - generic [ref=f12e18]: 
+      - generic [ref=f12e19]:
+        - button "Switch to Admin" [ref=f12e20] [cursor=pointer]
+        - link "Wishlist" [ref=f12e21] [cursor=pointer]:
+          - /url: /account/favorites
+          - generic [ref=f12e22]: 
+        - link "Cart" [ref=f12e23] [cursor=pointer]:
+          - /url: /cart
+          - generic [ref=f12e24]: 
+        - link "Account" [ref=f12e25] [cursor=pointer]:
+          - /url: /account
+          - generic [ref=f12e26]: 
+  - main [ref=f12e27]:
+    - generic [ref=f12e30]:
+      - heading "My Account" [level=1] [ref=f12e31]
+      - generic [ref=f12e32]:
+        - complementary [ref=f12e33]:
+          - navigation [ref=f12e34]:
+            - link " Account " [ref=f12e35] [cursor=pointer]:
+              - /url: /account
+              - generic [ref=f12e36]: 
+              - generic [ref=f12e38]: Account
+              - generic [ref=f12e39]: 
+            - link " Orders " [ref=f12e40] [cursor=pointer]:
+              - /url: /account/orders
+              - generic [ref=f12e41]: 
+              - generic [ref=f12e43]: Orders
+              - generic [ref=f12e44]: 
+            - link " Address " [ref=f12e45] [cursor=pointer]:
+              - /url: /account/address
+              - generic [ref=f12e46]: 
+              - generic [ref=f12e48]: Address
+              - generic [ref=f12e49]: 
+            - link " Cards " [ref=f12e50] [cursor=pointer]:
+              - /url: /account/cards
+              - generic [ref=f12e51]: 
+              - generic [ref=f12e53]: Cards
+              - generic [ref=f12e54]: 
+            - link " Favorites " [ref=f12e55] [cursor=pointer]:
+              - /url: /account/favorites
+              - generic [ref=f12e56]: 
+              - generic [ref=f12e58]: Favorites
+              - generic [ref=f12e59]: 
+          - button " Log out" [ref=f12e60] [cursor=pointer]:
+            - generic [ref=f12e61]: 
+            - generic [ref=f12e62]: Log out
+        - generic [ref=f12e64]:
+          - heading "My Addresses" [level=2] [ref=f12e66]
+          - generic [ref=f12e166]:
+            - generic [ref=f12e167]:
+              - generic [ref=f12e168]: Full Name
+              - textbox [ref=f12e169]: Playwright Tester
+            - generic [ref=f12e170]:
+              - generic [ref=f12e171]: Phone
+              - textbox [ref=f12e172]: 555-0199
+            - generic [ref=f12e173]:
+              - generic [ref=f12e174]: Address Line 1
+              - textbox [ref=f12e175]: 42 QA Lane
+            - generic [ref=f12e176]:
+              - generic [ref=f12e177]: Address Line 2 (optional)
+              - textbox [ref=f12e178]
+            - generic [ref=f12e179]:
+              - generic [ref=f12e180]:
+                - generic [ref=f12e181]: City
+                - textbox [ref=f12e182]: Testville
+              - generic [ref=f12e183]:
+                - generic [ref=f12e184]: State
+                - textbox [ref=f12e185]: CA
+            - generic [ref=f12e186]:
+              - generic [ref=f12e187]:
+                - generic [ref=f12e188]: Country
+                - textbox [ref=f12e189]: USA
+              - generic [ref=f12e190]:
+                - generic [ref=f12e191]: Postal Code
+                - textbox [ref=f12e192]: "90001"
+            - generic [ref=f12e193]:
+              - checkbox "Set as default address" [ref=f12e194]
+              - text: Set as default address
+            - generic [ref=f12e195]:
+              - button "Save Address" [ref=f12e196] [cursor=pointer]
+              - button "Cancel" [ref=f12e197] [cursor=pointer]
+  - contentinfo [ref=f12e115]:
+    - generic [ref=f12e116]:
+      - generic [ref=f12e117]:
+        - generic [ref=f12e118]:
+          - link "S ShopDemo" [ref=f12e119] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=f12e120]: S
+            - text: ShopDemo
+          - paragraph [ref=f12e121]: Your one-stop destination for quality products at amazing prices.
+          - generic [ref=f12e122]:
+            - link "" [ref=f12e123] [cursor=pointer]:
+              - /url: "#"
+            - link "" [ref=f12e125] [cursor=pointer]:
+              - /url: "#"
+            - link "" [ref=f12e127] [cursor=pointer]:
+              - /url: "#"
+            - link "" [ref=f12e129] [cursor=pointer]:
+              - /url: "#"
+        - generic [ref=f12e131]:
+          - heading "Quick Links" [level=6] [ref=f12e132]
+          - list [ref=f12e133]:
+            - listitem [ref=f12e134]:
+              - link "All Products" [ref=f12e135] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f12e136]:
+              - link "Categories" [ref=f12e137] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f12e138]:
+              - link "Track Order" [ref=f12e139] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f12e140]:
+              - link "About Us" [ref=f12e141] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=f12e142]:
+          - heading "Customer Service" [level=6] [ref=f12e143]
+          - list [ref=f12e144]:
+            - listitem [ref=f12e145]:
+              - link "Contact Us" [ref=f12e146] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f12e147]:
+              - link "FAQs" [ref=f12e148] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f12e149]:
+              - link "Shipping Info" [ref=f12e150] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f12e151]:
+              - link "Returns & Refunds" [ref=f12e152] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=f12e153]:
+          - heading "Newsletter" [level=6] [ref=f12e154]
+          - paragraph [ref=f12e155]: Subscribe for exclusive deals and updates.
+          - generic [ref=f12e156]:
+            - textbox "Your email" [ref=f12e157]
+            - button "" [ref=f12e158] [cursor=pointer]
+      - separator [ref=f12e160]
+      - generic [ref=f12e161]:
+        - paragraph [ref=f12e162]: © 2026 ShopDemo. All rights reserved.
+        - generic [ref=f12e163]:
+          - link "Privacy Policy" [ref=f12e164] [cursor=pointer]:
+            - /url: "#"
+          - link "Terms of Service" [ref=f12e165] [cursor=pointer]:
+            - /url: "#"

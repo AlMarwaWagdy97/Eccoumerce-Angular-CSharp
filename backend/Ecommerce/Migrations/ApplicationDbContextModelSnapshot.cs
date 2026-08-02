@@ -560,6 +560,9 @@ namespace Ecommerce.Migrations
                     b.HasIndex("Sku")
                         .IsUnique();
 
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
                     b.ToTable("Products");
                 });
 

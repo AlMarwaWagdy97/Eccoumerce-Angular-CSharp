@@ -1,0 +1,302 @@
+- generic [active] [ref=f13e1]:
+  - generic [ref=f13e2]:
+    - region "Notifications (F8)":
+      - list
+    - region "Notifications alt+T"
+    - generic [ref=f13e3]:
+      - banner [ref=f13e4]:
+        - generic [ref=f13e5]:
+          - link "S ShopDemo" [ref=f13e6] [cursor=pointer]:
+            - /url: /
+            - generic [ref=f13e7]: S
+            - generic [ref=f13e9]: ShopDemo
+          - navigation [ref=f13e10]:
+            - link "Home" [ref=f13e11] [cursor=pointer]:
+              - /url: /
+            - link "Shop" [ref=f13e12] [cursor=pointer]:
+              - /url: /products
+            - link "Categories" [ref=f13e13] [cursor=pointer]:
+              - /url: /categories
+          - textbox "Search products..." [ref=f13e19]
+          - generic [ref=f13e20]:
+            - button "Switch to Admin" [ref=f13e21] [cursor=pointer]
+            - button [ref=f13e22] [cursor=pointer]
+            - button [ref=f13e23] [cursor=pointer]
+            - button [ref=f13e24] [cursor=pointer]
+      - main [ref=f13e25]:
+        - generic [ref=f13e26]:
+          - generic [ref=f13e31]:
+            - heading "New Season Collection" [level=1] [ref=f13e32]
+            - paragraph [ref=f13e33]: Discover the latest trends in fashion and lifestyle
+            - link "Shop Now" [ref=f13e34] [cursor=pointer]:
+              - /url: /categories/fashion
+          - generic:
+            - generic:
+              - generic:
+                - heading "Tech Deals" [level=1]
+                - paragraph: Up to 40% off on premium electronics
+                - link "Shop Now":
+                  - /url: /categories/electronics
+          - generic:
+            - generic:
+              - generic:
+                - heading "Home Makeover" [level=1]
+                - paragraph: Transform your space with our curated collection
+                - link "Shop Now":
+                  - /url: /categories/home-living
+          - button [ref=f13e35] [cursor=pointer]
+          - button [ref=f13e36] [cursor=pointer]
+          - generic [ref=f13e37]:
+            - button [ref=f13e38] [cursor=pointer]
+            - button [ref=f13e39] [cursor=pointer]
+            - button [ref=f13e40] [cursor=pointer]
+        - generic [ref=f13e42]:
+          - generic [ref=f13e43]:
+            - generic [ref=f13e44]:
+              - heading "Shop by Category" [level=2] [ref=f13e45]
+              - paragraph [ref=f13e46]: Browse our curated collections
+            - link "View All" [ref=f13e47] [cursor=pointer]:
+              - /url: /categories
+          - generic [ref=f13e50]:
+            - link [ref=f13e51] [cursor=pointer]:
+              - /url: /categories/electronics
+              - img "Electronics" [ref=f13e52]
+              - generic [ref=f13e54]:
+                - heading "Electronics" [level=3] [ref=f13e55]
+                - paragraph [ref=f13e56]: 24 Products
+            - link [ref=f13e57] [cursor=pointer]:
+              - /url: /categories/fashion
+              - img "Fashion" [ref=f13e58]
+              - generic [ref=f13e60]:
+                - heading "Fashion" [level=3] [ref=f13e61]
+                - paragraph [ref=f13e62]: 56 Products
+            - link [ref=f13e63] [cursor=pointer]:
+              - /url: /categories/home-living
+              - img "Home & Living" [ref=f13e64]
+              - generic [ref=f13e66]:
+                - heading "Home & Living" [level=3] [ref=f13e67]
+                - paragraph [ref=f13e68]: 38 Products
+            - link [ref=f13e69] [cursor=pointer]:
+              - /url: /categories/sports
+              - img "Sports" [ref=f13e70]
+              - generic [ref=f13e72]:
+                - heading "Sports" [level=3] [ref=f13e73]
+                - paragraph [ref=f13e74]: 42 Products
+            - link [ref=f13e75] [cursor=pointer]:
+              - /url: /categories/beauty
+              - img "Beauty" [ref=f13e76]
+              - generic [ref=f13e78]:
+                - heading "Beauty" [level=3] [ref=f13e79]
+                - paragraph [ref=f13e80]: 31 Products
+            - link [ref=f13e81] [cursor=pointer]:
+              - /url: /categories/books
+              - img "Books" [ref=f13e82]
+              - generic [ref=f13e84]:
+                - heading "Books" [level=3] [ref=f13e85]
+                - paragraph [ref=f13e86]: 67 Products
+        - generic [ref=f13e88]:
+          - generic [ref=f13e89]:
+            - generic [ref=f13e90]:
+              - heading "Featured Products" [level=2] [ref=f13e91]
+              - paragraph [ref=f13e92]: Handpicked favorites just for you
+            - link "View All" [ref=f13e93] [cursor=pointer]:
+              - /url: /products
+          - generic [ref=f13e96]:
+            - link "Wireless Bluetooth Headphones New -20% Add to Cart Electronics Wireless Bluetooth Headphones 4.8 (124) $199.99 $249.99" [ref=f13e98] [cursor=pointer]:
+              - /url: /products/wireless-bluetooth-headphones
+              - generic [ref=f13e99]:
+                - img "Wireless Bluetooth Headphones" [ref=f13e100]
+                - generic [ref=f13e101]:
+                  - generic [ref=f13e102]: New
+                  - generic [ref=f13e103]: "-20%"
+                - button [ref=f13e105]
+                - button "Add to Cart" [ref=f13e107]
+              - generic [ref=f13e108]:
+                - paragraph [ref=f13e109]: Electronics
+                - heading "Wireless Bluetooth Headphones" [level=3] [ref=f13e110]
+                - generic [ref=f13e111]:
+                  - generic [ref=f13e114]: "4.8"
+                  - generic [ref=f13e115]: (124)
+                - generic [ref=f13e116]:
+                  - generic [ref=f13e117]: $199.99
+                  - generic [ref=f13e118]: $249.99
+            - link "Smart Watch Pro -14% Add to Cart Electronics Smart Watch Pro 4.6 (89) $299.99 $349.99" [ref=f13e120] [cursor=pointer]:
+              - /url: /products/smart-watch-pro
+              - generic [ref=f13e121]:
+                - img "Smart Watch Pro" [ref=f13e122]
+                - generic [ref=f13e123]: "-14%"
+                - button [ref=f13e126]
+                - button "Add to Cart" [ref=f13e128]
+              - generic [ref=f13e129]:
+                - paragraph [ref=f13e130]: Electronics
+                - heading "Smart Watch Pro" [level=3] [ref=f13e131]
+                - generic [ref=f13e132]:
+                  - generic [ref=f13e135]: "4.6"
+                  - generic [ref=f13e136]: (89)
+                - generic [ref=f13e137]:
+                  - generic [ref=f13e138]: $299.99
+                  - generic [ref=f13e139]: $349.99
+            - link "Designer Leather Bag -17% Add to Cart Fashion Designer Leather Bag 4.9 (78) $189.99 $229.99" [ref=f13e141] [cursor=pointer]:
+              - /url: /products/designer-leather-bag
+              - generic [ref=f13e142]:
+                - img "Designer Leather Bag" [ref=f13e143]
+                - generic [ref=f13e144]: "-17%"
+                - button [ref=f13e147]
+                - button "Add to Cart" [ref=f13e149]
+              - generic [ref=f13e150]:
+                - paragraph [ref=f13e151]: Fashion
+                - heading "Designer Leather Bag" [level=3] [ref=f13e152]
+                - generic [ref=f13e153]:
+                  - generic [ref=f13e156]: "4.9"
+                  - generic [ref=f13e157]: (78)
+                - generic [ref=f13e158]:
+                  - generic [ref=f13e159]: $189.99
+                  - generic [ref=f13e160]: $229.99
+            - link "Luxury Skincare Set -21% Add to Cart Beauty Luxury Skincare Set 4.8 (203) $149.99 $189.99" [ref=f13e162] [cursor=pointer]:
+              - /url: /products/luxury-skincare-set
+              - generic [ref=f13e163]:
+                - img "Luxury Skincare Set" [ref=f13e164]
+                - generic [ref=f13e165]: "-21%"
+                - button [ref=f13e168]
+                - button "Add to Cart" [ref=f13e170]
+              - generic [ref=f13e171]:
+                - paragraph [ref=f13e172]: Beauty
+                - heading "Luxury Skincare Set" [level=3] [ref=f13e173]
+                - generic [ref=f13e174]:
+                  - generic [ref=f13e177]: "4.8"
+                  - generic [ref=f13e178]: (203)
+                - generic [ref=f13e179]:
+                  - generic [ref=f13e180]: $149.99
+                  - generic [ref=f13e181]: $189.99
+        - generic [ref=f13e183]:
+          - generic [ref=f13e184]:
+            - generic [ref=f13e185]:
+              - heading "New Arrivals" [level=2] [ref=f13e186]
+              - paragraph [ref=f13e187]: Fresh additions to our collection
+            - link "View All" [ref=f13e188] [cursor=pointer]:
+              - /url: /products
+          - generic [ref=f13e191]:
+            - link "Wireless Bluetooth Headphones New -20% Add to Cart Electronics Wireless Bluetooth Headphones 4.8 (124) $199.99 $249.99" [ref=f13e193] [cursor=pointer]:
+              - /url: /products/wireless-bluetooth-headphones
+              - generic [ref=f13e194]:
+                - img "Wireless Bluetooth Headphones" [ref=f13e195]
+                - generic [ref=f13e196]:
+                  - generic [ref=f13e197]: New
+                  - generic [ref=f13e198]: "-20%"
+                - button [ref=f13e200]
+                - button "Add to Cart" [ref=f13e202]
+              - generic [ref=f13e203]:
+                - paragraph [ref=f13e204]: Electronics
+                - heading "Wireless Bluetooth Headphones" [level=3] [ref=f13e205]
+                - generic [ref=f13e206]:
+                  - generic [ref=f13e209]: "4.8"
+                  - generic [ref=f13e210]: (124)
+                - generic [ref=f13e211]:
+                  - generic [ref=f13e212]: $199.99
+                  - generic [ref=f13e213]: $249.99
+            - link "Premium Cotton T-Shirt Add to Cart Fashion Premium Cotton T-Shirt 4.5 (256) $39.99" [ref=f13e215] [cursor=pointer]:
+              - /url: /products/premium-cotton-tshirt
+              - generic [ref=f13e216]:
+                - img "Premium Cotton T-Shirt" [ref=f13e217]
+                - button [ref=f13e219]
+                - button "Add to Cart" [ref=f13e221]
+              - generic [ref=f13e222]:
+                - paragraph [ref=f13e223]: Fashion
+                - heading "Premium Cotton T-Shirt" [level=3] [ref=f13e224]
+                - generic [ref=f13e225]:
+                  - generic [ref=f13e228]: "4.5"
+                  - generic [ref=f13e229]: (256)
+                - generic [ref=f13e230]: $39.99
+            - link "Modern Floor Lamp New Add to Cart Home & Living Modern Floor Lamp 4.4 (45) $129.99" [ref=f13e233] [cursor=pointer]:
+              - /url: /products/modern-floor-lamp
+              - generic [ref=f13e234]:
+                - img "Modern Floor Lamp" [ref=f13e235]
+                - generic [ref=f13e236]: New
+                - button [ref=f13e239]
+                - button "Add to Cart" [ref=f13e241]
+              - generic [ref=f13e242]:
+                - paragraph [ref=f13e243]: Home & Living
+                - heading "Modern Floor Lamp" [level=3] [ref=f13e244]
+                - generic [ref=f13e245]:
+                  - generic [ref=f13e248]: "4.4"
+                  - generic [ref=f13e249]: (45)
+                - generic [ref=f13e250]: $129.99
+            - link "Yoga Mat Premium Add to Cart Sports Yoga Mat Premium 4.7 (167) $59.99" [ref=f13e253] [cursor=pointer]:
+              - /url: /products/yoga-mat-premium
+              - generic [ref=f13e254]:
+                - img "Yoga Mat Premium" [ref=f13e255]
+                - button [ref=f13e257]
+                - button "Add to Cart" [ref=f13e259]
+              - generic [ref=f13e260]:
+                - paragraph [ref=f13e261]: Sports
+                - heading "Yoga Mat Premium" [level=3] [ref=f13e262]
+                - generic [ref=f13e263]:
+                  - generic [ref=f13e266]: "4.7"
+                  - generic [ref=f13e267]: (167)
+                - generic [ref=f13e268]: $59.99
+      - contentinfo [ref=f13e270]:
+        - generic [ref=f13e271]:
+          - generic [ref=f13e272]:
+            - generic [ref=f13e273]:
+              - link "S ShopDemo" [ref=f13e274] [cursor=pointer]:
+                - /url: /
+                - generic [ref=f13e275]: S
+                - generic [ref=f13e277]: ShopDemo
+              - paragraph [ref=f13e278]: Your one-stop destination for quality products at amazing prices.
+              - generic [ref=f13e279]:
+                - link [ref=f13e280] [cursor=pointer]:
+                  - /url: "#"
+                - link [ref=f13e283] [cursor=pointer]:
+                  - /url: "#"
+                - link [ref=f13e286] [cursor=pointer]:
+                  - /url: "#"
+                - link [ref=f13e290] [cursor=pointer]:
+                  - /url: "#"
+            - generic [ref=f13e294]:
+              - heading "Quick Links" [level=4] [ref=f13e295]
+              - list [ref=f13e296]:
+                - listitem [ref=f13e297]:
+                  - link "All Products" [ref=f13e298] [cursor=pointer]:
+                    - /url: /products
+                - listitem [ref=f13e299]:
+                  - link "Categories" [ref=f13e300] [cursor=pointer]:
+                    - /url: /categories
+                - listitem [ref=f13e301]:
+                  - link "Track Order" [ref=f13e302] [cursor=pointer]:
+                    - /url: /profile/orders
+                - listitem [ref=f13e303]:
+                  - link "About Us" [ref=f13e304] [cursor=pointer]:
+                    - /url: "#"
+            - generic [ref=f13e305]:
+              - heading "Customer Service" [level=4] [ref=f13e306]
+              - list [ref=f13e307]:
+                - listitem [ref=f13e308]:
+                  - link "Contact Us" [ref=f13e309] [cursor=pointer]:
+                    - /url: "#"
+                - listitem [ref=f13e310]:
+                  - link "FAQs" [ref=f13e311] [cursor=pointer]:
+                    - /url: "#"
+                - listitem [ref=f13e312]:
+                  - link "Shipping Info" [ref=f13e313] [cursor=pointer]:
+                    - /url: "#"
+                - listitem [ref=f13e314]:
+                  - link "Returns & Refunds" [ref=f13e315] [cursor=pointer]:
+                    - /url: "#"
+            - generic [ref=f13e316]:
+              - heading "Newsletter" [level=4] [ref=f13e317]
+              - paragraph [ref=f13e318]: Subscribe for exclusive deals and updates.
+              - generic [ref=f13e319]:
+                - textbox "Your email" [ref=f13e320]
+                - button [ref=f13e321] [cursor=pointer]
+          - generic [ref=f13e322]:
+            - paragraph [ref=f13e323]: © 2024 ShopDemo. All rights reserved.
+            - generic [ref=f13e324]:
+              - link "Privacy Policy" [ref=f13e325] [cursor=pointer]:
+                - /url: "#"
+              - link "Terms of Service" [ref=f13e326] [cursor=pointer]:
+                - /url: "#"
+  - complementary "Edit with Lovable" [ref=f13e327]:
+    - link "Edit with Lovable" [ref=f13e328] [cursor=pointer]:
+      - /url: https://lovable.dev/projects/lovp_6pmq67ybcs9hzbytv4jn1fmjcp?utm_source=lovable-badge
+      - generic [ref=f13e329]: Edit with
+    - button "Dismiss" [ref=f13e335] [cursor=pointer]

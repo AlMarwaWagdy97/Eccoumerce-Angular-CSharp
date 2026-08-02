@@ -1,0 +1,125 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e5]:
+      - link "S ShopDemo" [ref=e6] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e7]: S
+        - text: ShopDemo
+      - list [ref=e9]:
+        - listitem [ref=e10]:
+          - link "Home" [ref=e11] [cursor=pointer]:
+            - /url: /home
+        - listitem [ref=e12]:
+          - link "Shop" [ref=e13] [cursor=pointer]:
+            - /url: /products
+        - listitem [ref=e14]:
+          - link "Categories" [ref=e15] [cursor=pointer]:
+            - /url: /categories
+      - generic [ref=e16]:
+        - textbox "Search products..." [ref=e17]
+        - generic [ref=e18]: 
+      - generic [ref=e19]:
+        - button "Switch to Admin" [ref=e20] [cursor=pointer]
+        - link "Wishlist" [ref=e21] [cursor=pointer]:
+          - /url: /account/favorites
+          - generic [ref=e22]: 
+        - link "Cart" [ref=e23] [cursor=pointer]:
+          - /url: /cart
+          - generic [ref=e24]: 
+        - link "Sign in" [ref=e25] [cursor=pointer]:
+          - /url: /auth/login
+          - generic [ref=e26]: 
+  - main [ref=e27]:
+    - generic [ref=e29]:
+      - generic [ref=e34]:
+        - heading "Tech Deals" [level=1] [ref=e35]
+        - paragraph [ref=e36]: Up to 40% off on premium electronics
+        - button "Shop Now" [ref=e37] [cursor=pointer]
+      - generic [ref=e40]:
+        - generic [ref=e41]:
+          - heading "Shop by Category" [level=2] [ref=e42]
+          - paragraph [ref=e43]: Browse our curated collections
+        - link "View All " [ref=e44] [cursor=pointer]:
+          - /url: "#"
+          - text: View All
+          - generic [ref=e45]: 
+      - generic [ref=e46]:
+        - generic [ref=e47]:
+          - generic [ref=e48]:
+            - heading "Featured Products" [level=2] [ref=e49]
+            - paragraph [ref=e50]: Handpicked favorites just for you
+          - link "View All " [ref=e51] [cursor=pointer]:
+            - /url: /products
+            - text: View All
+            - generic [ref=e52]: 
+        - paragraph [ref=e55]: No products available yet.
+      - generic [ref=e57]:
+        - generic [ref=e58]:
+          - heading "New Arrivals" [level=2] [ref=e59]
+          - paragraph [ref=e60]: Fresh additions to our collection
+        - link "View All " [ref=e61] [cursor=pointer]:
+          - /url: /products
+          - text: View All
+          - generic [ref=e62]: 
+  - contentinfo [ref=e64]:
+    - generic [ref=e65]:
+      - generic [ref=e66]:
+        - generic [ref=e67]:
+          - link "S ShopDemo" [ref=e68] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=e69]: S
+            - text: ShopDemo
+          - paragraph [ref=e70]: Your one-stop destination for quality products at amazing prices.
+          - generic [ref=e71]:
+            - link "" [ref=e72] [cursor=pointer]:
+              - /url: "#"
+            - link "" [ref=e74] [cursor=pointer]:
+              - /url: "#"
+            - link "" [ref=e76] [cursor=pointer]:
+              - /url: "#"
+            - link "" [ref=e78] [cursor=pointer]:
+              - /url: "#"
+        - generic [ref=e80]:
+          - heading "Quick Links" [level=6] [ref=e81]
+          - list [ref=e82]:
+            - listitem [ref=e83]:
+              - link "All Products" [ref=e84] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e85]:
+              - link "Categories" [ref=e86] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e87]:
+              - link "Track Order" [ref=e88] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e89]:
+              - link "About Us" [ref=e90] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e91]:
+          - heading "Customer Service" [level=6] [ref=e92]
+          - list [ref=e93]:
+            - listitem [ref=e94]:
+              - link "Contact Us" [ref=e95] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e96]:
+              - link "FAQs" [ref=e97] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e98]:
+              - link "Shipping Info" [ref=e99] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e100]:
+              - link "Returns & Refunds" [ref=e101] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e102]:
+          - heading "Newsletter" [level=6] [ref=e103]
+          - paragraph [ref=e104]: Subscribe for exclusive deals and updates.
+          - generic [ref=e105]:
+            - textbox "Your email" [ref=e106]
+            - button "" [ref=e107] [cursor=pointer]
+      - separator [ref=e109]
+      - generic [ref=e110]:
+        - paragraph [ref=e111]: © 2026 ShopDemo. All rights reserved.
+        - generic [ref=e112]:
+          - link "Privacy Policy" [ref=e113] [cursor=pointer]:
+            - /url: "#"
+          - link "Terms of Service" [ref=e114] [cursor=pointer]:
+            - /url: "#"

@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-A single-project ASP.NET Core **.NET 10** Web API for an e-commerce backend (categories, products, and JWT auth). The solution is `Ecommerce.slnx`; all code lives in the `Ecommerce/` project directory.
+A single-project ASP.NET Core **.NET 10** Web API for an e-commerce backend — categories, products, JWT auth, cart, orders, favorites, addresses, and saved cards. The solution is `Ecommerce.slnx`; all code lives in the `Ecommerce/` project directory. This directory is the `backend/` subtree of the `D:\ECom` monorepo (see the root `CLAUDE.md`); it was formerly its own repo, so paths in older notes referencing a standalone checkout no longer apply.
 
 ## Commands
 
-Run all commands from the repo root (`D:\C# Projects\Ecommerce`).
+Run all commands from this directory (`backend/`, i.e. `D:\ECom\backend`).
 
 ```powershell
 dotnet build Ecommerce.slnx
@@ -37,7 +37,7 @@ Layered-by-folder within one project. Namespaces map to folders; most common nam
 
 **Result pattern (`Abstractions/`):** Services return `Result` / `Result<T>` instead of throwing for expected failures. A failure carries an `Error(Code, Description)` (defined per-domain in `Errors/`, e.g. `CategoryErrors`, `ProductErrors`, `UserErrors`). Controllers branch on `result.IsSuccess` / `result.IsFailure`. `ResultExtensions.ToProblem(statusCode)` converts a failed result into an RFC-7807 `ProblemDetails`. When adding a new failure case, add an `Error` to the relevant `*Errors` class rather than inlining strings.
 
-**Response envelope:** `Contracts/Common/ApiResponse<T>` wraps `{ StatusCode, Message, Data }`. Note: usage is currently inconsistent — some controller actions return `ApiResponse<T>`, others return the raw `Result`. Follow the surrounding action's style when editing an existing controller.
+**Response envelope:** `Contracts/Common/ApiResponse<T>` wraps `{ StatusCode, Message, Data }`. Usage is inconsistent on the older `CategoriesController`/`ProductsController` — some actions return `ApiResponse<T>`, others the raw `Result`. The newer account-feature controllers (`AddressesController`, `CardsController`, `CartController`, `FavoritesController`, `OrdersController`, `ProfileController`) consistently return `ApiResponse<T>` — follow their style for new endpoints, and match the surrounding action's style when editing an existing controller.
 
 **Contracts (`Contracts/`):** DTOs are `record`s grouped by feature (`Categories/`, `Products/`, `Authentication/`). Each request that needs validation has a sibling FluentValidation validator (e.g. `CategoryRequestValidation`) auto-discovered from the assembly and run automatically via `SharpGrip.FluentValidation.AutoValidation` — no manual `ModelState` checks needed.
 
@@ -49,7 +49,9 @@ Layered-by-folder within one project. Namespaces map to folders; most common nam
 
 Entity `IEntityTypeConfiguration<T>` classes live in `Presistence/EntitiesConfigurations/` and are applied via `ApplyConfigurationsFromAssembly`.
 
-**Auth (`Authentication/` + `Services/AuthService.cs`):** ASP.NET Core Identity + JWT bearer. `IJwtProvider`/`JwtProvider` generate and validate tokens; `AuthService` handles register/login/refresh with rotating refresh tokens stored on `ApplicationUser.RefreshTokens`.
+**Auth (`Authentication/` + `Services/AuthService.cs`):** ASP.NET Core Identity + JWT bearer. `IJwtProvider`/`JwtProvider` generate and validate tokens; `AuthService` handles register/login/refresh with rotating refresh tokens stored on `ApplicationUser.RefreshTokens`. The account-feature controllers (`Addresses`, `Cards`, `Cart`, `Favorites`, `Orders`, `Profile`) are all `[Authorize]` and resolve the current user's ID from `ClaimTypes.NameIdentifier` via `IHttpContextAccessor` rather than taking it as a route/body parameter. `CartController` maps service errors to HTTP statuses through a `MapFailure(Error)` helper instead of inline `NotFound`/`BadRequest` calls — a variant worth following if you add more actions there.
+
+**Dev seed data:** `Presistence/DataSeeder.cs` (`DataSeeder.SeedAsync`), invoked from `Program.cs` only when `app.Environment.IsDevelopment()`. Seeds a fixed test user plus product stock, an address, a card, favorites, and three sample orders in different statuses — so the account pages have data to show without doing a manual checkout first.
 
 **Errors:** `GlobalExceptionHandler` (registered via `AddExceptionHandler` + `AddProblemDetails`) turns unhandled exceptions into a 500 `ProblemDetails`. Note it is registered but the `app.UseExceptionHandler()` call in `Program.cs` is currently commented out.
 

@@ -1,0 +1,174 @@
+- generic [ref=f5e3]:
+  - navigation [ref=f5e4]:
+    - generic [ref=f5e5]:
+      - link "S ShopDemo" [ref=f5e6] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=f5e7]: S
+        - text: ShopDemo
+      - list [ref=f5e9]:
+        - listitem [ref=f5e10]:
+          - link "Home" [ref=f5e11] [cursor=pointer]:
+            - /url: /home
+        - listitem [ref=f5e12]:
+          - link "Shop" [ref=f5e13] [cursor=pointer]:
+            - /url: /products
+        - listitem [ref=f5e14]:
+          - link "Categories" [ref=f5e15] [cursor=pointer]:
+            - /url: /categories
+      - generic [ref=f5e16]:
+        - textbox "Search products..." [ref=f5e17]
+        - generic [ref=f5e18]: 
+      - generic [ref=f5e19]:
+        - button "Switch to Admin" [ref=f5e20] [cursor=pointer]
+        - link "Wishlist" [ref=f5e21] [cursor=pointer]:
+          - /url: /account/favorites
+          - generic [ref=f5e22]: 
+        - link "Cart" [ref=f5e23] [cursor=pointer]:
+          - /url: /cart
+          - generic [ref=f5e24]: 
+        - link "Account" [ref=f5e25] [cursor=pointer]:
+          - /url: /account
+          - generic [ref=f5e26]: 
+  - main [ref=f5e27]:
+    - generic [ref=f5e30]:
+      - navigation [ref=f5e87]:
+        - link "Home" [ref=f5e88] [cursor=pointer]:
+          - /url: /home
+        - text: /
+        - link "Products" [ref=f5e89] [cursor=pointer]:
+          - /url: /products
+        - text: / Red T-shirt
+      - generic [ref=f5e90]:
+        - img "Red T-shirt" [ref=f5e93]
+        - generic [ref=f5e94]:
+          - generic [ref=f5e95]: T-shirt
+          - heading "Red T-shirt" [level=1] [ref=f5e96]
+          - generic [ref=f5e97]:
+            - generic [ref=f5e98]:
+              - generic [ref=f5e99]: 
+              - generic [ref=f5e100]: 
+              - generic [ref=f5e101]: 
+              - generic [ref=f5e102]: 
+              - generic [ref=f5e103]: 
+            - generic [ref=f5e104]: "0"
+            - generic [ref=f5e105]: (0 reviews)
+          - generic [ref=f5e106]: $50.00
+          - generic [ref=f5e108]: 48 in stock
+          - generic [ref=f5e111]:
+            - generic [ref=f5e112]:
+              - button "" [ref=f5e113] [cursor=pointer]
+              - generic [ref=f5e115]: "1"
+              - button "" [ref=f5e116] [cursor=pointer]
+            - button " Add to Cart" [ref=f5e118] [cursor=pointer]:
+              - generic [ref=f5e119]: 
+              - text: Add to Cart
+            - button "Remove Red T-shirt from favorites" [active] [ref=f5e175] [cursor=pointer]:
+              - generic [ref=f5e121]: 
+          - generic [ref=f5e122]:
+            - generic [ref=f5e124]:
+              - generic [ref=f5e125]: 
+              - text: Free Shipping
+            - generic [ref=f5e127]:
+              - generic [ref=f5e128]: 
+              - text: Secure Payment
+            - generic [ref=f5e130]:
+              - generic [ref=f5e131]: 
+              - text: 30-Day Returns
+      - list [ref=f5e133]:
+        - listitem [ref=f5e134]:
+          - button "Reviews (0)" [ref=f5e135] [cursor=pointer]
+      - generic [ref=f5e136]:
+        - generic [ref=f5e138]:
+          - heading "Write a Review" [level=5] [ref=f5e139]
+          - generic [ref=f5e140]:
+            - generic [ref=f5e141]: Rating
+            - generic [ref=f5e142] [cursor=pointer]:
+              - generic [ref=f5e143]: 
+              - generic [ref=f5e144]: 
+              - generic [ref=f5e145]: 
+              - generic [ref=f5e146]: 
+              - generic [ref=f5e147]: 
+          - generic [ref=f5e148]:
+            - generic [ref=f5e149]: Your Review
+            - textbox "Share your experience with this product..." [ref=f5e150]
+          - button "Submit Review" [ref=f5e151] [cursor=pointer]
+        - generic [ref=f5e152]: No reviews yet. Be the first to review this product!
+      - generic [ref=f5e154]:
+        - heading "Related Products" [level=3] [ref=f5e155]
+        - generic [ref=f5e156]:
+          - link "Yellow Tshirt Yellow Tshirt $300.00" [ref=f5e158] [cursor=pointer]:
+            - /url: /products/yellow-tshirt
+            - generic [ref=f5e159]:
+              - img "Yellow Tshirt" [ref=f5e161]
+              - generic [ref=f5e162]:
+                - heading "Yellow Tshirt" [level=6] [ref=f5e163]
+                - generic [ref=f5e164]: $300.00
+          - link "Yellow T-shirt Yellow T-shirt $50.00" [ref=f5e167] [cursor=pointer]:
+            - /url: /products/yellow-t-shirt
+            - generic [ref=f5e168]:
+              - img "Yellow T-shirt" [ref=f5e170]
+              - generic [ref=f5e171]:
+                - heading "Yellow T-shirt" [level=6] [ref=f5e172]
+                - generic [ref=f5e173]: $50.00
+  - contentinfo [ref=f5e36]:
+    - generic [ref=f5e37]:
+      - generic [ref=f5e38]:
+        - generic [ref=f5e39]:
+          - link "S ShopDemo" [ref=f5e40] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=f5e41]: S
+            - text: ShopDemo
+          - paragraph [ref=f5e42]: Your one-stop destination for quality products at amazing prices.
+          - generic [ref=f5e43]:
+            - link "" [ref=f5e44] [cursor=pointer]:
+              - /url: "#"
+            - link "" [ref=f5e46] [cursor=pointer]:
+              - /url: "#"
+            - link "" [ref=f5e48] [cursor=pointer]:
+              - /url: "#"
+            - link "" [ref=f5e50] [cursor=pointer]:
+              - /url: "#"
+        - generic [ref=f5e52]:
+          - heading "Quick Links" [level=6] [ref=f5e53]
+          - list [ref=f5e54]:
+            - listitem [ref=f5e55]:
+              - link "All Products" [ref=f5e56] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f5e57]:
+              - link "Categories" [ref=f5e58] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f5e59]:
+              - link "Track Order" [ref=f5e60] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f5e61]:
+              - link "About Us" [ref=f5e62] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=f5e63]:
+          - heading "Customer Service" [level=6] [ref=f5e64]
+          - list [ref=f5e65]:
+            - listitem [ref=f5e66]:
+              - link "Contact Us" [ref=f5e67] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f5e68]:
+              - link "FAQs" [ref=f5e69] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f5e70]:
+              - link "Shipping Info" [ref=f5e71] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f5e72]:
+              - link "Returns & Refunds" [ref=f5e73] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=f5e74]:
+          - heading "Newsletter" [level=6] [ref=f5e75]
+          - paragraph [ref=f5e76]: Subscribe for exclusive deals and updates.
+          - generic [ref=f5e77]:
+            - textbox "Your email" [ref=f5e78]
+            - button "" [ref=f5e79] [cursor=pointer]
+      - separator [ref=f5e81]
+      - generic [ref=f5e82]:
+        - paragraph [ref=f5e83]: © 2026 ShopDemo. All rights reserved.
+        - generic [ref=f5e84]:
+          - link "Privacy Policy" [ref=f5e85] [cursor=pointer]:
+            - /url: "#"
+          - link "Terms of Service" [ref=f5e86] [cursor=pointer]:
+            - /url: "#"

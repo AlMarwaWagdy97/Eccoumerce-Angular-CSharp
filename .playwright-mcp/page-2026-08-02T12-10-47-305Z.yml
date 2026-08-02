@@ -1,0 +1,153 @@
+- generic [ref=f17e1]:
+  - generic [ref=f17e2]:
+    - region "Notifications (F8)":
+      - list
+    - region "Notifications alt+T"
+    - generic [ref=f17e354]:
+      - complementary [ref=f17e356]:
+        - generic [ref=f17e357]:
+          - generic [ref=f17e358]:
+            - generic [ref=f17e359]: S
+            - generic [ref=f17e361]: Admin Panel
+          - button [ref=f17e362] [cursor=pointer]
+        - navigation [ref=f17e363]:
+          - link "Dashboard" [ref=f17e364] [cursor=pointer]:
+            - /url: /admin
+          - link "Categories" [ref=f17e371] [cursor=pointer]:
+            - /url: /admin/categories
+          - link "Products" [ref=f17e375] [cursor=pointer]:
+            - /url: /admin/products
+          - link "Orders" [ref=f17e381] [cursor=pointer]:
+            - /url: /admin/orders
+          - link "Sliders" [ref=f17e386] [cursor=pointer]:
+            - /url: /admin/sliders
+          - link "Customers" [ref=f17e392] [cursor=pointer]:
+            - /url: /admin/customers
+          - link "Users" [active] [ref=f17e399] [cursor=pointer]:
+            - /url: /admin/users
+        - generic [ref=f17e403]:
+          - generic [ref=f17e404]:
+            - paragraph [ref=f17e405]: Admin User
+            - paragraph [ref=f17e406]: admin@store.com
+          - button "Switch to Customer" [ref=f17e407] [cursor=pointer]
+      - main [ref=f17e409]:
+        - generic [ref=f17e543]:
+          - generic [ref=f17e544]:
+            - generic [ref=f17e545]:
+              - heading "Users" [level=1] [ref=f17e546]
+              - paragraph [ref=f17e547]: Manage system users and roles
+            - button "Add User" [ref=f17e548] [cursor=pointer]
+          - generic [ref=f17e549]:
+            - textbox "Search users..." [ref=f17e554]
+            - combobox [ref=f17e555] [cursor=pointer]:
+              - generic: All Roles
+          - table [ref=f17e560]:
+            - rowgroup [ref=f17e561]:
+              - row [ref=f17e562]:
+                - columnheader "User" [ref=f17e563]
+                - columnheader "Contact" [ref=f17e564]
+                - columnheader "Role" [ref=f17e565]
+                - columnheader "Status" [ref=f17e566]
+                - columnheader "Joined" [ref=f17e567]
+                - columnheader "Actions" [ref=f17e568]
+            - rowgroup [ref=f17e569]:
+              - row [ref=f17e570]:
+                - cell "A Admin User" [ref=f17e571]:
+                  - generic [ref=f17e572]:
+                    - generic [ref=f17e573]: A
+                    - generic [ref=f17e575]: Admin User
+                - cell "admin@store.com +1234567890" [ref=f17e576]:
+                  - generic [ref=f17e577]:
+                    - generic [ref=f17e578]: admin@store.com
+                    - generic [ref=f17e583]: "+1234567890"
+                - cell [ref=f17e587]
+                - cell "Active" [ref=f17e591]:
+                  - generic [ref=f17e592]:
+                    - switch [checked] [ref=f17e593] [cursor=pointer]
+                    - generic [ref=f17e594]: Active
+                - cell "2024-01-01" [ref=f17e595]
+                - cell [ref=f17e596]:
+                  - generic [ref=f17e597]:
+                    - button [ref=f17e598] [cursor=pointer]
+                    - button [ref=f17e599] [cursor=pointer]
+              - row [ref=f17e600]:
+                - cell "J John Doe" [ref=f17e601]:
+                  - generic [ref=f17e602]:
+                    - generic [ref=f17e603]: J
+                    - generic [ref=f17e605]: John Doe
+                - cell "john@example.com +1234567891" [ref=f17e606]:
+                  - generic [ref=f17e607]:
+                    - generic [ref=f17e608]: john@example.com
+                    - generic [ref=f17e613]: "+1234567891"
+                - cell "customer" [ref=f17e617]
+                - cell "Active" [ref=f17e619]:
+                  - generic [ref=f17e620]:
+                    - switch [checked] [ref=f17e621] [cursor=pointer]
+                    - generic [ref=f17e622]: Active
+                - cell "2024-01-15" [ref=f17e623]
+                - cell [ref=f17e624]:
+                  - generic [ref=f17e625]:
+                    - button [ref=f17e626] [cursor=pointer]
+                    - button [ref=f17e627] [cursor=pointer]
+              - row [ref=f17e628]:
+                - cell "J Jane Smith" [ref=f17e629]:
+                  - generic [ref=f17e630]:
+                    - generic [ref=f17e631]: J
+                    - generic [ref=f17e633]: Jane Smith
+                - cell "jane@example.com +1234567892" [ref=f17e634]:
+                  - generic [ref=f17e635]:
+                    - generic [ref=f17e636]: jane@example.com
+                    - generic [ref=f17e641]: "+1234567892"
+                - cell "customer" [ref=f17e645]
+                - cell "Active" [ref=f17e647]:
+                  - generic [ref=f17e648]:
+                    - switch [checked] [ref=f17e649] [cursor=pointer]
+                    - generic [ref=f17e650]: Active
+                - cell "2024-02-01" [ref=f17e651]
+                - cell [ref=f17e652]:
+                  - generic [ref=f17e653]:
+                    - button [ref=f17e654] [cursor=pointer]
+                    - button [ref=f17e655] [cursor=pointer]
+              - row [ref=f17e656]:
+                - cell "M Mike Johnson" [ref=f17e657]:
+                  - generic [ref=f17e658]:
+                    - generic [ref=f17e659]: M
+                    - generic [ref=f17e661]: Mike Johnson
+                - cell "mike@example.com +1234567893" [ref=f17e662]:
+                  - generic [ref=f17e663]:
+                    - generic [ref=f17e664]: mike@example.com
+                    - generic [ref=f17e669]: "+1234567893"
+                - cell "customer" [ref=f17e673]
+                - cell "Inactive" [ref=f17e675]:
+                  - generic [ref=f17e676]:
+                    - switch [ref=f17e677] [cursor=pointer]
+                    - generic [ref=f17e678]: Inactive
+                - cell "2024-02-15" [ref=f17e679]
+                - cell [ref=f17e680]:
+                  - generic [ref=f17e681]:
+                    - button [ref=f17e682] [cursor=pointer]
+                    - button [ref=f17e683] [cursor=pointer]
+              - row [ref=f17e684]:
+                - cell "M Manager User" [ref=f17e685]:
+                  - generic [ref=f17e686]:
+                    - generic [ref=f17e687]: M
+                    - generic [ref=f17e689]: Manager User
+                - cell "manager@store.com +1234567894" [ref=f17e690]:
+                  - generic [ref=f17e691]:
+                    - generic [ref=f17e692]: manager@store.com
+                    - generic [ref=f17e697]: "+1234567894"
+                - cell [ref=f17e701]
+                - cell "Active" [ref=f17e705]:
+                  - generic [ref=f17e706]:
+                    - switch [checked] [ref=f17e707] [cursor=pointer]
+                    - generic [ref=f17e708]: Active
+                - cell "2024-01-05" [ref=f17e709]
+                - cell [ref=f17e710]:
+                  - generic [ref=f17e711]:
+                    - button [ref=f17e712] [cursor=pointer]
+                    - button [ref=f17e713] [cursor=pointer]
+  - complementary "Edit with Lovable" [ref=f17e327]:
+    - link "Edit with Lovable" [ref=f17e328] [cursor=pointer]:
+      - /url: https://lovable.dev/projects/lovp_6pmq67ybcs9hzbytv4jn1fmjcp?utm_source=lovable-badge
+      - generic [ref=f17e329]: Edit with
+    - button "Dismiss" [ref=f17e335] [cursor=pointer]

@@ -1,0 +1,57 @@
+- generic [ref=f11e3]:
+  - navigation [ref=f11e4]:
+    - generic [ref=f11e5]:
+      - link "S ShopDemo" [ref=f11e6] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=f11e7]: S
+        - text: ShopDemo
+      - list [ref=f11e9]:
+        - listitem [ref=f11e10]:
+          - link "Home" [ref=f11e11] [cursor=pointer]:
+            - /url: /home
+        - listitem [ref=f11e12]:
+          - link "Shop" [ref=f11e13] [cursor=pointer]:
+            - /url: /products
+        - listitem [ref=f11e14]:
+          - link "Categories" [ref=f11e15] [cursor=pointer]:
+            - /url: /categories
+      - generic [ref=f11e16]:
+        - textbox "Search products..." [ref=f11e17]
+        - generic [ref=f11e18]: 
+      - generic [ref=f11e19]:
+        - button "Switch to Admin" [ref=f11e20] [cursor=pointer]
+        - link "Wishlist" [ref=f11e21] [cursor=pointer]:
+          - /url: /account/favorites
+          - generic [ref=f11e22]: 
+        - link "Cart" [ref=f11e23] [cursor=pointer]:
+          - /url: /cart
+          - generic [ref=f11e24]: 
+        - link "Sign in" [ref=f11e25] [cursor=pointer]:
+          - /url: /auth/login
+          - generic [ref=f11e26]: 
+  - paragraph [ref=f11e27]: auth-layout works!
+  - generic [ref=f11e30]:
+    - generic [ref=f11e31]:
+      - generic [ref=f11e32]: Welcome back
+      - heading "Sign in to your personal dashboard" [level=1] [ref=f11e33]
+      - paragraph [ref=f11e34]: Access your favorites, review your orders, and stay on top of every delivery with a single account.
+      - generic [ref=f11e35]:
+        - generic [ref=f11e36]: Secure checkout
+        - generic [ref=f11e37]: Order tracking
+        - generic [ref=f11e38]: Wishlist access
+    - generic [ref=f11e39]:
+      - generic [ref=f11e40]: ShopDemo
+      - heading "Welcome back" [level=2] [ref=f11e41]
+      - paragraph [ref=f11e42]: Enter your details to continue where you left off.
+      - generic [ref=f11e43]:
+        - generic [ref=f11e44]:
+          - generic [ref=f11e45]: Email
+          - textbox "you@example.com" [ref=f11e46]
+        - generic [ref=f11e47]:
+          - generic [ref=f11e48]: Password
+          - textbox "********" [ref=f11e49]
+        - button "Sign In" [ref=f11e50] [cursor=pointer]
+      - paragraph [ref=f11e51]:
+        - text: New here?
+        - link "Create an account" [ref=f11e52] [cursor=pointer]:
+          - /url: /auth/register

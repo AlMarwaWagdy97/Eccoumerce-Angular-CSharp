@@ -8,6 +8,8 @@
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
             builder.Property(x => x.Title).HasMaxLength(255).IsRequired();
+
+            builder.HasIndex(x => x.Slug).IsUnique();
             builder.Property(x => x.Slug).HasMaxLength(255).IsRequired();
 
             builder.HasIndex(x => x.Sku).IsUnique();

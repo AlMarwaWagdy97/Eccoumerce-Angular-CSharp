@@ -1,0 +1,161 @@
+- generic [ref=f8e3]:
+  - navigation [ref=f8e4]:
+    - generic [ref=f8e5]:
+      - link "S ShopDemo" [ref=f8e6] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=f8e7]: S
+        - text: ShopDemo
+      - list [ref=f8e9]:
+        - listitem [ref=f8e10]:
+          - link "Home" [ref=f8e11] [cursor=pointer]:
+            - /url: /home
+        - listitem [ref=f8e12]:
+          - link "Shop" [ref=f8e13] [cursor=pointer]:
+            - /url: /products
+        - listitem [ref=f8e14]:
+          - link "Categories" [ref=f8e15] [cursor=pointer]:
+            - /url: /categories
+      - generic [ref=f8e16]:
+        - textbox "Search products..." [ref=f8e17]
+        - generic [ref=f8e18]: 
+      - generic [ref=f8e19]:
+        - button "Switch to Admin" [ref=f8e20] [cursor=pointer]
+        - link "Wishlist" [ref=f8e21] [cursor=pointer]:
+          - /url: /account/favorites
+          - generic [ref=f8e22]: 
+        - link "Cart" [ref=f8e23] [cursor=pointer]:
+          - /url: /cart
+          - generic [ref=f8e24]: 
+          - generic [ref=f8e25]: "1"
+        - link "Account" [ref=f8e26] [cursor=pointer]:
+          - /url: /account
+          - generic [ref=f8e27]: 
+  - main [ref=f8e28]:
+    - generic [ref=f8e31]:
+      - generic [ref=f8e32]:
+        - heading "Checkout" [level=1] [ref=f8e33]
+        - paragraph [ref=f8e34]: Complete your order
+      - generic [ref=f8e36]:
+        - generic [ref=f8e37]:
+          - generic [ref=f8e38]:
+            - heading "Contact & Shipping" [level=5] [ref=f8e39]
+            - generic [ref=f8e40]:
+              - generic [ref=f8e41]:
+                - generic [ref=f8e42]: Full Name
+                - textbox "John Doe" [ref=f8e43]
+              - generic [ref=f8e44]:
+                - generic [ref=f8e45]: Email
+                - textbox "john@example.com" [ref=f8e46]
+              - generic [ref=f8e47]:
+                - generic [ref=f8e48]: Phone
+                - textbox "+1 555 000 0000" [ref=f8e49]
+              - generic [ref=f8e50]:
+                - generic [ref=f8e51]: Country
+                - textbox "United States" [ref=f8e52]
+              - generic [ref=f8e53]:
+                - generic [ref=f8e54]: Address
+                - textbox "123 Main St" [ref=f8e55]
+              - generic [ref=f8e56]:
+                - generic [ref=f8e57]: City
+                - textbox "New York" [ref=f8e58]
+              - generic [ref=f8e59]:
+                - generic [ref=f8e60]: State
+                - textbox "NY" [ref=f8e61]
+              - generic [ref=f8e62]:
+                - generic [ref=f8e63]: Postal Code
+                - textbox "10001" [ref=f8e64]
+          - generic [ref=f8e65]:
+            - heading "Payment Method" [level=5] [ref=f8e66]
+            - generic [ref=f8e67]:
+              - generic [ref=f8e68]:
+                - radio " Cash on Delivery" [checked] [ref=f8e69]
+                - generic [ref=f8e70]: 
+                - generic [ref=f8e71]: Cash on Delivery
+              - generic [ref=f8e72]:
+                - radio " Credit / Debit Card" [ref=f8e73]
+                - generic [ref=f8e74]: 
+                - generic [ref=f8e75]: Credit / Debit Card
+        - generic [ref=f8e77]:
+          - heading "Order Summary" [level=5] [ref=f8e78]
+          - generic [ref=f8e80]:
+            - generic [ref=f8e81]:
+              - img "Red T-shirt" [ref=f8e82]
+              - generic [ref=f8e83]: "1"
+            - heading "Red T-shirt" [level=6] [ref=f8e85]
+            - generic [ref=f8e86]: $50.00
+          - separator [ref=f8e87]
+          - generic [ref=f8e88]:
+            - generic [ref=f8e89]: Subtotal
+            - generic [ref=f8e90]: $50.00
+          - generic [ref=f8e91]:
+            - generic [ref=f8e92]: Shipping
+            - generic [ref=f8e93]: Free
+          - separator [ref=f8e94]
+          - generic [ref=f8e95]:
+            - generic [ref=f8e96]: Total
+            - generic [ref=f8e97]: $50.00
+          - button "Place Order" [ref=f8e98] [cursor=pointer]
+          - link "Back to Cart" [ref=f8e99] [cursor=pointer]:
+            - /url: /cart
+  - contentinfo [ref=f8e101]:
+    - generic [ref=f8e102]:
+      - generic [ref=f8e103]:
+        - generic [ref=f8e104]:
+          - link "S ShopDemo" [ref=f8e105] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=f8e106]: S
+            - text: ShopDemo
+          - paragraph [ref=f8e107]: Your one-stop destination for quality products at amazing prices.
+          - generic [ref=f8e108]:
+            - link "" [ref=f8e109] [cursor=pointer]:
+              - /url: "#"
+            - link "" [ref=f8e111] [cursor=pointer]:
+              - /url: "#"
+            - link "" [ref=f8e113] [cursor=pointer]:
+              - /url: "#"
+            - link "" [ref=f8e115] [cursor=pointer]:
+              - /url: "#"
+        - generic [ref=f8e117]:
+          - heading "Quick Links" [level=6] [ref=f8e118]
+          - list [ref=f8e119]:
+            - listitem [ref=f8e120]:
+              - link "All Products" [ref=f8e121] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f8e122]:
+              - link "Categories" [ref=f8e123] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f8e124]:
+              - link "Track Order" [ref=f8e125] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f8e126]:
+              - link "About Us" [ref=f8e127] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=f8e128]:
+          - heading "Customer Service" [level=6] [ref=f8e129]
+          - list [ref=f8e130]:
+            - listitem [ref=f8e131]:
+              - link "Contact Us" [ref=f8e132] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f8e133]:
+              - link "FAQs" [ref=f8e134] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f8e135]:
+              - link "Shipping Info" [ref=f8e136] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f8e137]:
+              - link "Returns & Refunds" [ref=f8e138] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=f8e139]:
+          - heading "Newsletter" [level=6] [ref=f8e140]
+          - paragraph [ref=f8e141]: Subscribe for exclusive deals and updates.
+          - generic [ref=f8e142]:
+            - textbox "Your email" [ref=f8e143]
+            - button "" [ref=f8e144] [cursor=pointer]
+      - separator [ref=f8e146]
+      - generic [ref=f8e147]:
+        - paragraph [ref=f8e148]: © 2026 ShopDemo. All rights reserved.
+        - generic [ref=f8e149]:
+          - link "Privacy Policy" [ref=f8e150] [cursor=pointer]:
+            - /url: "#"
+          - link "Terms of Service" [ref=f8e151] [cursor=pointer]:
+            - /url: "#"

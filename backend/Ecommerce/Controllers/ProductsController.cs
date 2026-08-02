@@ -29,7 +29,7 @@ namespace Ecommerce.Controllers
                 return NotFound(errorResponse);
             }
 
-            var response = new ApiResponse<ProductResponse>(StatusCodes.Status200OK, "Product retrieved successfully.", result.Value);
+            var response = new ApiResponse<ProductDetailsResponse>(StatusCodes.Status200OK, "Product retrieved successfully.", result.Value);
             return Ok(response);
         }
 

@@ -1,0 +1,57 @@
+- generic [ref=f8e222]:
+  - navigation [ref=f8e223]:
+    - generic [ref=f8e224]:
+      - link "S ShopDemo" [ref=f8e225] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=f8e226]: S
+        - text: ShopDemo
+      - list [ref=f8e228]:
+        - listitem [ref=f8e229]:
+          - link "Home" [ref=f8e230] [cursor=pointer]:
+            - /url: /home
+        - listitem [ref=f8e231]:
+          - link "Shop" [ref=f8e232] [cursor=pointer]:
+            - /url: /products
+        - listitem [ref=f8e233]:
+          - link "Categories" [ref=f8e234] [cursor=pointer]:
+            - /url: /categories
+      - generic [ref=f8e235]:
+        - textbox "Search products..." [ref=f8e236]
+        - generic [ref=f8e237]: 
+      - generic [ref=f8e238]:
+        - button "Switch to Admin" [ref=f8e239] [cursor=pointer]
+        - link "Wishlist" [ref=f8e240] [cursor=pointer]:
+          - /url: /account/favorites
+          - generic [ref=f8e241]: 
+        - link "Cart" [ref=f8e242] [cursor=pointer]:
+          - /url: /cart
+          - generic [ref=f8e243]: 
+        - link "Sign in" [ref=f8e244] [cursor=pointer]:
+          - /url: /auth/login
+          - generic [ref=f8e245]: 
+  - paragraph [ref=f8e246]: auth-layout works!
+  - generic [ref=f8e249]:
+    - generic [ref=f8e250]:
+      - generic [ref=f8e251]: Welcome back
+      - heading "Sign in to your personal dashboard" [level=1] [ref=f8e252]
+      - paragraph [ref=f8e253]: Access your favorites, review your orders, and stay on top of every delivery with a single account.
+      - generic [ref=f8e254]:
+        - generic [ref=f8e255]: Secure checkout
+        - generic [ref=f8e256]: Order tracking
+        - generic [ref=f8e257]: Wishlist access
+    - generic [ref=f8e258]:
+      - generic [ref=f8e259]: ShopDemo
+      - heading "Welcome back" [level=2] [ref=f8e260]
+      - paragraph [ref=f8e261]: Enter your details to continue where you left off.
+      - generic [ref=f8e262]:
+        - generic [ref=f8e263]:
+          - generic [ref=f8e264]: Email
+          - textbox "you@example.com" [ref=f8e265]
+        - generic [ref=f8e266]:
+          - generic [ref=f8e267]: Password
+          - textbox "********" [ref=f8e268]
+        - button "Sign In" [ref=f8e269] [cursor=pointer]
+      - paragraph [ref=f8e270]:
+        - text: New here?
+        - link "Create an account" [ref=f8e271] [cursor=pointer]:
+          - /url: /auth/register

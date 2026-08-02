@@ -1,0 +1,146 @@
+- generic [ref=f7e3]:
+  - navigation [ref=f7e4]:
+    - generic [ref=f7e5]:
+      - link "S ShopDemo" [ref=f7e6] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=f7e7]: S
+        - text: ShopDemo
+      - list [ref=f7e9]:
+        - listitem [ref=f7e10]:
+          - link "Home" [ref=f7e11] [cursor=pointer]:
+            - /url: /home
+        - listitem [ref=f7e12]:
+          - link "Shop" [ref=f7e13] [cursor=pointer]:
+            - /url: /products
+        - listitem [ref=f7e14]:
+          - link "Categories" [ref=f7e15] [cursor=pointer]:
+            - /url: /categories
+      - generic [ref=f7e16]:
+        - textbox "Search products..." [ref=f7e17]
+        - generic [ref=f7e18]: 
+      - generic [ref=f7e19]:
+        - button "Switch to Admin" [ref=f7e20] [cursor=pointer]
+        - link "Wishlist" [ref=f7e21] [cursor=pointer]:
+          - /url: /account/favorites
+          - generic [ref=f7e22]: 
+        - link "Cart" [ref=f7e23] [cursor=pointer]:
+          - /url: /cart
+          - generic [ref=f7e24]: 
+          - generic [ref=f7e25]: "1"
+        - link "Account" [ref=f7e26] [cursor=pointer]:
+          - /url: /account
+          - generic [ref=f7e27]: 
+  - main [ref=f7e28]:
+    - generic [ref=f7e31]:
+      - heading "My Account" [level=1] [ref=f7e32]
+      - generic [ref=f7e33]:
+        - complementary [ref=f7e34]:
+          - navigation [ref=f7e35]:
+            - link " Account " [ref=f7e36] [cursor=pointer]:
+              - /url: /account
+              - generic [ref=f7e37]: 
+              - generic [ref=f7e39]: Account
+              - generic [ref=f7e40]: 
+            - link " Orders " [ref=f7e41] [cursor=pointer]:
+              - /url: /account/orders
+              - generic [ref=f7e42]: 
+              - generic [ref=f7e44]: Orders
+              - generic [ref=f7e45]: 
+            - link " Address " [ref=f7e46] [cursor=pointer]:
+              - /url: /account/address
+              - generic [ref=f7e47]: 
+              - generic [ref=f7e49]: Address
+              - generic [ref=f7e50]: 
+            - link " Cards " [ref=f7e51] [cursor=pointer]:
+              - /url: /account/cards
+              - generic [ref=f7e52]: 
+              - generic [ref=f7e54]: Cards
+              - generic [ref=f7e55]: 
+            - link " Favorites " [ref=f7e56] [cursor=pointer]:
+              - /url: /account/favorites
+              - generic [ref=f7e57]: 
+              - generic [ref=f7e59]: Favorites
+              - generic [ref=f7e60]: 
+          - button " Log out" [ref=f7e61] [cursor=pointer]:
+            - generic [ref=f7e62]: 
+            - generic [ref=f7e63]: Log out
+        - generic [ref=f7e65]:
+          - generic [ref=f7e66]:
+            - heading "My Cards" [level=2] [ref=f7e67]
+            - button "+ Add Card" [ref=f7e68] [cursor=pointer]
+          - generic [ref=f7e69]:
+            - generic [ref=f7e70]:
+              - generic [ref=f7e71]: Default
+              - paragraph [ref=f7e72]: Visa
+              - paragraph [ref=f7e73]: •••• •••• •••• 4242
+              - paragraph [ref=f7e74]: Seed Tester · Expires 12/2028
+              - button "Delete" [ref=f7e76] [cursor=pointer]
+            - generic [ref=f7e77]:
+              - paragraph [ref=f7e78]: Mastercard
+              - paragraph [ref=f7e79]: •••• •••• •••• 1234
+              - paragraph [ref=f7e80]: Test Two · Expires 06/2030
+              - generic [ref=f7e81]:
+                - button "Set as default" [ref=f7e82] [cursor=pointer]
+                - button "Delete" [ref=f7e83] [cursor=pointer]
+  - contentinfo [ref=f7e85]:
+    - generic [ref=f7e86]:
+      - generic [ref=f7e87]:
+        - generic [ref=f7e88]:
+          - link "S ShopDemo" [ref=f7e89] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=f7e90]: S
+            - text: ShopDemo
+          - paragraph [ref=f7e91]: Your one-stop destination for quality products at amazing prices.
+          - generic [ref=f7e92]:
+            - link "" [ref=f7e93] [cursor=pointer]:
+              - /url: "#"
+            - link "" [ref=f7e95] [cursor=pointer]:
+              - /url: "#"
+            - link "" [ref=f7e97] [cursor=pointer]:
+              - /url: "#"
+            - link "" [ref=f7e99] [cursor=pointer]:
+              - /url: "#"
+        - generic [ref=f7e101]:
+          - heading "Quick Links" [level=6] [ref=f7e102]
+          - list [ref=f7e103]:
+            - listitem [ref=f7e104]:
+              - link "All Products" [ref=f7e105] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f7e106]:
+              - link "Categories" [ref=f7e107] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f7e108]:
+              - link "Track Order" [ref=f7e109] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f7e110]:
+              - link "About Us" [ref=f7e111] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=f7e112]:
+          - heading "Customer Service" [level=6] [ref=f7e113]
+          - list [ref=f7e114]:
+            - listitem [ref=f7e115]:
+              - link "Contact Us" [ref=f7e116] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f7e117]:
+              - link "FAQs" [ref=f7e118] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f7e119]:
+              - link "Shipping Info" [ref=f7e120] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=f7e121]:
+              - link "Returns & Refunds" [ref=f7e122] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=f7e123]:
+          - heading "Newsletter" [level=6] [ref=f7e124]
+          - paragraph [ref=f7e125]: Subscribe for exclusive deals and updates.
+          - generic [ref=f7e126]:
+            - textbox "Your email" [ref=f7e127]
+            - button "" [ref=f7e128] [cursor=pointer]
+      - separator [ref=f7e130]
+      - generic [ref=f7e131]:
+        - paragraph [ref=f7e132]: © 2026 ShopDemo. All rights reserved.
+        - generic [ref=f7e133]:
+          - link "Privacy Policy" [ref=f7e134] [cursor=pointer]:
+            - /url: "#"
+          - link "Terms of Service" [ref=f7e135] [cursor=pointer]:
+            - /url: "#"

@@ -1,0 +1,4 @@
+[     102ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/D:/ECom/frontend/.angular/cache/22.0.4/Ecommerce/vite/deps/chunk-XWLZMWXH.js?v=d5ccc179:14933
+[     111ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/auth/register:0
+[     119ms] [LOG] Angular hydrated 4 component(s) and 97 node(s), 0 component(s) were skipped. 0 defer block(s) were configured to use incremental hydration. Learn more at https://v22.angular.dev/guide/hydration. @ http://localhost:4200/@fs/D:/ECom/frontend/.angular/cache/22.0.4/Ecommerce/vite/deps/chunk-XWLZMWXH.js?v=d5ccc179:14933
+[   15447ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://localhost:7297/api/Auth/register:0

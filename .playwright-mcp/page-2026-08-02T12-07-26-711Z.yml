@@ -1,0 +1,15 @@
+- generic [active] [ref=f14e1]:
+  - generic [ref=f14e2]:
+    - region "Notifications (F8)":
+      - list
+    - region "Notifications alt+T"
+    - generic [ref=f14e4]:
+      - heading "404" [level=1] [ref=f14e5]
+      - paragraph [ref=f14e6]: Oops! Page not found
+      - link "Return to Home" [ref=f14e7] [cursor=pointer]:
+        - /url: /
+  - complementary "Edit with Lovable" [ref=f14e8]:
+    - link "Edit with Lovable" [ref=f14e9] [cursor=pointer]:
+      - /url: https://lovable.dev/projects/lovp_6pmq67ybcs9hzbytv4jn1fmjcp?utm_source=lovable-badge
+      - generic [ref=f14e10]: Edit with
+    - button "Dismiss" [ref=f14e16] [cursor=pointer]

@@ -1,8 +1,14 @@
-
 <app-navbar></app-navbar>
 
-<main class="d-flex flex-column min-vh-100">
- <p>not-found works!</p>
+<main class="d-flex flex-column min-vh-100" style="margin-top: 90px;">
+  <div class="container py-4 flex-grow-1 d-flex align-items-center justify-content-center">
+    <div class="text-center py-5">
+      <i class="bi bi-signpost-2 fs-1 text-secondary d-block mb-3"></i>
+      <h1 class="fw-bold h2 text-dark mb-2">Page not found</h1>
+      <p class="text-muted mb-4">The page you're looking for doesn't exist or may have been moved.</p>
+      <a routerLink="/home" class="btn btn-teal-action text-white rounded-3 px-4 py-2">Back to Home</a>
+    </div>
+  </div>
 </main>
 
 <app-footer></app-footer>

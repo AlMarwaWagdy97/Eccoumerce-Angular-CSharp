@@ -23,25 +23,54 @@ public class ProductService(ApplicationDbContext context) : IProductService
             Result.Failure<ProductResponse>(ProductErrors.ProductNotFound);
     }
 
-    public async Task<Result<ProductResponse>> GetByIdOrSlugAsync(string identifier, CancellationToken cancellationToken = default)
+    public async Task<Result<ProductDetailsResponse>> GetByIdOrSlugAsync(string identifier, CancellationToken cancellationToken = default)
     {
-        Product? product = null;
+        var query = _context.Products
+            .AsNoTracking()
+            .Include(p => p.Category)
+            .Include(p => p.Images.OrderBy(i => i.Sort))
+            .Include(p => p.Reviews)
+                .ThenInclude(r => r.User)
+            .AsQueryable();
 
-        if (long.TryParse(identifier, out long id))
-        {
-            product = await _context.Products
-                .AsNoTracking()
-                .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
-        }
-        else
-        {
-            product = await _context.Products
-                .AsNoTracking()
-                .FirstOrDefaultAsync(p => p.Slug == identifier, cancellationToken);
-        }
-        return product is not null ?
-            Result.Success(product.Adapt<ProductResponse>()) :
-            Result.Failure<ProductResponse>(ProductErrors.ProductNotFound);
+        var product = long.TryParse(identifier, out long id)
+            ? await query.FirstOrDefaultAsync(p => p.Id == id, cancellationToken)
+            : await query.FirstOrDefaultAsync(p => p.Slug == identifier, cancellationToken);
+
+        if (product is null)
+            return Result.Failure<ProductDetailsResponse>(ProductErrors.ProductNotFound);
+
+        var reviews = product.Reviews
+            .OrderByDescending(r => r.CreatedOn)
+            .Select(r => new ProductReviewResponse(
+                r.Id,
+                $"{r.User.FirstName} {r.User.LastName}".Trim(),
+                r.Rating,
+                r.Comment,
+                r.CreatedOn))
+            .ToList();
+
+        var response = new ProductDetailsResponse(
+            product.Id,
+            product.CategoryId,
+            product.Category?.Title,
+            product.Title,
+            product.Slug,
+            product.Sku,
+            product.Price,
+            product.PriceAfterSale,
+            product.Sale,
+            product.Description,
+            product.Image,
+            product.Images.Select(i => i.Url).ToList(),
+            product.StockQuantity,
+            reviews.Count > 0 ? reviews.Average(r => r.Rating) : null,
+            reviews.Count,
+            reviews,
+            product.MetaDescription,
+            product.MetaKey);
+
+        return Result.Success(response);
     }
 
     public async Task<Result<ProductResponse>> AddAsync(ProductRequest request, CancellationToken cancellationToken = default)
@@ -49,6 +78,10 @@ public class ProductService(ApplicationDbContext context) : IProductService
         var isSkuExists = await _context.Products.AnyAsync(x => x.Sku == request.Sku, cancellationToken);
         if (isSkuExists)
             return Result.Failure<ProductResponse>(ProductErrors.DuplicatedProductSku);
+
+        var isSlugExists = await _context.Products.AnyAsync(x => x.Slug == request.Slug, cancellationToken);
+        if (isSlugExists)
+            return Result.Failure<ProductResponse>(ProductErrors.DuplicatedProductSlug);
 
         var product = request.Adapt<Product>();
         product.Status = true;
@@ -65,6 +98,10 @@ public class ProductService(ApplicationDbContext context) : IProductService
         var isSkuExists = await _context.Products.AnyAsync(x => x.Sku == request.Sku && x.Id != id, cancellationToken);
         if (isSkuExists)
             return Result.Failure<ProductResponse>(ProductErrors.DuplicatedProductSku);
+
+        var isSlugExists = await _context.Products.AnyAsync(x => x.Slug == request.Slug && x.Id != id, cancellationToken);
+        if (isSlugExists)
+            return Result.Failure<ProductResponse>(ProductErrors.DuplicatedProductSlug);
 
         var product = await _context.Products.FindAsync(new object[] { id }, cancellationToken);
         if (product is null)

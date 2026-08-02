@@ -49,7 +49,15 @@ Default is `RenderMode.Prerender` for `**`, but any route whose content **cannot
 ### Cart / checkout
 
 - **`CartServices`** ([site/core/services/cart-services.ts](src/app/site/core/services/cart-services.ts)) is a `providedIn: 'root'` **client-side** store: signal of `CartItemInterface[]`, persisted to `localStorage` under `shopdemo_cart`, **guarded by `isPlatformBrowser`** (returns `[]` on the server). It exposes `add/increment/decrement/remove/clear` and computed `count`, `subtotal` (original prices), `discount` (sale savings), `shipping` (free over $50, else $5.99), `total`.
-- There is **no backend cart or orders endpoint**. `CheckoutComponent.placeOrder()` validates a reactive form, then **simulates** the order (`cart.clear()` + confirmation). The `TODO` there marks the single place to POST the order when an endpoint exists.
+- The backend has a matching `api/Cart` (DB-backed), but the frontend **never calls it** — `CartServices` remains the sole source of truth for the in-progress cart. Checkout is real, though: `CheckoutComponent.placeOrder()` (guarded by `authGuard`/`account.isLoggedIn()`) validates the form, saves the address via `AccountServices.addAddress()` (`POST api/Addresses`), then places the order via `AccountServices.createOrder()` (`POST api/Orders`) with the cart's line items, and only then clears the cart.
+
+### Auth & account area
+
+- **Session**: `AccountServices` ([site/core/services/account-services.ts](src/app/site/core/services/account-services.ts)) stores the whole auth response (token, refresh token, user) under `localStorage['shopdemo_auth']` and exposes it as `user = signal<AuthResponseInterface | null>` with `isLoggedIn = computed(...)`. It mixes both service styles the rest of the codebase keeps separate: HTTP-backed `Observable` methods (`login`, `register`, `getProfile`, `getOrders`, `getAddresses`, `getCards`, etc. — one per `Addresses`/`Cards`/`Cart`-sibling backend controller) *and* readonly signal state (`user`, `favoriteProductIds`) with client helpers (`ensureFavoritesLoaded`, `isFavorite`, `toggleFavorite`) — treat it as the one exception to "services are either Observable or signals, not both."
+- **Guard**: [site/core/guards/auth-guard.ts](src/app/site/core/guards/auth-guard.ts) (`authGuard`, `CanActivateFn`) checks `AccountServices.isLoggedIn()`, else redirects to `/auth/login?returnUrl=...`.
+- **Routes**: an `AccountLayoutComponent` shell ([site/features/layouts/account-layout/](src/app/site/features/layouts/account-layout/)) with a sidebar hosts `/account` (Profile), `/account/orders`, `/account/orders/:orderNumber` (Tracking), `/account/address`, `/account/cards`, `/account/favorites` — all guarded by `authGuard`. Legacy flat paths (`/profile`, `/orders`, `/favorites`, …) redirect into `/account/**`; keep both in sync if you rename an account route.
+- **Favorites**: the heart/favorite toggle lives in `shared/component/product-card-component/` and `features/pages/product-details/`; both call `AccountServices.ensureFavoritesLoaded()` on init and `AccountServices.toggleFavorite(productId)` on click, redirecting to `/auth/login` if not authenticated.
+- `api.interceptor.ts` (see HTTP layer above) imports `AccountServices` from the `site/` tree directly — the one place a top-level, tree-agnostic file reaches into a specific tree. There's no equivalent auth wiring for `admin/` yet.
 
 ### HTTP / API layer
 
@@ -57,8 +65,8 @@ Default is `RenderMode.Prerender` for `**`, but any route whose content **cannot
 - Backend is an external .NET API (`https://localhost:7297/api` in dev — [environment.ts](src/environments/environment.ts); `api.shopdemo.com/api` in prod). Import the config object as `Environment` (capital E).
 - **List** endpoints return `ApiResponseInterface<T> = { statusCode, message, data: T[] }`; services `.pipe(map(r => r.data))` to unwrap.
 - **Detail** endpoints (`getProductById`, `getProductBySlug`) are typed to `ProductDetailsInterface` and **defensively unwrap**: `map(res => (res?.data ?? res))` — the backend may return the object directly or wrapped. `ProductDetailsInterface` is a richer shape than the list `ProductInterface` (adds `images[]`, `stockQuantity`, `reviews[]`, `rating`, `categoryTitle`).
-- ⚠️ `getProductBySlug()` assumes `GET /products/slug/{slug}` — **verify/adjust to the real backend route** (it's a single line in [product-services.ts](src/app/site/core/services/product-services.ts)).
 - Endpoint **casing is inconsistent** across the codebase (`/Products` vs `/products`, `/Categories/${id}`) — match the actual backend route, don't assume lowercase.
+- [api.interceptor.ts](src/app/api.interceptor.ts) also attaches auth: it reads a JWT from `localStorage['shopdemo_auth']` and adds `Authorization: Bearer <token>` to requests, and on a 401 (excluding `/Auth/login|register|refresh`) calls `AccountServices.refreshToken()` and retries once before redirecting to `/auth/login`. This file lives at the top-level `src/app/`, not inside `site/` — see the auth/account note below for why that's a deliberate exception to the site/admin split.
 
 ## Conventions
 

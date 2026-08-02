@@ -1,0 +1,65 @@
+- generic [ref=f10e3]:
+  - navigation [ref=f10e4]:
+    - generic [ref=f10e5]:
+      - link "S ShopDemo" [ref=f10e6] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=f10e7]: S
+        - text: ShopDemo
+      - list [ref=f10e9]:
+        - listitem [ref=f10e10]:
+          - link "Home" [ref=f10e11] [cursor=pointer]:
+            - /url: /home
+        - listitem [ref=f10e12]:
+          - link "Shop" [ref=f10e13] [cursor=pointer]:
+            - /url: /products
+        - listitem [ref=f10e14]:
+          - link "Categories" [ref=f10e15] [cursor=pointer]:
+            - /url: /categories
+      - generic [ref=f10e16]:
+        - textbox "Search products..." [ref=f10e17]
+        - generic [ref=f10e18]: 
+      - generic [ref=f10e19]:
+        - button "Switch to Admin" [ref=f10e20] [cursor=pointer]
+        - link "Wishlist" [ref=f10e21] [cursor=pointer]:
+          - /url: /account/favorites
+          - generic [ref=f10e22]: 
+        - link "Cart" [ref=f10e23] [cursor=pointer]:
+          - /url: /cart
+          - generic [ref=f10e24]: 
+        - link "Sign in" [ref=f10e25] [cursor=pointer]:
+          - /url: /auth/login
+          - generic [ref=f10e26]: 
+  - paragraph [ref=f10e27]: auth-layout works!
+  - generic [ref=f10e30]:
+    - generic [ref=f10e31]:
+      - generic [ref=f10e32]: Join ShopDemo
+      - heading "Create an account and shop smarter" [level=1] [ref=f10e33]
+      - paragraph [ref=f10e34]: Save products you love, manage your orders, and track every purchase from one polished profile.
+      - generic [ref=f10e35]:
+        - generic [ref=f10e36]: Wishlist
+        - generic [ref=f10e37]: Fast checkout
+        - generic [ref=f10e38]: Order updates
+    - generic [ref=f10e39]:
+      - generic [ref=f10e40]: ShopDemo
+      - heading "Create your account" [level=2] [ref=f10e41]
+      - paragraph [ref=f10e42]: Join thousands of shoppers who enjoy a simpler experience.
+      - generic [ref=f10e60]: We could not create your account right now.
+      - generic [ref=f10e43]:
+        - generic [ref=f10e44]:
+          - generic [ref=f10e45]:
+            - generic [ref=f10e46]: First Name
+            - textbox "First name" [ref=f10e47]: Dup
+          - generic [ref=f10e48]:
+            - generic [ref=f10e49]: Last Name
+            - textbox "Last name" [ref=f10e50]: Licate
+        - generic [ref=f10e51]:
+          - generic [ref=f10e52]: Email
+          - textbox "you@example.com" [ref=f10e53]: seed.tester@example.com
+        - generic [ref=f10e54]:
+          - generic [ref=f10e55]: Password
+          - textbox "At least 6 characters" [ref=f10e56]: SomePassword123
+        - button "Create account" [ref=f10e57] [cursor=pointer]
+      - paragraph [ref=f10e58]:
+        - text: Already have an account?
+        - link "Sign in" [ref=f10e59] [cursor=pointer]:
+          - /url: /auth/login

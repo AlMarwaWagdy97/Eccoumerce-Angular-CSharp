@@ -1,0 +1,2 @@
+[      79ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/D:/ECom/frontend/.angular/cache/22.0.4/Ecommerce/vite/deps/chunk-XWLZMWXH.js?v=d5ccc179:14933
+[     107ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost:4200/auth/login?returnUrl=%2Faccount:0

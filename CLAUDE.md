@@ -36,17 +36,19 @@ The frontend's `Environment.apiUrl` is hardcoded to **`https://localhost:7297/ap
 
 Both sides define parallel shapes and there are real inconsistencies to watch for when wiring them up:
 
-- **Product-by-slug.** Backend serves product detail at `GET api/Products/{slug}`. The frontend's `getProductBySlug()` currently assumes `/products/slug/{slug}` — a known mismatch flagged in the frontend CLAUDE.md; reconcile the two when touching product detail.
 - **Casing.** Backend routes are PascalCase (`/api/Products`, `/api/Categories`); the frontend calls a mix of `/Products` and `/products`. Match the actual backend route, which is case-insensitive on the server but should be kept consistent.
-- **Response envelope.** Backend wraps list responses in `ApiResponse<T> = { StatusCode, Message, Data }`; the frontend unwraps via `.pipe(map(r => r.data))`. Detail endpoints are unwrapped defensively (`res?.data ?? res`) because envelope usage is inconsistent across backend actions.
-- **Cart is duplicated, not shared.** The backend has a full cart API (`api/Cart`, DB-backed, `CartService`), but the frontend implements its **own client-side cart** in `localStorage` (`CartServices`) and does not call the backend cart endpoints. Checkout is still simulated client-side as of this writing — see `docs/superpowers/specs/2026-07-14-account-features-design.md` for the in-progress work to make orders real. Confirm which cart is authoritative before building on either.
+- **Response envelope.** Backend wraps list responses in `ApiResponse<T> = { StatusCode, Message, Data }`; the frontend unwraps via `.pipe(map(r => r.data))`. Detail endpoints are unwrapped defensively (`res?.data ?? res`) because envelope usage is inconsistent on the older `Products`/`Categories` controllers — the newer account-feature controllers (`Addresses`, `Cards`, `Cart`, `Favorites`, `Orders`, `Profile`) consistently return `ApiResponse<T>`.
+- **Cart is real but not used for the cart itself.** The backend has a full cart API (`api/Cart`, DB-backed, `CartService`), but the frontend still implements its **own client-side cart** in `localStorage` (`CartServices`) and never calls the backend cart endpoints. Checkout is no longer simulated, though: `CheckoutComponent` now saves a real address (`POST api/Addresses`) and places a real order (`POST api/Orders`) via `AccountServices` before clearing the local cart. See `docs/superpowers/specs/2026-07-14-account-features-design.md` for the design this implements.
 
 For per-project commands, architecture, and conventions, defer to the two subproject CLAUDE.md files rather than duplicating here.
 
-## In-progress work
+## Account features (auth, orders, favorites, addresses, cards)
 
-See `docs/superpowers/specs/2026-07-14-account-features-design.md` for the
-active design covering authentication wiring, Profile/My Account, Orders +
-Tracking, Favorites, Addresses, and Cards (saved-card metadata), including a
+`docs/superpowers/specs/2026-07-14-account-features-design.md` is the design
+this was built from — authentication wiring, Profile/My Account, Orders +
+Tracking, Favorites, Addresses, and Cards (saved-card metadata), with a
 left-sidebar account shell replacing the top navbar **for the account area
-only**.
+only**. Both sides now implement it (backend: `Addresses`/`Cards`/`Cart`/
+`Favorites`/`Orders`/`Profile` controllers; frontend: `AccountServices` +
+routes under `/account/**`); consult the spec for scope/rationale rather than
+treating it as still-pending.
