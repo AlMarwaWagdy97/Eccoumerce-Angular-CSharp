@@ -52,6 +52,32 @@ export const serverRoutes: ServerRoute[] = [
     path: 'orders/:orderNumber/tracking',
     renderMode: RenderMode.Client
   },
+  // The whole admin area reads from localStorage (admin session) and always
+  // calls the backend, so none of it can be prerendered.
+  {
+    path: 'admin/auth/login',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'admin/auth/forgot-password',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'admin/auth/reset-password',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'admin',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'admin/roles',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'admin/admins',
+    renderMode: RenderMode.Client
+  },
   {
     path: '**',
     renderMode: RenderMode.Prerender

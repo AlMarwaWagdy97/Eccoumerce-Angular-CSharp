@@ -20,11 +20,33 @@ import { TrackingComponent } from './site/features/pages/tracking/tracking';
 import { AddressComponent } from './site/features/pages/address/address';
 import { CardsComponent } from './site/features/pages/cards/cards';
 import { authGuard } from './site/core/guards/auth-guard';
+import { AdminLayoutComponent } from './admin/features/layouts/main-layout/main-layout';
+import { AdminAuthLayoutComponent } from './admin/features/layouts/auth-layout/auth-layout';
+import { LoginComponent as AdminLoginComponent } from './admin/features/auth/login/login';
+import { ForgotPasswordComponent as AdminForgotPasswordComponent } from './admin/features/auth/forgot-password/forgot-password';
+import { ResetPasswordComponent as AdminResetPasswordComponent } from './admin/features/auth/reset-password/reset-password';
+import { DashboardComponent } from './admin/features/pages/dashboard/dashboard';
+import { Admins as AdminsComponent } from './admin/features/pages/admins/admins';
+// TODO(Task 19): uncomment once RolesComponent exists
+// import { RolesComponent } from './admin/features/pages/roles/roles';
+import { adminAuthGuard } from './admin/core/guards/admin-auth-guard';
+import { adminPermissionGuard } from './admin/core/guards/admin-permission-guard';
 
 export const routes: Routes = [
     { path: 'auth', component: AuthLayoutComponent, title: 'Auth', children: [
         { path: 'login', component: LoginComponent, title: 'Login' },
         { path: 'register', component: RegisterComponent, title: 'Register' }
+    ]},
+    { path: 'admin/auth', component: AdminAuthLayoutComponent, title: 'Admin', children: [
+        { path: 'login', component: AdminLoginComponent, title: 'Admin Login' },
+        { path: 'forgot-password', component: AdminForgotPasswordComponent, title: 'Forgot Password' },
+        { path: 'reset-password', component: AdminResetPasswordComponent, title: 'Reset Password' },
+    ]},
+    { path: 'admin', component: AdminLayoutComponent, canActivate: [adminAuthGuard], children: [
+        { path: '', component: DashboardComponent, title: 'Admin Dashboard' },
+        // TODO(Task 19): uncomment once RolesComponent exists
+        // { path: 'roles', component: RolesComponent, canActivate: [adminPermissionGuard('roles.manage')], title: 'Roles' },
+        { path: 'admins', component: AdminsComponent, canActivate: [adminPermissionGuard('admins.manage')], title: 'Admins' },
     ]},
     { path: '', component: MainLayoutComponent, title: '', children: [
         { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -52,6 +74,7 @@ export const routes: Routes = [
         { path: 'orders/:orderNumber/tracking', redirectTo: 'account/orders/:orderNumber' },
         { path: 'favorites', redirectTo: 'account/favorites', pathMatch: 'full' },
     ]},
+
     { path: '**', component: NotFoundComponent, title: 'Not Found' },
 
 ]

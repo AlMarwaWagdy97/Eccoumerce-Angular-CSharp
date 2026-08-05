@@ -1,0 +1,10 @@
+@import '../../../shared/scss/variables';
+
+.page-title {
+  font-weight: 800;
+  color: $admin-text;
+}
+
+.page-subtitle {
+  color: $admin-muted;
+}
