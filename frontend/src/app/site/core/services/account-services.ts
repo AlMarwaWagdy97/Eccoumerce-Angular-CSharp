@@ -210,7 +210,11 @@ export class AccountServices {
       return null;
     }
 
-    const stored = localStorage.getItem(this.storageKey);
-    return stored ? JSON.parse(stored) as AuthResponseInterface : null;
+    try {
+      const stored = localStorage.getItem(this.storageKey);
+      return stored ? JSON.parse(stored) as AuthResponseInterface : null;
+    } catch {
+      return null;
+    }
   }
 }

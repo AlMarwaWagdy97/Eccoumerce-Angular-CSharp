@@ -77,7 +77,11 @@ export class AdminAuthServices {
       return null;
     }
 
-    const stored = localStorage.getItem(this.storageKey);
-    return stored ? JSON.parse(stored) as AdminAuthResponseInterface : null;
+    try {
+      const stored = localStorage.getItem(this.storageKey);
+      return stored ? JSON.parse(stored) as AdminAuthResponseInterface : null;
+    } catch {
+      return null;
+    }
   }
 }
