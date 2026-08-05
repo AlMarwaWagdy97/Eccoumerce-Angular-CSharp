@@ -26,6 +26,9 @@ namespace Ecommerce.Presistence
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Card> Cards { get; set; }
         public DbSet<NewsletterSubscription> NewsletterSubscriptions { get; set; }
+        public DbSet<Admin> Admins { get; set; }
+        public DbSet<AdminRole> AdminRoles { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
