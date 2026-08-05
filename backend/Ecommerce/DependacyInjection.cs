@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Ecommerce.Authentication;
 using Ecommerce.Email;
+using Ecommerce.Options;
 using System.Reflection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -98,6 +99,10 @@ namespace Ecommerce
 
             services.AddOptions<SmtpOptions>()
                 .BindConfiguration(SmtpOptions.SectionName)
+                .ValidateOnStart();
+
+            services.AddOptions<FrontendOptions>()
+                .BindConfiguration(FrontendOptions.SectionName)
                 .ValidateOnStart();
 
             services.AddScoped<IEmailSender, SmtpEmailSender>();

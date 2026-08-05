@@ -5,7 +5,7 @@ namespace Ecommerce.Tests.Email;
 
 public class SmtpEmailSenderTests
 {
-    private static SmtpEmailSender CreateSender() => new(Options.Create(new SmtpOptions
+    private static SmtpEmailSender CreateSender() => new(Microsoft.Extensions.Options.Options.Create(new SmtpOptions
     {
         Host = "sandbox.smtp.mailtrap.io",
         Port = 2525,

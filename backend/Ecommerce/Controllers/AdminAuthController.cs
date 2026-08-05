@@ -44,4 +44,21 @@ public class AdminAuthController(IAdminAuthService adminAuthService) : Controlle
         await _adminAuthService.LogoutAsync(id, cancellationToken);
         return Ok(new ApiResponse<object>(StatusCodes.Status200OK, "Logged out."));
     }
+
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPasswordAsync([FromBody] AdminForgotPasswordRequest request, CancellationToken cancellationToken)
+    {
+        await _adminAuthService.ForgotPasswordAsync(request.Email, cancellationToken);
+        return Ok(new ApiResponse<object>(StatusCodes.Status200OK, "If that email is registered, a reset link has been sent."));
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPasswordAsync([FromBody] AdminResetPasswordRequest request, CancellationToken cancellationToken)
+    {
+        var result = await _adminAuthService.ResetPasswordAsync(request.Email, request.Token, request.NewPassword, cancellationToken);
+        if (!result.IsSuccess)
+            return BadRequest(new ApiResponse<object>(StatusCodes.Status400BadRequest, result.Error.Description ?? "Reset failed."));
+
+        return Ok(new ApiResponse<object>(StatusCodes.Status200OK, "Password updated. You can now log in."));
+    }
 }

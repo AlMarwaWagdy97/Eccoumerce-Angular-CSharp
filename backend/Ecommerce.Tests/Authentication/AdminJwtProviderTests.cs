@@ -6,7 +6,7 @@ namespace Ecommerce.Tests.Authentication;
 
 public class AdminJwtProviderTests
 {
-    private static AdminJwtProvider CreateProvider() => new(Options.Create(new JwtOptions
+    private static AdminJwtProvider CreateProvider() => new(Microsoft.Extensions.Options.Options.Create(new JwtOptions
     {
         Key = "ThisIsAVeryLongAndSecureSecretKeyThatIsAtLeast32CharactersLong",
         Issuer = "EcommerceApp",
