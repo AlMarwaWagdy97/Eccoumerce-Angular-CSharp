@@ -3,6 +3,7 @@ using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Ecommerce.Authentication;
+using Ecommerce.Email;
 using System.Reflection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -93,6 +94,12 @@ namespace Ecommerce
                 .BindConfiguration(JwtOptions.SectionName)
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
+
+            services.AddOptions<SmtpOptions>()
+                .BindConfiguration(SmtpOptions.SectionName)
+                .ValidateOnStart();
+
+            services.AddScoped<IEmailSender, SmtpEmailSender>();
 
             var jwtSettings = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
 
