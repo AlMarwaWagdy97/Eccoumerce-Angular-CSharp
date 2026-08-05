@@ -114,7 +114,25 @@ namespace Ecommerce
                     ValidIssuer = jwtSettings?.Issuer,
                     ValidAudience = jwtSettings?.Audience
                 };
+            })
+            .AddJwtBearer(Ecommerce.Authorization.AdminAuthDefaults.Scheme, o =>
+            {
+                o.SaveToken = true;
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings?.Key!)),
+                    ValidIssuer = jwtSettings?.Issuer,
+                    ValidAudience = jwtSettings?.AdminAudience
+                };
             });
+
+            services.AddSingleton<IAuthorizationPolicyProvider, Ecommerce.Authorization.PermissionPolicyProvider>();
+            services.AddSingleton<IAuthorizationHandler, Ecommerce.Authorization.PermissionAuthorizationHandler>();
+            services.AddSingleton<IAdminJwtProvider, AdminJwtProvider>();
 
             return services;
         }
