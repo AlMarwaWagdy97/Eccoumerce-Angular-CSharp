@@ -59,6 +59,7 @@ namespace Ecommerce
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<ICardService, CardService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IAdminService, AdminService>();
 
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
