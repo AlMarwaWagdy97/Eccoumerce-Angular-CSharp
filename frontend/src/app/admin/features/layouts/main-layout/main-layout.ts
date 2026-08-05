@@ -1,12 +1,41 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { Navbar } from "../navbar/navbar";
-import { FooterComponent } from "../footer/footer";
+import { Component, inject, signal } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AdminAuthServices } from '../../../core/services/admin-auth-services';
+
+interface AdminNavItem {
+  label: string;
+  path: string;
+  icon: string;
+  permission: string;
+}
+
+const NAV_ITEMS: AdminNavItem[] = [
+  { label: 'Dashboard', path: '.', icon: 'bi-grid-1x2-fill', permission: 'dashboard.view' },
+  { label: 'Roles', path: 'roles', icon: 'bi-shield-lock-fill', permission: 'roles.manage' },
+  { label: 'Admins', path: 'admins', icon: 'bi-people-fill', permission: 'admins.manage' },
+];
 
 @Component({
-  selector: 'app-main-layout',
-  imports: [RouterOutlet, Navbar, FooterComponent],
+  selector: 'app-admin-layout',
+  imports: [RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.scss',
 })
-export class MainLayoutComponent {}
+export class AdminLayoutComponent {
+  private auth = inject(AdminAuthServices);
+  private router = inject(Router);
+
+  collapsed = signal(false);
+  admin = this.auth.user;
+
+  visibleNavItems = () => NAV_ITEMS.filter(item => this.auth.hasPermission(item.permission));
+
+  toggleCollapsed(): void {
+    this.collapsed.update(v => !v);
+  }
+
+  logout(): void {
+    this.auth.logout();
+    this.router.navigateByUrl('/admin/auth/login');
+  }
+}

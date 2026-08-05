@@ -1,0 +1,141 @@
+@import '../../../shared/scss/variables';
+
+.admin-shell {
+  display: flex;
+  min-height: 100vh;
+  background: $admin-bg;
+}
+
+.admin-sidebar {
+  width: 260px;
+  background: $admin-sidebar-bg;
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 1rem;
+  transition: width 0.15s ease;
+
+  .collapsed & {
+    width: 76px;
+  }
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+
+  .brand-badge {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: $admin-green;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+  }
+
+  .brand-label {
+    font-weight: 800;
+    color: $admin-text;
+    flex: 1;
+  }
+
+  .collapse-btn {
+    border: none;
+    background: transparent;
+    color: $admin-muted;
+    cursor: pointer;
+  }
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: $admin-radius;
+  color: $admin-muted;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: rgba($admin-green, 0.08);
+    color: $admin-text;
+  }
+
+  &.active {
+    background: $admin-green;
+    color: #fff;
+
+    &:hover {
+      background: $admin-green-hover;
+    }
+  }
+}
+
+.nav-icon {
+  width: 1.25rem;
+  text-align: center;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.admin-card {
+  padding: 0.6rem 0.75rem;
+  border-radius: $admin-radius;
+  background: $admin-bg;
+  margin-bottom: 0.5rem;
+
+  .admin-name {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: $admin-text;
+    margin: 0;
+  }
+
+  .admin-email {
+    font-size: 0.75rem;
+    color: $admin-muted;
+    margin: 0;
+  }
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: none;
+  background: transparent;
+  border-radius: $admin-radius;
+  color: #b3261e;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(#b3261e, 0.08);
+  }
+}
+
+.admin-content {
+  flex: 1;
+  padding: 2.5rem;
+  min-width: 0;
+}

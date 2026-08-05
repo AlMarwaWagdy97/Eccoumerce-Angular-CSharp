@@ -1,7 +1,43 @@
-<app-navbar></app-navbar>
+<div class="admin-shell" [class.collapsed]="collapsed()">
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <span class="brand-badge">S</span>
+      @if (!collapsed()) {
+        <span class="brand-label">Admin Panel</span>
+      }
+      <button type="button" class="collapse-btn" (click)="toggleCollapsed()">
+        <i class="bi" [class.bi-chevron-left]="!collapsed()" [class.bi-chevron-right]="collapsed()"></i>
+      </button>
+    </div>
 
-<main>
-  <router-outlet></router-outlet>
-</main>
+    <nav class="sidebar-nav">
+      @for (item of visibleNavItems(); track item.path) {
+        <a [routerLink]="item.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: item.path === '.' }" class="nav-link">
+          <i class="bi {{ item.icon }} nav-icon"></i>
+          @if (!collapsed()) {
+            <span class="nav-label">{{ item.label }}</span>
+          }
+        </a>
+      }
+    </nav>
 
-<app-footer></app-footer>
+    <div class="sidebar-footer">
+      @if (!collapsed() && admin()) {
+        <div class="admin-card">
+          <p class="admin-name">{{ admin()!.firstName }} {{ admin()!.lastName }}</p>
+          <p class="admin-email">{{ admin()!.email }}</p>
+        </div>
+      }
+      <button type="button" class="logout-btn" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i>
+        @if (!collapsed()) {
+          <span>Log out</span>
+        }
+      </button>
+    </div>
+  </aside>
+
+  <main class="admin-content">
+    <router-outlet />
+  </main>
+</div>
