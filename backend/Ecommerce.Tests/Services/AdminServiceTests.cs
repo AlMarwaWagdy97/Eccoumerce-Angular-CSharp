@@ -101,6 +101,21 @@ public class AdminServiceTests
     }
 
     [Fact]
+    public async Task UpdateAsync_fails_when_an_admin_tries_to_update_themselves()
+    {
+        await using var context = CreateContext();
+        var role = await SeedRoleAsync(context);
+        var admin = await SeedAdminAsync(context, role);
+        var service = new AdminService(context, new Mock<IAdminAuthService>().Object);
+        var request = new UpdateAdminRequest(admin.FirstName, admin.LastName, admin.PhoneNumber, role.Id, admin.IsActive);
+
+        var result = await service.UpdateAsync(admin.Id, request, currentAdminId: admin.Id);
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("Admin.CannotModifyOwnAccount", result.Error.Code);
+    }
+
+    [Fact]
     public async Task DeleteAsync_succeeds_for_a_different_admin()
     {
         await using var context = CreateContext();

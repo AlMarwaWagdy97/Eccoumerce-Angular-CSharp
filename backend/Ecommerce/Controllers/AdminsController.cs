@@ -43,7 +43,7 @@ public class AdminsController(IAdminService adminService) : ControllerBase
     [HttpPut("{id:long}")]
     public async Task<IActionResult> UpdateAsync([FromRoute] long id, [FromBody] UpdateAdminRequest request, CancellationToken cancellationToken)
     {
-        var result = await _adminService.UpdateAsync(id, request, cancellationToken);
+        var result = await _adminService.UpdateAsync(id, request, GetCurrentAdminId(), cancellationToken);
         if (!result.IsSuccess)
             return BadRequest(new ApiResponse<object>(StatusCodes.Status400BadRequest, result.Error.Description ?? "Could not update admin."));
 

@@ -1,6 +1,7 @@
 namespace Ecommerce.Authorization;
 
-public class PermissionRequirement(string permission) : IAuthorizationRequirement
+public class PermissionRequirement(params string[] permissions) : IAuthorizationRequirement
 {
-    public string Permission { get; } = permission;
+    // The user must hold ANY one of these permission claims (OR semantics), not all of them.
+    public IReadOnlyList<string> Permissions { get; } = permissions;
 }

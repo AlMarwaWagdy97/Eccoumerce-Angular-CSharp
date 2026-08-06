@@ -4,14 +4,18 @@ using Ecommerce.Contracts.Roles;
 
 namespace Ecommerce.Controllers;
 
-[HasPermission(PermissionKeys.RolesManage)]
+[Authorize(AuthenticationSchemes = AdminAuthDefaults.Scheme)]
 [Route("api/Admin/[controller]")]
 [ApiController]
 public class RolesController(IRoleService roleService) : ControllerBase
 {
     private readonly IRoleService _roleService = roleService;
 
+    // The Admins page needs the role list to populate its role picker, so any admin who can
+    // manage admins (not just those who can manage roles) is allowed to list roles here.
+    // Every other action below still requires roles.manage specifically.
     [HttpGet]
+    [HasPermission(PermissionKeys.RolesManage, PermissionKeys.AdminsManage)]
     public async Task<IActionResult> GetAllAsync(CancellationToken cancellationToken)
     {
         var result = await _roleService.GetAllAsync(cancellationToken);
@@ -19,6 +23,7 @@ public class RolesController(IRoleService roleService) : ControllerBase
     }
 
     [HttpGet("{id:long}")]
+    [HasPermission(PermissionKeys.RolesManage)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] long id, CancellationToken cancellationToken)
     {
         var result = await _roleService.GetByIdAsync(id, cancellationToken);
@@ -29,6 +34,7 @@ public class RolesController(IRoleService roleService) : ControllerBase
     }
 
     [HttpGet("~/api/Admin/Permissions")]
+    [HasPermission(PermissionKeys.RolesManage)]
     public async Task<IActionResult> GetPermissionCatalogAsync(CancellationToken cancellationToken)
     {
         var result = await _roleService.GetPermissionCatalogAsync(cancellationToken);
@@ -36,6 +42,7 @@ public class RolesController(IRoleService roleService) : ControllerBase
     }
 
     [HttpPost]
+    [HasPermission(PermissionKeys.RolesManage)]
     public async Task<IActionResult> CreateAsync([FromBody] RoleRequest request, CancellationToken cancellationToken)
     {
         var result = await _roleService.CreateAsync(request, cancellationToken);
@@ -47,6 +54,7 @@ public class RolesController(IRoleService roleService) : ControllerBase
     }
 
     [HttpPut("{id:long}")]
+    [HasPermission(PermissionKeys.RolesManage)]
     public async Task<IActionResult> UpdateAsync([FromRoute] long id, [FromBody] RoleRequest request, CancellationToken cancellationToken)
     {
         var result = await _roleService.UpdateAsync(id, request, cancellationToken);
@@ -57,6 +65,7 @@ public class RolesController(IRoleService roleService) : ControllerBase
     }
 
     [HttpDelete("{id:long}")]
+    [HasPermission(PermissionKeys.RolesManage)]
     public async Task<IActionResult> DeleteAsync([FromRoute] long id, CancellationToken cancellationToken)
     {
         var result = await _roleService.DeleteAsync(id, cancellationToken);

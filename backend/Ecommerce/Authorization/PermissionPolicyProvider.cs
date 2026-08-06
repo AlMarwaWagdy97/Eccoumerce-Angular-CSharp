@@ -12,9 +12,10 @@ public class PermissionPolicyProvider(IOptions<AuthorizationOptions> options) : 
         if (!policyName.StartsWith(AdminAuthDefaults.PolicyPrefix, StringComparison.Ordinal))
             return _fallback.GetPolicyAsync(policyName);
 
-        var permission = policyName[AdminAuthDefaults.PolicyPrefix.Length..];
+        var permissions = policyName[AdminAuthDefaults.PolicyPrefix.Length..]
+            .Split(AdminAuthDefaults.PermissionDelimiter, StringSplitOptions.RemoveEmptyEntries);
         var policy = new AuthorizationPolicyBuilder(AdminAuthDefaults.Scheme)
-            .AddRequirements(new PermissionRequirement(permission))
+            .AddRequirements(new PermissionRequirement(permissions))
             .Build();
 
         return Task.FromResult<AuthorizationPolicy?>(policy);

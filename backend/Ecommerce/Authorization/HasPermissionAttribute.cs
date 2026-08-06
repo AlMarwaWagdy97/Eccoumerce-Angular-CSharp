@@ -2,8 +2,8 @@ namespace Ecommerce.Authorization;
 
 public class HasPermissionAttribute : AuthorizeAttribute
 {
-    public HasPermissionAttribute(string permission)
+    public HasPermissionAttribute(params string[] permissions)
     {
-        Policy = $"{AdminAuthDefaults.PolicyPrefix}{permission}";
+        Policy = $"{AdminAuthDefaults.PolicyPrefix}{string.Join(AdminAuthDefaults.PermissionDelimiter, permissions)}";
     }
 }

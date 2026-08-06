@@ -52,8 +52,11 @@ public class AdminService(ApplicationDbContext context, IAdminAuthService adminA
         return Result.Success(MapAdmin(admin));
     }
 
-    public async Task<Result<AdminResponse>> UpdateAsync(long id, UpdateAdminRequest request, CancellationToken cancellationToken = default)
+    public async Task<Result<AdminResponse>> UpdateAsync(long id, UpdateAdminRequest request, long currentAdminId, CancellationToken cancellationToken = default)
     {
+        if (id == currentAdminId)
+            return Result.Failure<AdminResponse>(AdminErrors.CannotModifyOwnAccount);
+
         var admin = await _context.Admins.Include(x => x.AdminRole).FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (admin is null)
             return Result.Failure<AdminResponse>(AdminErrors.AdminNotFound);
