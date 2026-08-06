@@ -1,0 +1,81 @@
+<div class="panel-header">
+  <div>
+    <h1 class="page-title">Roles &amp; Permissions</h1>
+    <p class="page-subtitle">Define roles and toggle exactly what each one can do.</p>
+  </div>
+  @if (!showForm()) {
+    <button type="button" class="add-btn" (click)="startAdd()">+ Add Role</button>
+  }
+</div>
+
+@if (loading()) {
+  <div class="state-message">Loading roles…</div>
+} @else if (!showForm()) {
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Permissions</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (role of roles(); track role.id) {
+        <tr>
+          <td>
+            {{ role.name }}
+            @if (role.isSystem) {
+              <span class="system-badge">System</span>
+            }
+          </td>
+          <td>{{ role.description || '—' }}</td>
+          <td>{{ role.permissions.length }}</td>
+          <td class="actions">
+            <button type="button" (click)="startEdit(role)" [disabled]="role.isSystem">Edit</button>
+            <button type="button" class="danger" [disabled]="role.isSystem || busyId() === role.id" (click)="remove(role)">Delete</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+
+@if (showForm()) {
+  @if (error()) {
+    <div class="alert-error">{{ error() }}</div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="role-form">
+    <div class="field-group">
+      <label>Name</label>
+      <input formControlName="name" type="text" class="form-control">
+    </div>
+    <div class="field-group">
+      <label>Description</label>
+      <input formControlName="description" type="text" class="form-control">
+    </div>
+
+    <div class="permission-groups">
+      @for (group of permissionsByModule(); track group.module) {
+        <div class="permission-group">
+          <h4>{{ group.module }}</h4>
+          @for (permission of group.permissions; track permission.id) {
+            <label class="checkbox-field">
+              <input
+                type="checkbox"
+                [checked]="isChecked(permission.key)"
+                (change)="togglePermission(permission.key, $any($event.target).checked)">
+              {{ permission.description }}
+            </label>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="save-btn" [disabled]="saving()">{{ saving() ? 'Saving…' : 'Save Role' }}</button>
+      <button type="button" class="cancel-btn" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+}

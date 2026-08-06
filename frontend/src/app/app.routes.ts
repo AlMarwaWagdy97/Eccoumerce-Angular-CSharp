@@ -27,8 +27,7 @@ import { ForgotPasswordComponent as AdminForgotPasswordComponent } from './admin
 import { ResetPasswordComponent as AdminResetPasswordComponent } from './admin/features/auth/reset-password/reset-password';
 import { DashboardComponent } from './admin/features/pages/dashboard/dashboard';
 import { Admins as AdminsComponent } from './admin/features/pages/admins/admins';
-// TODO(Task 19): uncomment once RolesComponent exists
-// import { RolesComponent } from './admin/features/pages/roles/roles';
+import { RolesComponent } from './admin/features/pages/roles/roles';
 import { adminAuthGuard } from './admin/core/guards/admin-auth-guard';
 import { adminPermissionGuard } from './admin/core/guards/admin-permission-guard';
 
@@ -44,8 +43,7 @@ export const routes: Routes = [
     ]},
     { path: 'admin', component: AdminLayoutComponent, canActivate: [adminAuthGuard], children: [
         { path: '', component: DashboardComponent, title: 'Admin Dashboard' },
-        // TODO(Task 19): uncomment once RolesComponent exists
-        // { path: 'roles', component: RolesComponent, canActivate: [adminPermissionGuard('roles.manage')], title: 'Roles' },
+        { path: 'roles', component: RolesComponent, canActivate: [adminPermissionGuard('roles.manage')], title: 'Roles' },
         { path: 'admins', component: AdminsComponent, canActivate: [adminPermissionGuard('admins.manage')], title: 'Admins' },
     ]},
     { path: '', component: MainLayoutComponent, title: '', children: [
