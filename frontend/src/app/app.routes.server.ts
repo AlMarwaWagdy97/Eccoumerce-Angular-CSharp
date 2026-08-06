@@ -70,10 +70,11 @@ export const serverRoutes: ServerRoute[] = [
     path: 'admin',
     renderMode: RenderMode.Client
   },
-  {
-    path: 'admin/roles',
-    renderMode: RenderMode.Client
-  },
+  // TODO(Task 19): uncomment once the 'roles' route exists in app.routes.ts
+  // {
+  //   path: 'admin/roles',
+  //   renderMode: RenderMode.Client
+  // },
   {
     path: 'admin/admins',
     renderMode: RenderMode.Client
