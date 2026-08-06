@@ -1,1 +1,103 @@
-<p>admins works!</p>
+<div class="panel-header">
+  <div>
+    <h1 class="page-title">Admins</h1>
+    <p class="page-subtitle">Manage admin users and assign roles.</p>
+  </div>
+  @if (!showForm()) {
+    <button type="button" class="add-btn" (click)="startAdd()">+ Add Admin</button>
+  }
+</div>
+
+@if (loading()) {
+  <div class="state-message">Loading admins…</div>
+} @else if (!showForm()) {
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Admin</th>
+        <th>Contact</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (admin of admins(); track admin.id) {
+        <tr>
+          <td>
+            <span class="avatar">{{ admin.firstName.charAt(0) }}</span>
+            {{ admin.firstName }} {{ admin.lastName }}
+          </td>
+          <td>
+            {{ admin.email }}
+            @if (admin.phoneNumber) {
+              <div class="muted">{{ admin.phoneNumber }}</div>
+            }
+          </td>
+          <td><span class="role-badge">{{ admin.roleName }}</span></td>
+          <td>
+            <label class="status-toggle">
+              <input
+                type="checkbox"
+                [checked]="admin.isActive"
+                [disabled]="admin.id === currentAdminId() || busyId() === admin.id"
+                (change)="toggleStatus(admin)">
+              {{ admin.isActive ? 'Active' : 'Inactive' }}
+            </label>
+          </td>
+          <td class="actions">
+            <button type="button" (click)="startEdit(admin)">Edit</button>
+            <button type="button" class="danger" [disabled]="admin.id === currentAdminId() || busyId() === admin.id" (click)="remove(admin)">Delete</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+
+@if (showForm()) {
+  @if (error()) {
+    <div class="alert-error">{{ error() }}</div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="admin-form">
+    <div class="field-row">
+      <div class="field-group">
+        <label>First Name</label>
+        <input formControlName="firstName" type="text" class="form-control">
+      </div>
+      <div class="field-group">
+        <label>Last Name</label>
+        <input formControlName="lastName" type="text" class="form-control">
+      </div>
+    </div>
+    <div class="field-group">
+      <label>Email</label>
+      <input formControlName="email" type="email" class="form-control">
+      @if (editingId()) {
+        <small class="muted">Email can't be changed after an admin is created.</small>
+      }
+    </div>
+    <div class="field-group">
+      <label>Phone</label>
+      <input formControlName="phoneNumber" type="tel" class="form-control">
+    </div>
+    <div class="field-group">
+      <label>Role</label>
+      <select formControlName="roleId" class="form-control">
+        @for (role of roles(); track role.id) {
+          <option [value]="role.id">{{ role.name }}</option>
+        }
+      </select>
+    </div>
+
+    @if (!editingId()) {
+      <p class="muted">No password field — the new admin will get an email with a link to set their own password.</p>
+    }
+
+    <div class="form-actions">
+      <button type="submit" class="save-btn" [disabled]="saving()">{{ saving() ? 'Saving…' : 'Save Admin' }}</button>
+      <button type="button" class="cancel-btn" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+}
