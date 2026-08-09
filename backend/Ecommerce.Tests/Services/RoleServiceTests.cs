@@ -77,6 +77,20 @@ public class RoleServiceTests
     }
 
     [Fact]
+    public async Task DeleteAsync_removes_a_role_and_its_permission_assignments()
+    {
+        await using var context = CreateContext();
+        await SeedPermissionsAsync(context);
+        var service = new RoleService(context);
+        var created = (await service.CreateAsync(new RoleRequest("Editor", null, ["products.manage", "orders.view"]))).Value;
+
+        var result = await service.DeleteAsync(created.Id);
+
+        Assert.True(result.IsSuccess);
+        Assert.False(await context.AdminRoles.AnyAsync(x => x.Id == created.Id));
+    }
+
+    [Fact]
     public async Task DeleteAsync_fails_for_a_system_role()
     {
         await using var context = CreateContext();

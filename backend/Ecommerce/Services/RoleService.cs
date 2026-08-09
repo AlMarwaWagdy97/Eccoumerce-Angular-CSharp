@@ -67,7 +67,7 @@ public class RoleService(ApplicationDbContext context) : IRoleService
 
     public async Task<Result> DeleteAsync(long id, CancellationToken cancellationToken = default)
     {
-        var role = await _context.AdminRoles.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var role = await _context.AdminRoles.Include(x => x.Permissions).FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (role is null)
             return Result.Failure(RoleErrors.RoleNotFound);
 
@@ -77,6 +77,7 @@ public class RoleService(ApplicationDbContext context) : IRoleService
         if (await _context.Admins.AnyAsync(x => x.AdminRoleId == id, cancellationToken))
             return Result.Failure(RoleErrors.RoleInUse);
 
+        role.Permissions.Clear();
         _context.AdminRoles.Remove(role);
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success();
