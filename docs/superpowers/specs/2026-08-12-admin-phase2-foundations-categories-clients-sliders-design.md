@@ -309,7 +309,9 @@ is seeded but unconsumed.
 **New `Slider` entity:** `Id (long)`, `Title`, `Image` (path from
 `IFileStorage`), `Link` (target URL, nullable), `Sort (int?)`,
 `Status (bool)`, `StartsOn (DateTime?)`, `EndsOn (DateTime?)`, plus the audit
-base. Included in the same migration as Foundation A.
+base. It gets its own `AddSliders` migration, generated on top of Foundation
+A's `AddAuditAndSoftDelete`, because the implementation is split into two
+plans (2A foundations, 2B features) and Sliders belongs to the second.
 
 **Permission key gap:** the catalog has `SlidersManage` but no
 `SlidersView`, so a view-only slider role is impossible. Add
