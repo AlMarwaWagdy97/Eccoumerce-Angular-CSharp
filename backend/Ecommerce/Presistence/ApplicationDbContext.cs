@@ -90,25 +90,56 @@ namespace Ecommerce.Presistence
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            var entries = ChangeTracker.Entries<AuditableEntity>();
+            ApplyAuditRules();
+            return base.SaveChangesAsync(cancellationToken);
+        }
 
-            foreach (var entityEntry in entries)
+        // Overridden as well so synchronous saves cannot bypass auditing or soft delete.
+        public override int SaveChanges()
+        {
+            ApplyAuditRules();
+            return base.SaveChanges();
+        }
+
+        private void ApplyAuditRules()
+        {
+            var adminId = CurrentAdminId();
+            var now = DateTime.UtcNow;
+
+            // Materialised first: flipping an entry's State mutates the change tracker,
+            // which would invalidate a live enumeration.
+            foreach (var entry in ChangeTracker.Entries<IAuditable>().ToList())
             {
-                var claim = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                long? currentUserId = long.TryParse(claim, out var adminId) ? adminId : null;
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedById = adminId;
+                        break;
 
-                if (entityEntry.State == EntityState.Added)
-                {
-                    entityEntry.Property(x => x.CreatedById).CurrentValue = currentUserId;
-                }
-                else if (entityEntry.State == EntityState.Modified)
-                {
-                    entityEntry.Property(x => x.UpdatedById).CurrentValue = currentUserId;
-                    entityEntry.Property(x => x.UpdatedOn).CurrentValue = DateTime.UtcNow;
+                    case EntityState.Modified:
+                        entry.Entity.UpdatedById = adminId;
+                        entry.Entity.UpdatedOn = now;
+                        break;
+
+                    case EntityState.Deleted:
+                        // Soft delete: rewrite the delete into an update. Every existing
+                        // Remove() call in every service becomes a soft delete for free.
+                        entry.State = EntityState.Modified;
+                        entry.Entity.IsDeleted = true;
+                        entry.Entity.DeletedOn = now;
+                        entry.Entity.DeletedById = adminId;
+                        break;
                 }
             }
+        }
 
-            return base.SaveChangesAsync(cancellationToken);
+        // The admin JWT carries the Admin's numeric id in `sub` (mapped to NameIdentifier);
+        // the customer JWT carries a GUID there. Only a long is a real Admin id, so a failed
+        // parse means "not an admin request" and the audit columns stay null.
+        private long? CurrentAdminId()
+        {
+            var value = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return long.TryParse(value, out var adminId) ? adminId : null;
         }
     }
 
