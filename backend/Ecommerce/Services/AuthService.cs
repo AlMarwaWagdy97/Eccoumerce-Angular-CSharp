@@ -14,8 +14,14 @@ public class AuthService(UserManager<ApplicationUser> userManager, IJwtProvider 
 
     public async Task<Result<AuthResponse>> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
     {
-        var emailExists = await _userManager.FindByEmailAsync(request.Email);
-        if (emailExists is not null)
+        // IgnoreQueryFilters: a soft-deleted account still owns its email in the unique index,
+        // so it must block re-registration even though it is invisible to every other query.
+        var normalizedEmail = _userManager.NormalizeEmail(request.Email);
+        var emailExists = await _userManager.Users
+            .IgnoreQueryFilters()
+            .AnyAsync(x => x.NormalizedEmail == normalizedEmail, cancellationToken);
+
+        if (emailExists)
             return Result.Failure<AuthResponse>(UserErrors.DuplicatedEmail);
 
         var user = new ApplicationUser
