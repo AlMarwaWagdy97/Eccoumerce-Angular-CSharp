@@ -3,3 +3,7 @@
 .idea/
 .DS_Store
 Thumbs.db
+
+# Uploaded media is runtime data, not source. Keep the folder, ignore its contents.
+backend/Ecommerce/wwwroot/uploads/*
+!backend/Ecommerce/wwwroot/uploads/.gitkeep

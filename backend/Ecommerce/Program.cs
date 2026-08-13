@@ -29,6 +29,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Uploaded images under wwwroot/uploads are public by design — served before auth runs.
+app.UseStaticFiles();
+
 app.UseCors("AngularAppPolicy");
 
 app.UseAuthorization();
