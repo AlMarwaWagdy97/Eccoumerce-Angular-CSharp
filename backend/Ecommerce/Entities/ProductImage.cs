@@ -1,6 +1,6 @@
 namespace Ecommerce.Entities;
 
-public sealed class ProductImage
+public sealed class ProductImage : AuditableEntity
 {
     public long Id { get; set; }
     public long ProductId { get; set; }

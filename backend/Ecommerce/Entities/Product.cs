@@ -1,6 +1,6 @@
 ﻿namespace Ecommerce.Entities
 {
-    public class Product
+    public class Product : AuditableEntity
     {
         public long Id { get; set; }
         public long CategoryId { get; set; }

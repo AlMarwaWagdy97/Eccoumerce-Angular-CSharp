@@ -1,6 +1,6 @@
 namespace Ecommerce.Entities;
 
-public sealed class Order
+public sealed class Order : AuditableEntity
 {
     public long Id { get; set; }
     public string OrderNumber { get; set; } = string.Empty;
@@ -23,8 +23,6 @@ public sealed class Order
     public string ShipToState { get; set; } = string.Empty;
     public string ShipToCountry { get; set; } = string.Empty;
     public string? ShipToPostalCode { get; set; }
-
-    public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
 
     public ApplicationUser User { get; set; } = null!;
     public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();

@@ -1,6 +1,6 @@
 namespace Ecommerce.Entities;
 
-public sealed class Card
+public sealed class Card : AuditableEntity
 {
     public long Id { get; set; }
     public string UserId { get; set; } = string.Empty;

@@ -34,6 +34,36 @@ namespace Ecommerce.Presistence
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
+            // The three audit navigations all point at Admin and have no inverse collection, so EF
+            // cannot pair them by convention — on Admin itself they are three self-references and
+            // model building fails outright. Configure them explicitly for every IAuditable type.
+            var auditableTypes = modelBuilder.Model
+                    .GetEntityTypes()
+                    .Where(t => typeof(IAuditable).IsAssignableFrom(t.ClrType))
+                    .Select(t => t.ClrType)
+                    .ToList();
+
+            foreach (var clrType in auditableTypes)
+            {
+                modelBuilder.Entity(clrType, b =>
+                {
+                    b.HasOne(typeof(Admin), nameof(IAuditable.CreatedBy))
+                        .WithMany()
+                        .HasForeignKey(nameof(IAuditable.CreatedById))
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne(typeof(Admin), nameof(IAuditable.UpdatedBy))
+                        .WithMany()
+                        .HasForeignKey(nameof(IAuditable.UpdatedById))
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne(typeof(Admin), nameof(IAuditable.DeletedBy))
+                        .WithMany()
+                        .HasForeignKey(nameof(IAuditable.DeletedById))
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+            }
+
             var cascadeFKs = modelBuilder.Model
                     .GetEntityTypes()
                     .SelectMany(t => t.GetForeignKeys())
@@ -51,7 +81,8 @@ namespace Ecommerce.Presistence
 
             foreach (var entityEntry in entries)
             {
-                var currentUserId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+                var claim = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                long? currentUserId = long.TryParse(claim, out var adminId) ? adminId : null;
 
                 if (entityEntry.State == EntityState.Added)
                 {
