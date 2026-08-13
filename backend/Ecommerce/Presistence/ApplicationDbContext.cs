@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Security.Claims;
 
@@ -73,6 +74,18 @@ namespace Ecommerce.Presistence
                 fk.DeleteBehavior = DeleteBehavior.Restrict;
 
             base.OnModelCreating(modelBuilder);
+
+            // Soft delete: hide IsDeleted rows from every query. This runs AFTER base.OnModelCreating
+            // so the Identity entity types (ApplicationUser) are already registered and get filtered too.
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (!typeof(IAuditable).IsAssignableFrom(entityType.ClrType))
+                    continue;
+
+                var parameter = Expression.Parameter(entityType.ClrType, "e");
+                var body = Expression.Not(Expression.Property(parameter, nameof(IAuditable.IsDeleted)));
+                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(Expression.Lambda(body, parameter));
+            }
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

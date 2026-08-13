@@ -7,6 +7,7 @@ using Ecommerce.Email;
 using Ecommerce.Options;
 using System.Reflection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Text;
 
 namespace Ecommerce
@@ -42,7 +43,11 @@ namespace Ecommerce
             // Connect Database
             var connectionString = configuration.GetConnectionString("DefaultConnection") ??
                 throw new InvalidDataException("Connection string DefaultConnection not found");
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString)
+                       // Favorite/Cart/CartItem are intentionally not soft-deletable but navigate to the
+                       // filtered Product entity. The warning is expected, not a defect.
+                       .ConfigureWarnings(w => w.Ignore(CoreEventId.PossibleIncorrectRequiredNavigationWithQueryFilterInteractionWarning)));
 
             services.AddOpenApi()
                 .AddMapsterConf()
