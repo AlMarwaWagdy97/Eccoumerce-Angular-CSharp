@@ -1,5 +1,24 @@
 # Admin Dashboard Phase 2A: Audit, Soft-Delete & File Upload Foundations Implementation Plan
 
+> **STATUS: all 9 tasks implemented** on branch `phase2a-audit-soft-delete`, commits
+> `463ffd8`..`bee6b47`. 72 backend tests pass. Two deviations from the plan as written,
+> both required and both committed:
+> 1. `OnModelCreating` explicitly configures the three audit navigations per `IAuditable`
+>    type — EF cannot resolve `Admin`'s three self-references by convention and model
+>    building throws without it. `Slider` will be picked up by that loop automatically in 2B.
+> 2. Task 1 also had to fix `SaveChangesAsync`'s `string` → `long?` claim assignment to
+>    compile; Task 4 then replaced the method wholesale as specified.
+>
+> **One open defect, found after Task 9 and NOT yet fixed:** unique indexes on soft-deletable
+> entities (`AdminRoles.Name`, `Admins.Email`, `Products.Slug`, `Products.Sku`,
+> `Categories.Slug`, `Orders.OrderNumber`, `Reviews(ProductId,UserId)`) still hold
+> soft-deleted rows, while the services' uniqueness pre-checks are now query-filtered and
+> cannot see them. Reusing a deleted role's name returns **HTTP 500** on SQL Server
+> (`IX_AdminRoles_Name` violation), contradicting the design doc. The InMemory test suite
+> cannot catch this — it does not enforce unique indexes, so `RoleServiceSoftDeleteTests`
+> is falsely green. Fix is a filtered unique index (`HasFilter("[IsDeleted] = 0")`) on each,
+> plus a migration. **Resolve before starting 2B**, which adds more unique-slug entities.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Put a schema-wide admin audit trail, soft-delete, and file-upload capability in place so the Phase 2B feature plan (Categories, Clients, Sliders) and every later phase can build on them without re-migrating the same tables.
