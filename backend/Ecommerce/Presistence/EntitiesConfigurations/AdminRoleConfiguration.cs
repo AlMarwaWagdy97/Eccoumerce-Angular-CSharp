@@ -8,7 +8,9 @@ public class AdminRoleConfiguration : IEntityTypeConfiguration<AdminRole>
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
         builder.Property(x => x.Name).HasMaxLength(100).IsRequired();
-        builder.HasIndex(x => x.Name).IsUnique();
+        // Filtered so a deleted role's name can be reused, which the Phase 2 design requires
+        // and RoleService's (query-filtered) uniqueness check already assumes.
+        builder.HasIndex(x => x.Name).IsUnique().HasFilter("[IsDeleted] = 0");
         builder.Property(x => x.Description).HasMaxLength(500);
 
         builder.HasMany(x => x.Permissions)

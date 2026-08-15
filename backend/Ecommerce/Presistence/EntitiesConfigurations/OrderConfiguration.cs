@@ -7,7 +7,7 @@ namespace Ecommerce.Presistence.EntitiesConfigurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.HasIndex(x => x.OrderNumber).IsUnique();
+            builder.HasIndex(x => x.OrderNumber).IsUnique().HasFilter("[IsDeleted] = 0");
             builder.Property(x => x.OrderNumber).HasMaxLength(50).IsRequired();
 
             // Store enums as strings for readability in the DB

@@ -10,7 +10,8 @@ public class AdminConfiguration : IEntityTypeConfiguration<Admin>
         builder.Property(x => x.FirstName).HasMaxLength(100).IsRequired();
         builder.Property(x => x.LastName).HasMaxLength(100).IsRequired();
         builder.Property(x => x.Email).HasMaxLength(256).IsRequired();
-        builder.HasIndex(x => x.Email).IsUnique();
+        // Filtered so a soft-deleted admin releases its email — see ProductConfiguration.
+        builder.HasIndex(x => x.Email).IsUnique().HasFilter("[IsDeleted] = 0");
         builder.Property(x => x.PasswordHash).IsRequired();
         builder.Property(x => x.PhoneNumber).HasMaxLength(30);
 

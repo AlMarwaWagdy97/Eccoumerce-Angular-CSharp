@@ -9,10 +9,13 @@
 
             builder.Property(x => x.Title).HasMaxLength(255).IsRequired();
 
-            builder.HasIndex(x => x.Slug).IsUnique();
+            // Filtered so a soft-deleted product releases its slug/SKU. Without the filter the
+            // deleted row keeps its slot in the index while the service's uniqueness check —
+            // which is query-filtered — cannot see it, turning a reuse into an opaque 500.
+            builder.HasIndex(x => x.Slug).IsUnique().HasFilter("[IsDeleted] = 0");
             builder.Property(x => x.Slug).HasMaxLength(255).IsRequired();
 
-            builder.HasIndex(x => x.Sku).IsUnique();
+            builder.HasIndex(x => x.Sku).IsUnique().HasFilter("[IsDeleted] = 0");
             builder.Property(x => x.Sku).HasMaxLength(100).IsRequired();
 
             builder.Property(x => x.Price).IsRequired();
