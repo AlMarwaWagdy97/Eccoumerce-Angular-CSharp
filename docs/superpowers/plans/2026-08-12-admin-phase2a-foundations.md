@@ -9,15 +9,22 @@
 > 2. Task 1 also had to fix `SaveChangesAsync`'s `string` → `long?` claim assignment to
 >    compile; Task 4 then replaced the method wholesale as specified.
 >
-> **One open defect, found after Task 9 and NOT yet fixed:** unique indexes on soft-deletable
-> entities (`AdminRoles.Name`, `Admins.Email`, `Products.Slug`, `Products.Sku`,
-> `Categories.Slug`, `Orders.OrderNumber`, `Reviews(ProductId,UserId)`) still hold
-> soft-deleted rows, while the services' uniqueness pre-checks are now query-filtered and
-> cannot see them. Reusing a deleted role's name returns **HTTP 500** on SQL Server
-> (`IX_AdminRoles_Name` violation), contradicting the design doc. The InMemory test suite
-> cannot catch this — it does not enforce unique indexes, so `RoleServiceSoftDeleteTests`
-> is falsely green. Fix is a filtered unique index (`HasFilter("[IsDeleted] = 0")`) on each,
-> plus a migration. **Resolve before starting 2B**, which adds more unique-slug entities.
+> 3. **Follow-up defect found after Task 9, now FIXED in `052254e`.** Unique indexes on
+>    soft-deletable entities still held soft-deleted rows while the services' uniqueness
+>    pre-checks had become query-filtered, so reusing a deleted role's name returned
+>    **HTTP 500** (`IX_AdminRoles_Name` violation) — the case the design doc says must
+>    succeed. Fixed with `HasFilter("[IsDeleted] = 0")` on all seven such indexes
+>    (`AdminRoles.Name`, `Admins.Email`, `Products.Slug`, `Products.Sku`, `Categories.Slug`,
+>    `Orders.OrderNumber`, `Reviews(ProductId,UserId)`) plus migration
+>    `AddFilteredUniqueIndexes`. `AspNetUsers` is deliberately excluded — Task 5 resolved
+>    that case the other way. **The InMemory provider does not enforce unique indexes, so
+>    no test in this suite can cover this class of bug**; it was verified by curl against
+>    the running API (same call now returns 201). Keep that limitation in mind in 2B, which
+>    adds two more unique-slug entities.
+>
+> Task 9 Step 4's SQL-Server verification is done: after a create/delete/recreate cycle,
+> `AdminRoles` holds both rows with `IsDeleted=1`, `DeletedOn` set, and `CreatedById`/
+> `DeletedById` = the seeded admin, while the API's role list shows only `Super Admin`.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
