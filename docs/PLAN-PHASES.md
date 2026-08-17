@@ -1,7 +1,7 @@
 # Plan Phases — Status Tracker
 
-**Last updated:** 2026-08-15
-**Current branch:** `phase2a-audit-soft-delete` (10 commits, `463ffd8`..`052254e`, not merged to `main`)
+**Last updated:** 2026-08-17
+**Current branch:** `phase2a-audit-soft-delete` (14 commits from `463ffd8`, not merged to `main`)
 **Currently doing:** nothing in flight — Phase 2A is complete; Phase 2B is ready to start
 
 Legend: ✅ Done · 🔵 Doing now · ⬜ Not started · ⛔ Blocked
@@ -29,7 +29,7 @@ Legend: ✅ Done · 🔵 Doing now · ⬜ Not started · ⛔ Blocked
 
 ## 2. Phase 2A — Audit, Soft-Delete & File Upload Foundations
 
-Progress: **9 done · 0 remaining** · 72 backend tests pass · build clean
+Progress: **9 done · 0 remaining** · 76 backend tests pass · build clean
 
 | Task | What it delivers | Status | Evidence |
 |---|---|---|---|
@@ -43,9 +43,10 @@ Progress: **9 done · 0 remaining** · 72 backend tests pass · build clean
 | 8 | Lock down Products write endpoints (`products.manage`) | ✅ Done | `14589bb`, `ProductsControllerAuthorizationTests.cs` (6 tests) — `DELETE` → 401, `GET` → 200 |
 | 9 | Verify Phase 1 admin paths inherited soft-delete | ✅ Done | `bee6b47`, `RoleServiceSoftDeleteTests.cs` (3 tests); `RoleService.cs` unchanged |
 | + | **Follow-up:** filtered unique indexes on `IsDeleted` | ✅ Done | `052254e` + migration `AddFilteredUniqueIndexes` |
+| + | **Follow-up:** deferred cascade + product dependant cleanup | ✅ Done | `f04a81d`, `ProductSoftDeleteCleanupTests.cs` (4 tests) |
 
 **Done criteria — all met**
-- ✅ `dotnet test Ecommerce.Tests/Ecommerce.Tests.csproj` — 72/72 pass.
+- ✅ `dotnet test Ecommerce.Tests/Ecommerce.Tests.csproj` — 76/76 pass.
 - ✅ API boots, dev seeders run, `/uploads/<file>` is fetchable.
 - ✅ `DELETE https://localhost:7297/api/Products/1` returns 401 without an admin token.
 - ✅ Deleting anything auditable sets `IsDeleted` instead of removing the row — confirmed
@@ -62,6 +63,14 @@ Progress: **9 done · 0 remaining** · 72 backend tests pass · build clean
    stopped assigning the `NameIdentifier` claim string into the now-`long?` columns; Task 4
    then replaced the method wholesale as specified.
 3. **Filtered unique indexes** (see below).
+4. **Deferred cascade timing.** `Remove()` on a soft-deletable entity threw
+   `InvalidOperationException: the association ... has been severed` whenever EF already had a
+   dependent tracked — EF processes the cascade the moment the state flips to `Deleted`, which is
+   before `SaveChanges` and therefore before `ApplyAuditRules` can rewrite the delete into an
+   update. `ApplicationDbContext` now sets `ChangeTracker.CascadeDeleteTiming =
+   CascadeTiming.OnSaveChanges` so the rewrite lands first. Doing that meant writing the
+   context's constructor out in full (`ChangeTracker` is instance-only), a deliberate departure
+   from `backend/CLAUDE.md`'s primary-constructor convention.
 
 ### ⚠️ Testing limitation worth carrying into 2B
 
@@ -72,6 +81,19 @@ same operation returned **HTTP 500** against SQL Server. Fixed in `052254e` by f
 seven affected indexes on `[IsDeleted] = 0`. **Any uniqueness rule added in 2B (category
 slugs, slider fields) must be checked against SQL Server by hand — a passing test proves
 nothing here.**
+
+### ⚠️ Second thing to carry into 2B: soft-deleting a principal
+
+Soft delete is not free for anything that other rows point at. Two questions now have to be
+answered for **every** delete path 2B adds — `Category` (children, products) and `Slider` both
+qualify:
+
+1. **Does it still throw?** Fixed globally by the deferred cascade timing above, and covered by
+   `ProductSoftDeleteCleanupTests`. Nothing more to do unless a service loads dependents itself.
+2. **What dangles afterwards?** This one is *per service* and has no global fix. The row survives
+   with `IsDeleted = 1`, so every reference to it survives too. `ProductService.DeleteAsync` had
+   to explicitly clear favourites and cart items while deliberately leaving order items alone.
+   Deleting a category must make the same call about its child categories and its products.
 
 ---
 
@@ -120,7 +142,7 @@ with `wwwroot/uploads/`; and permission-gated `ProductsController` writes.
 
 Phase 2A is finished. Choose one:
 
-1. **Merge 2A.** Branch `phase2a-audit-soft-delete` is 10 commits ahead of `main` and has
+1. **Merge 2A.** Branch `phase2a-audit-soft-delete` is 14 commits ahead of `main` and has
    never been merged. Nothing on it is frontend-facing, so the storefront is unaffected.
 2. **Start Phase 2B Task 1** (`CategoryService` image upload) from
    `docs/superpowers/plans/2026-08-12-admin-phase2b-categories-clients-sliders.md`.
