@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Data.Common;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -10,10 +11,25 @@ namespace Ecommerce.Presistence
 
 {
 
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor httpContextAccessor) :
-    IdentityDbContext<ApplicationUser>(options)
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        // Written out rather than as a primary constructor (the convention elsewhere) because
+        // ChangeTracker only exists on an instance and the timing below has to be in place
+        // before the first Remove().
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor httpContextAccessor)
+            : base(options)
+        {
+            _httpContextAccessor = httpContextAccessor;
+
+            // Removing a soft-deletable entity threw immediately: EF severed the required foreign
+            // key of every dependent it already had tracked, before SaveChanges ever ran. Deferring
+            // the cascade to save time lets ApplyAuditRules rewrite the delete into an update first,
+            // so the principal is no longer Deleted by the time EF looks at its dependents and
+            // nothing gets severed.
+            ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges;
+        }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
