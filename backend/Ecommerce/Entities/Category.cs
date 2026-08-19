@@ -1,6 +1,6 @@
 ﻿namespace Ecommerce.Entities
 {
-    public sealed class Category
+    public sealed class Category : AuditableEntity
     {
         public long Id { get; set; }
         public long? ParentId { get; set; } 

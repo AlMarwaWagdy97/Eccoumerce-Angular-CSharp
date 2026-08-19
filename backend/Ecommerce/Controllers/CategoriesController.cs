@@ -1,12 +1,13 @@
-﻿using Ecommerce.Contracts.Categories;
+using Ecommerce.Contracts.Categories;
 using Ecommerce.Contracts.Common;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Ecommerce.Controllers
 {
+    // Storefront-facing, unauthenticated, read-only.
+    // Every write action now lives on AdminCategoriesController behind
+    // AdminBearer + categories.manage.
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
     public class CategoriesController(ICategoryService categoryService) : ControllerBase
     {
         private readonly ICategoryService _categoryService = categoryService;
@@ -15,7 +16,9 @@ namespace Ecommerce.Controllers
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             var categories = await _categoryService.GetAllAsync(cancellationToken);
-            var response = new ApiResponse<IEnumerable<CategoryResponse>>(StatusCodes.Status200OK, "", categories.Adapt<IEnumerable<CategoryResponse>>());
+            var response = new ApiResponse<IEnumerable<CategoryResponse>>(
+                StatusCodes.Status200OK, "", categories.Adapt<IEnumerable<CategoryResponse>>());
+
             return Ok(response);
         }
 
@@ -23,70 +26,10 @@ namespace Ecommerce.Controllers
         public async Task<IActionResult> Get([FromRoute] long id, CancellationToken cancellationToken)
         {
             var result = await _categoryService.GetAsync(id, cancellationToken);
-            if (result.IsFailure)
-            {
-                //var errorResponse = new ApiResponse<object>(StatusCodes.Status404NotFound, result.Error.Description ?? "Category not found.");
-                return NotFound(result);
-            }
-
-            //var response =  ApiResponse<CategoryResponse>(StatusCodes.Status200OK, "Category retrieved successfully.", result.Value);
-            return Ok(result);
-        }
-
-        [HttpPost("")]
-        public async Task<IActionResult> Add([FromForm] CategoryRequest request, CancellationToken cancellationToken)
-        {
-            var result = await _categoryService.AddAsync(request, cancellationToken);
             if (!result.IsSuccess)
-            {
-                var errorResponse = new ApiResponse<object>(StatusCodes.Status409Conflict, result.Error.Description ?? "Category conflict occurred.");
-                return StatusCode(StatusCodes.Status409Conflict, errorResponse);
-            }
+                return NotFound(new ApiResponse<object>(StatusCodes.Status404NotFound, result.Error.Description ?? "Category not found."));
 
-            var response = new ApiResponse<CategoryResponse>(StatusCodes.Status201Created, "Category created successfully.", result.Value);
-            return CreatedAtAction(nameof(Get), new { id = result.Value.Id }, response);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute] long id, [FromForm] CategoryRequest request, CancellationToken cancellationToken)
-        {
-            var result = await _categoryService.UpdateAsync(id, request, cancellationToken);
-           if (!result.IsSuccess)
-            {
-                var errorResponse = new ApiResponse<object>(StatusCodes.Status404NotFound, result.Error.Description ?? "Category not found.");
-                return NotFound(errorResponse);
-            }
-
-            var response = new ApiResponse<CategoryResponse>(StatusCodes.Status200OK, "Category updated successfully.", result.Value);
-            return Ok(response);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] long id, CancellationToken cancellationToken)
-        {
-            var result = await _categoryService.DeleteAsync(id, cancellationToken);
-            if (!result.IsSuccess)
-            {
-                var errorResponse = new ApiResponse<object>(StatusCodes.Status404NotFound, result.Error.Description ?? "Category not found.");
-                return NotFound(errorResponse);
-            }
-
-            var response = new ApiResponse<object>(StatusCodes.Status200OK, "Category deleted successfully.");
-            return Ok(response);
-        }
-
-        [HttpPut("{id}/toggleStatus")]
-        public async Task<IActionResult> ToggleStatus([FromRoute] long id, CancellationToken cancellationToken)
-        {
-            var result = await _categoryService.ToggleStatusAsync(id, cancellationToken);
-            if (!result.IsSuccess)
-            {
-                var errorResponse = new ApiResponse<object>(StatusCodes.Status404NotFound, result.Error.Description ?? "Category not found.");
-                return NotFound(errorResponse);
-            }
-
-            var response = new ApiResponse<object>(StatusCodes.Status200OK, "Category status toggled successfully.");
-            return Ok(response);
+            return Ok(new ApiResponse<CategoryResponse>(StatusCodes.Status200OK, "Category retrieved successfully.", result.Value));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Ecommerce.Contracts.Common;
+﻿using Ecommerce.Authorization;
+using Ecommerce.Contracts.Common;
 using Ecommerce.Contracts.Products;
 
 namespace Ecommerce.Controllers
@@ -34,6 +35,7 @@ namespace Ecommerce.Controllers
         }
 
         [HttpPost("")]
+        [HasPermission(PermissionKeys.ProductsManage, AuthenticationSchemes = AdminAuthDefaults.Scheme)]
         public async Task<IActionResult> Add([FromForm] ProductRequest request, CancellationToken cancellationToken)
         {
             var result = await _productService.AddAsync(request, cancellationToken);
@@ -48,6 +50,7 @@ namespace Ecommerce.Controllers
         }
         
         [HttpPut("{id}")]
+        [HasPermission(PermissionKeys.ProductsManage, AuthenticationSchemes = AdminAuthDefaults.Scheme)]
         public async Task<IActionResult> Update([FromRoute] long id, [FromForm] ProductRequest request, CancellationToken cancellationToken)
         {
             var result = await _productService.UpdateAsync(id, request, cancellationToken);
@@ -62,6 +65,7 @@ namespace Ecommerce.Controllers
         }
 
         [HttpDelete("{id}")]
+        [HasPermission(PermissionKeys.ProductsManage, AuthenticationSchemes = AdminAuthDefaults.Scheme)]
         public async Task<IActionResult> Delete([FromRoute] long id, CancellationToken cancellationToken)
         {
             var result = await _productService.DeleteAsync(id, cancellationToken);
@@ -76,6 +80,7 @@ namespace Ecommerce.Controllers
         }
 
         [HttpPut("{id}/toggleStatus")]
+        [HasPermission(PermissionKeys.ProductsManage, AuthenticationSchemes = AdminAuthDefaults.Scheme)]
         public async Task<IActionResult> ToggleStatus([FromRoute] long id, CancellationToken cancellationToken)
         {
             var result = await _productService.ToggleStatusAsync(id, cancellationToken);

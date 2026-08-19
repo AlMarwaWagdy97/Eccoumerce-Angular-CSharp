@@ -1,6 +1,6 @@
 namespace Ecommerce.Entities;
 
-public class AdminRole
+public class AdminRole : AuditableEntity
 {
     public long Id { get; set; }
     public string Name { get; set; } = string.Empty;

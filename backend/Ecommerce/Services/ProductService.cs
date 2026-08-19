@@ -119,6 +119,20 @@ public class ProductService(ApplicationDbContext context) : IProductService
         if (product is null)
             return Result.Failure(ProductErrors.ProductNotFound);
 
+        // The product row survives as IsDeleted, so anything still pointing at it would keep
+        // showing a product customers can no longer buy. Favorite and CartItem are deliberately
+        // not auditable, so removing them here is a real delete. OrderItem is left alone: it
+        // snapshots the product details and is history.
+        var favorites = await _context.Favorites
+            .Where(f => f.ProductId == id)
+            .ToListAsync(cancellationToken);
+        _context.Favorites.RemoveRange(favorites);
+
+        var cartItems = await _context.CartItems
+            .Where(c => c.ProductId == id)
+            .ToListAsync(cancellationToken);
+        _context.CartItems.RemoveRange(cartItems);
+
         _context.Remove(product);
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success();

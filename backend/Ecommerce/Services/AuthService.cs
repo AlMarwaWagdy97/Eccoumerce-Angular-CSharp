@@ -14,8 +14,14 @@ public class AuthService(UserManager<ApplicationUser> userManager, IJwtProvider 
 
     public async Task<Result<AuthResponse>> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
     {
-        var emailExists = await _userManager.FindByEmailAsync(request.Email);
-        if (emailExists is not null)
+        // IgnoreQueryFilters: a soft-deleted account still owns its email in the unique index,
+        // so it must block re-registration even though it is invisible to every other query.
+        var normalizedEmail = _userManager.NormalizeEmail(request.Email);
+        var emailExists = await _userManager.Users
+            .IgnoreQueryFilters()
+            .AnyAsync(x => x.NormalizedEmail == normalizedEmail, cancellationToken);
+
+        if (emailExists)
             return Result.Failure<AuthResponse>(UserErrors.DuplicatedEmail);
 
         var user = new ApplicationUser
@@ -66,6 +72,12 @@ public class AuthService(UserManager<ApplicationUser> userManager, IJwtProvider 
 
         if (user is null)
             return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
+
+        // Admin "disable client" (Phase 2B) rides Identity's lockout rather than a bespoke
+        // IsActive column, so login has to honour it explicitly here — CheckPasswordAsync
+        // alone does not.
+        if (await _userManager.IsLockedOutAsync(user))
+            return Result.Failure<AuthResponse>(UserErrors.AccountLocked);
 
         var isValidPassword = await _userManager.CheckPasswordAsync(user, password);
 

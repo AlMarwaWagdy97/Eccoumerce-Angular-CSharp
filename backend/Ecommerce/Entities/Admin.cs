@@ -1,6 +1,6 @@
 namespace Ecommerce.Entities;
 
-public class Admin
+public class Admin : AuditableEntity
 {
     public long Id { get; set; }
     public string FirstName { get; set; } = string.Empty;
@@ -9,7 +9,6 @@ public class Admin
     public string PasswordHash { get; set; } = string.Empty;
     public string? PhoneNumber { get; set; }
     public bool IsActive { get; set; } = true;
-    public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
 
     public long AdminRoleId { get; set; }
     public AdminRole AdminRole { get; set; } = default!;

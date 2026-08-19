@@ -9,7 +9,8 @@
 
             builder.Property(x => x.Title).HasMaxLength(255).IsRequired();
 
-            builder.HasIndex(x => x.Slug).IsUnique();
+            // Filtered so a soft-deleted category releases its slug — see ProductConfiguration.
+            builder.HasIndex(x => x.Slug).IsUnique().HasFilter("[IsDeleted] = 0");
             builder.Property(x => x.Slug).HasMaxLength(255).IsRequired();
 
             builder.Property(x => x.Status).HasDefaultValue(true);

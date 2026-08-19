@@ -10,7 +10,8 @@ namespace Ecommerce.Presistence.EntitiesConfigurations
             builder.Property(x => x.Comment).HasMaxLength(2000);
 
             // One review per user per product
-            builder.HasIndex(x => new { x.ProductId, x.UserId }).IsUnique();
+            // Filtered so deleting a review lets the same user review the product again.
+            builder.HasIndex(x => new { x.ProductId, x.UserId }).IsUnique().HasFilter("[IsDeleted] = 0");
 
             builder.HasOne(x => x.Product)
                    .WithMany(x => x.Reviews)

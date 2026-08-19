@@ -1,6 +1,6 @@
 namespace Ecommerce.Entities;
 
-public sealed class OrderItem
+public sealed class OrderItem : AuditableEntity
 {
     public long Id { get; set; }
     public long OrderId { get; set; }

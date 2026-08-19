@@ -1,6 +1,6 @@
 namespace Ecommerce.Entities;
 
-public sealed class Address
+public sealed class Address : AuditableEntity
 {
     public long Id { get; set; }
     public string UserId { get; set; } = string.Empty;
