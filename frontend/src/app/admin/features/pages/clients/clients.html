@@ -1,0 +1,123 @@
+<div class="panel-header">
+  <div>
+    <h1 class="page-title">Clients</h1>
+    <p class="page-subtitle">Customer accounts — {{ totalCount() }} total.</p>
+  </div>
+  @if (!showForm()) {
+    <div class="search-box">
+      <input
+        type="search"
+        class="form-control"
+        placeholder="Search name or email…"
+        [value]="searchTerm()"
+        (input)="onSearchInput($event)"
+        (keyup.enter)="search()">
+      <button type="button" class="add-btn" (click)="search()">Search</button>
+    </div>
+  }
+</div>
+
+@if (loading()) {
+  <div class="state-message">Loading clients…</div>
+} @else if (!showForm()) {
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Client</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (client of clients(); track client.id) {
+        <tr>
+          <td>
+            <span class="avatar">{{ client.firstName.charAt(0) }}</span>
+            {{ client.firstName }} {{ client.lastName }}
+          </td>
+          <td>
+            {{ client.email }}
+            @if (!client.emailConfirmed) {
+              <div class="muted">Email not confirmed</div>
+            }
+          </td>
+          <td>{{ client.phoneNumber || '—' }}</td>
+          <td>
+            <span class="pill" [class.pill-off]="!client.isActive">{{ client.isActive ? 'Active' : 'Disabled' }}</span>
+          </td>
+          <td class="actions">
+            <button type="button" [disabled]="busyId() === client.id" (click)="view(client)">View</button>
+            @if (canManage()) {
+              <button type="button" (click)="startEdit(client)">Edit</button>
+              <button type="button" [disabled]="busyId() === client.id" (click)="toggleStatus(client)">
+                {{ client.isActive ? 'Disable' : 'Enable' }}
+              </button>
+              <button type="button" class="danger" [disabled]="busyId() === client.id" (click)="remove(client)">Delete</button>
+            }
+          </td>
+        </tr>
+      } @empty {
+        <tr><td colspan="5" class="state-message">No clients match this search.</td></tr>
+      }
+    </tbody>
+  </table>
+
+  @if (totalPages() > 1) {
+    <div class="pager">
+      <button type="button" [disabled]="page() === 1" (click)="goToPage(page() - 1)">Previous</button>
+      <span class="muted">Page {{ page() }} of {{ totalPages() }}</span>
+      <button type="button" [disabled]="page() === totalPages()" (click)="goToPage(page() + 1)">Next</button>
+    </div>
+  }
+
+  @if (detail(); as client) {
+    <div class="detail-card">
+      <div class="detail-header">
+        <h2>{{ client.firstName }} {{ client.lastName }}</h2>
+        <button type="button" class="cancel-btn" (click)="closeDetail()">Close</button>
+      </div>
+      <dl class="detail-grid">
+        <div><dt>Email</dt><dd>{{ client.email }}</dd></div>
+        <div><dt>Phone</dt><dd>{{ client.phoneNumber || '—' }}</dd></div>
+        <div><dt>Status</dt><dd>{{ client.isActive ? 'Active' : 'Disabled' }}</dd></div>
+        <div><dt>Orders</dt><dd>{{ client.orderCount }}</dd></div>
+        <div><dt>Lifetime total</dt><dd>{{ client.lifetimeTotal | currency }}</dd></div>
+      </dl>
+    </div>
+  }
+}
+
+@if (showForm()) {
+  @if (error()) {
+    <div class="alert-error">{{ error() }}</div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="client-form">
+    <div class="field-row">
+      <div class="field-group">
+        <label>First Name</label>
+        <input formControlName="firstName" type="text" class="form-control">
+      </div>
+      <div class="field-group">
+        <label>Last Name</label>
+        <input formControlName="lastName" type="text" class="form-control">
+      </div>
+    </div>
+    <div class="field-group">
+      <label>Email</label>
+      <input formControlName="email" type="email" class="form-control">
+      <small class="muted">Changing this changes the account's sign-in address.</small>
+    </div>
+    <div class="field-group">
+      <label>Phone</label>
+      <input formControlName="phoneNumber" type="tel" class="form-control">
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="save-btn" [disabled]="saving()">{{ saving() ? 'Saving…' : 'Save Client' }}</button>
+      <button type="button" class="cancel-btn" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+}

@@ -12,6 +12,7 @@ interface AdminNavItem {
 const NAV_ITEMS: AdminNavItem[] = [
   { label: 'Dashboard', path: '.', icon: 'bi-grid-1x2-fill', permission: 'dashboard.view' },
   { label: 'Categories', path: 'categories', icon: 'bi-diagram-3-fill', permission: 'categories.view' },
+  { label: 'Clients', path: 'clients', icon: 'bi-person-lines-fill', permission: 'clients.view' },
   { label: 'Roles', path: 'roles', icon: 'bi-shield-lock-fill', permission: 'roles.manage' },
   { label: 'Admins', path: 'admins', icon: 'bi-people-fill', permission: 'admins.manage' },
 ];

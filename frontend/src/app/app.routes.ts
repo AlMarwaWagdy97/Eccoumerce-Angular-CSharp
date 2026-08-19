@@ -28,6 +28,7 @@ import { ResetPasswordComponent as AdminResetPasswordComponent } from './admin/f
 import { DashboardComponent } from './admin/features/pages/dashboard/dashboard';
 import { Admins as AdminsComponent } from './admin/features/pages/admins/admins';
 import { Categories as AdminCategoriesComponent } from './admin/features/pages/categories/categories';
+import { ClientsComponent } from './admin/features/pages/clients/clients';
 import { RolesComponent } from './admin/features/pages/roles/roles';
 import { adminAuthGuard } from './admin/core/guards/admin-auth-guard';
 import { adminPermissionGuard } from './admin/core/guards/admin-permission-guard';
@@ -45,6 +46,7 @@ export const routes: Routes = [
     { path: 'admin', component: AdminLayoutComponent, canActivate: [adminAuthGuard], children: [
         { path: '', component: DashboardComponent, title: 'Admin Dashboard' },
         { path: 'categories', component: AdminCategoriesComponent, canActivate: [adminPermissionGuard('categories.view')], title: 'Categories' },
+        { path: 'clients', component: ClientsComponent, canActivate: [adminPermissionGuard('clients.view')], title: 'Clients' },
         { path: 'roles', component: RolesComponent, canActivate: [adminPermissionGuard('roles.manage')], title: 'Roles' },
         { path: 'admins', component: AdminsComponent, canActivate: [adminPermissionGuard('admins.manage')], title: 'Admins' },
     ]},
