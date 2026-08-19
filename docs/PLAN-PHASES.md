@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-08-19
 **Current branch:** `phase2b-categories-clients-sliders`
-**Currently doing:** Phase 2B Task 8 done; next is Task 9 (`AdminSlidersController` + public `SlidersController`, backend)
+**Currently doing:** Phase 2B Task 9 done; next is Task 10 (Sliders admin page, frontend) — the last task in the plan
 
 Legend: ✅ Done · 🔵 Doing now · ⬜ Not started · ⛔ Blocked
 
@@ -20,7 +20,7 @@ Legend: ✅ Done · 🔵 Doing now · ⬜ Not started · ⛔ Blocked
 | 0 | Monorepo merge (backend + frontend via git subtree) | `docs/superpowers/specs/2026-07-09-monorepo-merge-design.md` | ✅ Done |
 | 1 | Admin: auth, roles & permissions, admins | `docs/superpowers/plans/2026-08-02-admin-phase1-auth-roles-admins.md` (20 tasks) | ✅ Done — all 20 tasks committed + 2 follow-up bug fixes |
 | **2A** | **Foundations: audit trail, soft-delete, file upload** | `docs/superpowers/plans/2026-08-12-admin-phase2a-foundations.md` (9 tasks) | ✅ **Done** — 9/9 tasks + 1 follow-up defect fix |
-| 2B | Categories, Clients, Sliders | `docs/superpowers/plans/2026-08-12-admin-phase2b-categories-clients-sliders.md` (10 tasks) | 🔵 Doing now — 8/10 tasks done |
+| 2B | Categories, Clients, Sliders | `docs/superpowers/plans/2026-08-12-admin-phase2b-categories-clients-sliders.md` (10 tasks) | 🔵 Doing now — 9/10 tasks done |
 | 3 | Products admin | not yet designed | ⬜ Not started |
 | 4 | Orders admin | not yet designed | ⬜ Not started |
 | 5 | Dashboard / Reports | not yet designed | ⬜ Not started |
@@ -100,7 +100,7 @@ qualify:
 
 ## 3. Phase 2B — Categories, Clients & Sliders
 
-Progress: **8 done · 2 remaining**
+Progress: **9 done · 1 remaining**
 
 | Task | Area | Deliverable | Status |
 |---|---|---|---|
@@ -112,7 +112,7 @@ Progress: **8 done · 2 remaining**
 | 6 | Frontend · Clients | Clients admin page | ✅ Done — `660aa45`; manually verified search, detail card, edit (incl. email-change login proof), disable/enable, delete, and permission-gated read-only rendering. **Follow-up fix (same commit):** `.detail-grid dd` had no `overflow-wrap`, so a full email address overflowed its grid cell into the next column — added `overflow-wrap: break-word`. `tsc --noEmit` clean |
 | 7 | Backend · Sliders | `Slider` entity, EF config, `sliders.view` permission, `AddSliders` migration | ✅ Done — `6682b95`; migration creates only `Sliders` (audit columns + 3 `Restrict` FKs to `Admins`), applied to the dev DB; `sliders.view` seeded onto Super Admin, confirmed idempotent on a second run; 95/95 backend tests pass |
 | 8 | Backend · Sliders | `ISliderService` / `SliderService` | ✅ Done — `ca9fe16`, `SliderServiceTests.cs` (11 tests: upload, `ImageRequired`, `InvalidSchedule`, storage-failure propagation, image round-trip on update, active/schedule filtering, sort order, toggle, delete, not-found); 106/106 backend tests pass |
-| 9 | Backend · Sliders | `AdminSlidersController` + public `SlidersController` | ⬜ Not started |
+| 9 | Backend · Sliders | `AdminSlidersController` + public `SlidersController` | ✅ Done — `5600d9d`; manually verified create (with image upload) → admin + public lists → 401 gate → status toggle drops/restores it from the public list → expired `EndsOn` drops it too → uploaded file servable via `UseStaticFiles`; build clean, 106/106 tests pass |
 | 10 | Frontend · Sliders | Sliders admin page | ⬜ Not started |
 
 **Sequencing constraint:** Tasks 3, 6 and 10 each edit `frontend/src/app/app.routes.ts`,
@@ -141,15 +141,16 @@ with `wwwroot/uploads/`; and permission-gated `ProductsController` writes.
 
 ## 5. Next action
 
-Phase 2B Task 8 is done — `SliderService` is fully implemented and unit-tested, but not
-yet reachable over HTTP (Task 9). Branch `phase2b-categories-clients-sliders` carries all
-of 2A's commits plus Tasks 1–8 and the two follow-up fixes (unmerged into `main`).
-Continue with **Phase 2B Task 9** (`AdminSlidersController` + public `SlidersController`,
-backend) from
-`docs/superpowers/plans/2026-08-12-admin-phase2b-categories-clients-sliders.md`. Note the
-plan's sequencing constraint: Tasks 3, 6 and 10 each touch `app.routes.ts`,
-`app.routes.server.ts` and `main-layout.ts` — Tasks 3 and 6 are done, so only Task 10
-remains under that constraint.
+Phase 2B Task 9 is done — Sliders is now fully reachable over HTTP, both the admin CRUD
+surface and the public read-only one. Branch `phase2b-categories-clients-sliders` carries
+all of 2A's commits plus Tasks 1–9 and the two follow-up fixes (unmerged into `main`).
+Continue with **Phase 2B Task 10** (Sliders admin page, frontend) — the **last task in
+this plan** — from
+`docs/superpowers/plans/2026-08-12-admin-phase2b-categories-clients-sliders.md`. Once
+Task 10 is done and its own manual walkthrough passes, do the plan's three closing
+checks: the design-doc coverage sweep, the full manual walkthrough across all three
+modules, and the storefront regression check — all listed under "Plan-level final check"
+at the end of the plan file.
 
 Housekeeping note: the dev database holds two soft-deleted `Temp QA` roles (ids 3 and 5)
 left by the SQL-Server verification, and `frontend/src/app/site/core/guards/auth-guard.ts`
