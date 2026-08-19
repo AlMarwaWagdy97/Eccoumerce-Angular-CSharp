@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-08-19
 **Current branch:** `phase2b-categories-clients-sliders`
-**Currently doing:** Phase 2B Task 4 done; next is Task 5 (`AdminClientsController`, backend)
+**Currently doing:** Phase 2B Task 5 done (plus a storefront-login lockout fix found during its verification); next is Task 6 (Clients admin page, frontend)
 
 Legend: ✅ Done · 🔵 Doing now · ⬜ Not started · ⛔ Blocked
 
@@ -20,7 +20,7 @@ Legend: ✅ Done · 🔵 Doing now · ⬜ Not started · ⛔ Blocked
 | 0 | Monorepo merge (backend + frontend via git subtree) | `docs/superpowers/specs/2026-07-09-monorepo-merge-design.md` | ✅ Done |
 | 1 | Admin: auth, roles & permissions, admins | `docs/superpowers/plans/2026-08-02-admin-phase1-auth-roles-admins.md` (20 tasks) | ✅ Done — all 20 tasks committed + 2 follow-up bug fixes |
 | **2A** | **Foundations: audit trail, soft-delete, file upload** | `docs/superpowers/plans/2026-08-12-admin-phase2a-foundations.md` (9 tasks) | ✅ **Done** — 9/9 tasks + 1 follow-up defect fix |
-| 2B | Categories, Clients, Sliders | `docs/superpowers/plans/2026-08-12-admin-phase2b-categories-clients-sliders.md` (10 tasks) | 🔵 Doing now — 4/10 tasks done |
+| 2B | Categories, Clients, Sliders | `docs/superpowers/plans/2026-08-12-admin-phase2b-categories-clients-sliders.md` (10 tasks) | 🔵 Doing now — 5/10 tasks done |
 | 3 | Products admin | not yet designed | ⬜ Not started |
 | 4 | Orders admin | not yet designed | ⬜ Not started |
 | 5 | Dashboard / Reports | not yet designed | ⬜ Not started |
@@ -28,6 +28,7 @@ Legend: ✅ Done · 🔵 Doing now · ⬜ Not started · ⛔ Blocked
 ---
 
 ## 2. Phase 2A — Audit, Soft-Delete & File Upload Foundations
+
 
 Progress: **9 done · 0 remaining** · 76 backend tests pass · build clean
 
@@ -99,7 +100,7 @@ qualify:
 
 ## 3. Phase 2B — Categories, Clients & Sliders
 
-Progress: **4 done · 6 remaining**
+Progress: **5 done · 5 remaining**
 
 | Task | Area | Deliverable | Status |
 |---|---|---|---|
@@ -107,7 +108,7 @@ Progress: **4 done · 6 remaining**
 | 2 | Backend · Categories | `AdminCategoriesController`; public `CategoriesController` → read-only | ✅ Done — `cd69b32`; manually verified `GET`/`POST`/admin-auth status codes; build clean, 83/83 tests pass |
 | 3 | Frontend · Categories | Categories admin page (table + tree view) | ✅ Done — manually verified table/tree toggle, nested expand, image upload round-trip on create + update, and permission-gated read-only rendering (no Add/Actions when `categories.manage` is absent); `tsc --noEmit` clean |
 | 4 | Backend · Clients | `IClientService` / `ClientService` over `ApplicationUser` | ✅ Done — `5d44ee8`, `ClientServiceTests.cs` (8 tests, real `UserManager` over in-memory context); 91/91 backend tests pass; not yet wired into DI or a controller (Task 5) |
-| 5 | Backend · Clients | `AdminClientsController` | ⬜ Not started |
+| 5 | Backend · Clients | `AdminClientsController` | ✅ Done — `0db2f1e`; manually verified paged list, search, detail (`orderCount`/`lifetimeTotal`), 401 gate against the seeded dev DB. **Follow-up fix (`ef5600d`):** `api/Auth/login` didn't check Identity's lockout state, so disabling a client had no effect on their storefront login — `AuthService.GetTokenAsync` now calls `IsLockedOutAsync` and fails with the new `UserErrors.AccountLocked`. Verified end-to-end (disable → login rejected 400 → re-enable → login succeeds). 93/93 backend tests pass |
 | 6 | Frontend · Clients | Clients admin page | ⬜ Not started |
 | 7 | Backend · Sliders | `Slider` entity, EF config, `sliders.view` permission, `AddSliders` migration | ⬜ Not started |
 | 8 | Backend · Sliders | `ISliderService` / `SliderService` | ⬜ Not started |
@@ -140,13 +141,14 @@ with `wwwroot/uploads/`; and permission-gated `ProductsController` writes.
 
 ## 5. Next action
 
-Phase 2B Task 4 is done. Branch `phase2b-categories-clients-sliders` carries all of 2A's
-commits plus Tasks 1–4 (unmerged into `main`). Continue with **Phase 2B Task 5**
-(`AdminClientsController`, backend — also registers `IClientService` in
-`DependacyInjection.cs`) from
+Phase 2B Task 5 is done, plus a same-session fix to `AuthService.GetTokenAsync` so the
+disable-client toggle actually blocks storefront login (see Task 5's row above). Branch
+`phase2b-categories-clients-sliders` carries all of 2A's commits plus Tasks 1–5 and that
+fix (unmerged into `main`). Continue with **Phase 2B Task 6** (Clients admin page,
+frontend) from
 `docs/superpowers/plans/2026-08-12-admin-phase2b-categories-clients-sliders.md`. Note the
 plan's sequencing constraint: Tasks 3, 6 and 10 each touch `app.routes.ts`,
-`app.routes.server.ts` and `main-layout.ts` — Task 3 is now done, so only Tasks 6 and 10
+`app.routes.server.ts` and `main-layout.ts` — Task 3 is done, so only Tasks 6 and 10
 remain under that constraint; still run them one at a time, never in parallel.
 
 Housekeeping note: the dev database holds two soft-deleted `Temp QA` roles (ids 3 and 5)
