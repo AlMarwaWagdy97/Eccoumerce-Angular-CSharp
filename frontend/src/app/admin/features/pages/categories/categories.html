@@ -1,1 +1,160 @@
-<p>categories works!</p>
+<div class="panel-header">
+  <div>
+    <h1 class="page-title">Categories</h1>
+    <p class="page-subtitle">Organise the catalogue into a parent/child hierarchy.</p>
+  </div>
+  <div class="header-actions">
+    @if (!showForm()) {
+      <button type="button" class="toggle-btn" (click)="toggleTreeView()">
+        {{ treeView() ? 'Show table' : 'Show tree' }}
+      </button>
+      @if (canManage()) {
+        <button type="button" class="add-btn" (click)="startAdd()">+ Add Category</button>
+      }
+    }
+  </div>
+</div>
+
+@if (loading()) {
+  <div class="state-message">Loading categories…</div>
+} @else if (!showForm()) {
+  @if (!treeView()) {
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Title</th>
+          <th>Slug</th>
+          <th>Parent</th>
+          <th>Sort</th>
+          <th>Status</th>
+          @if (canManage()) { <th>Actions</th> }
+        </tr>
+      </thead>
+      <tbody>
+        @for (category of categories(); track category.id) {
+          <tr>
+            <td>
+              @if (category.image) {
+                <img class="thumb" [src]="imageUrl(category.image)" [alt]="category.title">
+              } @else {
+                <span class="thumb thumb-empty">—</span>
+              }
+            </td>
+            <td>{{ category.title }}</td>
+            <td class="muted">{{ category.slug }}</td>
+            <td>{{ parentTitle(category) }}</td>
+            <td>{{ category.sort ?? '—' }}</td>
+            <td>
+              <span class="pill" [class.pill-off]="!category.status">{{ category.status ? 'Active' : 'Hidden' }}</span>
+            </td>
+            @if (canManage()) {
+              <td class="actions">
+                <button type="button" (click)="startEdit(category)">Edit</button>
+                <button type="button" [disabled]="busyId() === category.id" (click)="toggleStatus(category)">Toggle</button>
+                <button type="button" class="danger" [disabled]="busyId() === category.id" (click)="remove(category)">Delete</button>
+              </td>
+            }
+          </tr>
+        } @empty {
+          <tr><td colspan="7" class="state-message">No categories yet.</td></tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <div class="tree">
+      @for (row of treeRows(); track row.category.id) {
+        <div class="tree-row" [style.padding-left]="indent(row.depth)">
+          @if (row.hasChildren) {
+            <button type="button" class="expander" (click)="toggleExpanded(row.category.id)">
+              <i class="bi" [class.bi-chevron-down]="row.expanded" [class.bi-chevron-right]="!row.expanded"></i>
+            </button>
+          } @else {
+            <span class="expander expander-leaf"></span>
+          }
+
+          <span class="tree-title">{{ row.category.title }}</span>
+          <span class="pill" [class.pill-off]="!row.category.status">{{ row.category.status ? 'Active' : 'Hidden' }}</span>
+
+          @if (canManage()) {
+            <span class="tree-actions">
+              <button type="button" (click)="startEdit(row.category)">Edit</button>
+              <button type="button" class="danger" [disabled]="busyId() === row.category.id" (click)="remove(row.category)">Delete</button>
+            </span>
+          }
+        </div>
+      } @empty {
+        <div class="state-message">No categories yet.</div>
+      }
+    </div>
+  }
+}
+
+@if (showForm()) {
+  @if (error()) {
+    <div class="alert-error">{{ error() }}</div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="category-form">
+    <div class="field-row">
+      <div class="field-group">
+        <label>Title</label>
+        <input formControlName="title" type="text" class="form-control">
+      </div>
+      <div class="field-group">
+        <label>Slug</label>
+        <input formControlName="slug" type="text" class="form-control">
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Parent</label>
+      <select formControlName="parentId" class="form-control">
+        <option [value]="0">— None (top level) —</option>
+        @for (parent of parentOptions(); track parent.id) {
+          <option [value]="parent.id">{{ parent.title }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label>Description</label>
+      <textarea formControlName="description" rows="3" class="form-control"></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>Image</label>
+      @if (existingImage()) {
+        <img class="preview" [src]="imageUrl(existingImage())" alt="Current image">
+      }
+      <input type="file" accept="image/*" class="form-control" (change)="onFileSelected($event)">
+      <small class="muted">JPG, PNG or WebP, up to 2 MB. Leave empty to keep the current image.</small>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>Sort</label>
+        <input formControlName="sort" type="number" class="form-control">
+      </div>
+      <div class="field-group">
+        <label>Meta key</label>
+        <input formControlName="metaKey" type="text" class="form-control">
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Meta description</label>
+      <input formControlName="metaDescription" type="text" class="form-control">
+    </div>
+
+    <div class="checkbox-row">
+      <label class="checkbox-field"><input formControlName="feature" type="checkbox"> Featured</label>
+      <label class="checkbox-field"><input formControlName="status" type="checkbox"> Active</label>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="save-btn" [disabled]="saving()">{{ saving() ? 'Saving…' : 'Save Category' }}</button>
+      <button type="button" class="cancel-btn" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+}
