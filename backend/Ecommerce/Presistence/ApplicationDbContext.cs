@@ -46,6 +46,7 @@ namespace Ecommerce.Presistence
         public DbSet<Admin> Admins { get; set; }
         public DbSet<AdminRole> AdminRoles { get; set; }
         public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Slider> Sliders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

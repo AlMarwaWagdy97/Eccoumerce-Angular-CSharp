@@ -11,6 +11,7 @@ public static class PermissionKeys
     public const string ProductsManage = "products.manage";
     public const string OrdersView = "orders.view";
     public const string OrdersManage = "orders.manage";
+    public const string SlidersView = "sliders.view";
     public const string SlidersManage = "sliders.manage";
     public const string ReportsView = "reports.view";
     public const string RolesManage = "roles.manage";
@@ -27,6 +28,7 @@ public static class PermissionKeys
         (ProductsManage, "Products", "Create, edit, and delete products"),
         (OrdersView, "Orders", "View orders"),
         (OrdersManage, "Orders", "Update order status and details"),
+        (SlidersView, "Sliders", "View homepage sliders"),
         (SlidersManage, "Sliders", "Manage homepage sliders"),
         (ReportsView, "Reports", "View sales and product reports"),
         (RolesManage, "Roles", "Create, edit, and delete roles and permissions"),
