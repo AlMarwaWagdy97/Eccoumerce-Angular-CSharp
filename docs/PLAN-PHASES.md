@@ -1,8 +1,8 @@
 # Plan Phases — Status Tracker
 
-**Last updated:** 2026-08-17
-**Current branch:** `phase2a-audit-soft-delete` (14 commits from `463ffd8`, not merged to `main`)
-**Currently doing:** nothing in flight — Phase 2A is complete; Phase 2B is ready to start
+**Last updated:** 2026-08-19
+**Current branch:** `phase2b-categories-clients-sliders`
+**Currently doing:** Phase 2B Task 1 done; next is Task 2 (`AdminCategoriesController` + lock down public `CategoriesController`)
 
 Legend: ✅ Done · 🔵 Doing now · ⬜ Not started · ⛔ Blocked
 
@@ -20,7 +20,7 @@ Legend: ✅ Done · 🔵 Doing now · ⬜ Not started · ⛔ Blocked
 | 0 | Monorepo merge (backend + frontend via git subtree) | `docs/superpowers/specs/2026-07-09-monorepo-merge-design.md` | ✅ Done |
 | 1 | Admin: auth, roles & permissions, admins | `docs/superpowers/plans/2026-08-02-admin-phase1-auth-roles-admins.md` (20 tasks) | ✅ Done — all 20 tasks committed + 2 follow-up bug fixes |
 | **2A** | **Foundations: audit trail, soft-delete, file upload** | `docs/superpowers/plans/2026-08-12-admin-phase2a-foundations.md` (9 tasks) | ✅ **Done** — 9/9 tasks + 1 follow-up defect fix |
-| 2B | Categories, Clients, Sliders | `docs/superpowers/plans/2026-08-12-admin-phase2b-categories-clients-sliders.md` (10 tasks) | ⬜ Not started — **unblocked**, 2A's deliverables all exist |
+| 2B | Categories, Clients, Sliders | `docs/superpowers/plans/2026-08-12-admin-phase2b-categories-clients-sliders.md` (10 tasks) | 🔵 Doing now — 1/10 tasks done |
 | 3 | Products admin | not yet designed | ⬜ Not started |
 | 4 | Orders admin | not yet designed | ⬜ Not started |
 | 5 | Dashboard / Reports | not yet designed | ⬜ Not started |
@@ -99,11 +99,11 @@ qualify:
 
 ## 3. Phase 2B — Categories, Clients & Sliders
 
-Progress: **0 done · 10 remaining** — no longer blocked
+Progress: **1 done · 9 remaining**
 
 | Task | Area | Deliverable | Status |
 |---|---|---|---|
-| 1 | Backend · Categories | Image upload + parent validation in `CategoryService` | ⬜ Not started |
+| 1 | Backend · Categories | Image upload + parent validation in `CategoryService` | ✅ Done — `6582396`, `CategoryServiceTests.cs` (7 tests); 83/83 backend tests pass |
 | 2 | Backend · Categories | `AdminCategoriesController`; public `CategoriesController` → read-only | ⬜ Not started |
 | 3 | Frontend · Categories | Categories admin page (table + tree view) | ⬜ Not started |
 | 4 | Backend · Clients | `IClientService` / `ClientService` over `ApplicationUser` | ⬜ Not started |
@@ -140,12 +140,10 @@ with `wwwroot/uploads/`; and permission-gated `ProductsController` writes.
 
 ## 5. Next action
 
-Phase 2A is finished. Choose one:
-
-1. **Merge 2A.** Branch `phase2a-audit-soft-delete` is 14 commits ahead of `main` and has
-   never been merged. Nothing on it is frontend-facing, so the storefront is unaffected.
-2. **Start Phase 2B Task 1** (`CategoryService` image upload) from
-   `docs/superpowers/plans/2026-08-12-admin-phase2b-categories-clients-sliders.md`.
+Phase 2B Task 1 is done. Branch `phase2b-categories-clients-sliders` carries all of 2A's
+commits plus Task 1 (15 commits ahead of `main`, unmerged). Continue with **Phase 2B Task 2**
+(`AdminCategoriesController`; lock the public `CategoriesController` down to reads) from
+`docs/superpowers/plans/2026-08-12-admin-phase2b-categories-clients-sliders.md`.
 
 Housekeeping note: the dev database holds two soft-deleted `Temp QA` roles (ids 3 and 5)
 left by the SQL-Server verification, and `frontend/src/app/site/core/guards/auth-guard.ts`
