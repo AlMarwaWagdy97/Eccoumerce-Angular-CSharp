@@ -73,6 +73,12 @@ public class AuthService(UserManager<ApplicationUser> userManager, IJwtProvider 
         if (user is null)
             return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
 
+        // Admin "disable client" (Phase 2B) rides Identity's lockout rather than a bespoke
+        // IsActive column, so login has to honour it explicitly here — CheckPasswordAsync
+        // alone does not.
+        if (await _userManager.IsLockedOutAsync(user))
+            return Result.Failure<AuthResponse>(UserErrors.AccountLocked);
+
         var isValidPassword = await _userManager.CheckPasswordAsync(user, password);
 
         if (!isValidPassword)

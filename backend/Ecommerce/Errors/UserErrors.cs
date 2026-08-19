@@ -13,4 +13,7 @@ public static class UserErrors
 
     public static readonly Error DuplicatedEmail =
         new("User.InvalidEmail", "Invalid Email token");
+
+    public static readonly Error AccountLocked =
+        new("User.AccountLocked", "This account has been disabled");
 }
