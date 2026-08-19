@@ -66,6 +66,7 @@ namespace Ecommerce
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IClientService, ClientService>();
+            services.AddScoped<ISliderService, SliderService>();
             services.AddScoped<Ecommerce.Storage.IFileStorage, Ecommerce.Storage.LocalFileStorage>();
 
             services.AddExceptionHandler<GlobalExceptionHandler>();
