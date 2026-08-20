@@ -46,7 +46,7 @@ namespace Ecommerce.Controllers
             }
 
             var response = new ApiResponse<ProductResponse>(StatusCodes.Status201Created, "Product created successfully.", result.Value);
-            return CreatedAtAction(nameof(Get), new { id = result.Value.Id }, response);
+            return CreatedAtAction(nameof(Get), new { slug = result.Value.Slug }, response);
         }
         
         [HttpPut("{id}")]
@@ -60,7 +60,7 @@ namespace Ecommerce.Controllers
                 return NotFound(errorResponse);
             }
 
-            var response = new ApiResponse<ProductResponse>(StatusCodes.Status200OK, "Product updated successfully.");
+            var response = new ApiResponse<ProductResponse>(StatusCodes.Status200OK, "Product updated successfully.", result.Value);
             return Ok(response);
         }
 

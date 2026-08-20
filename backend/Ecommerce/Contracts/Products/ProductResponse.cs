@@ -9,6 +9,7 @@
         double Price,
         double? PriceAfterSale,
         double? Sale,
+        string? Image,
         int? Sort,
         bool Feature,
         bool Status,
