@@ -12,7 +12,8 @@
             @for(category of cats;track $index){
                 <div class="col">
                     <div class="category-card position-relative rounded-4 overflow-hidden h-100 shadow-sm text-white d-flex align-items-end p-3"
-                        style="height: 180px; background-image: linear-gradient(transparent, rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600'); background-size: cover;">
+                        [style.background-image]="'linear-gradient(transparent, rgba(0,0,0,0.8)), url(' + ((category.image | resolveImageUrl) || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600') + ')'"
+                        style="height: 180px; background-size: cover;">
                         <div>
                             <h6 class="fw-bold m-0"> {{category.title}} </h6>
                             <small class="opacity-75 fs-7">3 Products</small>
