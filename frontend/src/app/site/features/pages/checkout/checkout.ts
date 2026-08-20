@@ -4,10 +4,11 @@ import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CartServices } from '../../../core/services/cart-services';
 import { AccountServices } from '../../../core/services/account-services';
+import { ResolveImageUrlPipe } from '../../../shared/pipes/resolve-image-url.pipe';
 
 @Component({
   selector: 'app-checkout',
-  imports: [RouterLink, ReactiveFormsModule, CurrencyPipe],
+  imports: [RouterLink, ReactiveFormsModule, CurrencyPipe, ResolveImageUrlPipe],
   templateUrl: './checkout.html',
   styleUrl: './checkout.scss',
 })

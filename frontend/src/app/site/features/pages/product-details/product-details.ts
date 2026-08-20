@@ -6,10 +6,11 @@ import { CartServices } from '../../../core/services/cart-services';
 import { AccountServices } from '../../../core/services/account-services';
 import { ProductDetailsInterface } from '../../../shared/interface/productDetailsInterface';
 import { ProductInterface } from '../../../shared/interface/productInterface';
+import { ResolveImageUrlPipe } from '../../../shared/pipes/resolve-image-url.pipe';
 
 @Component({
   selector: 'app-product-details',
-  imports: [RouterLink, CurrencyPipe, DatePipe],
+  imports: [RouterLink, CurrencyPipe, DatePipe, ResolveImageUrlPipe],
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss',
 })

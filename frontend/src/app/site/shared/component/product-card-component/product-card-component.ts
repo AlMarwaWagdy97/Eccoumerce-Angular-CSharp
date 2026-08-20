@@ -4,10 +4,11 @@ import { Router, RouterLink } from '@angular/router';
 import { ProductInterface } from '../../interface/productInterface';
 import { CartServices } from '../../../core/services/cart-services';
 import { AccountServices } from '../../../core/services/account-services';
+import { ResolveImageUrlPipe } from '../../pipes/resolve-image-url.pipe';
 
 @Component({
   selector: 'app-product-card',
-  imports: [RouterLink, CurrencyPipe],
+  imports: [RouterLink, CurrencyPipe, ResolveImageUrlPipe],
   templateUrl: './product-card-component.html',
   styleUrl: './product-card-component.scss',
 })

@@ -15,7 +15,7 @@
     </button>
 
     <div class="img-container p-3 d-flex align-items-center justify-content-center">
-      <img [src]="product().image || 'assets/placeholder.png'" class="img-fluid" [alt]="product().title">
+      <img [src]="(product().image | resolveImageUrl) || 'assets/placeholder.png'" class="img-fluid" [alt]="product().title">
     </div>
 
     <div class="card-body bg-white pt-2">

@@ -26,7 +26,7 @@
 
       <div class="col-lg-6">
         <div class="main-image-container p-4 rounded-4 bg-light d-flex align-items-center justify-content-center mb-3">
-          <img [src]="selectedImage() || 'assets/placeholder.png'" class="img-fluid main-img" [alt]="p.title">
+          <img [src]="(selectedImage() | resolveImageUrl) || 'assets/placeholder.png'" class="img-fluid main-img" [alt]="p.title">
         </div>
         @if (gallery().length > 1) {
           <div class="d-flex gap-3 thumbnail-row">
@@ -34,7 +34,7 @@
               <div class="thumb-box rounded-3 overflow-hidden p-1 border cursor-pointer"
                    [class.active]="img === selectedImage()"
                    (click)="selectImage(img)">
-                <img [src]="img" class="img-fluid" alt="thumbnail">
+                <img [src]="img | resolveImageUrl" class="img-fluid" alt="thumbnail">
               </div>
             }
           </div>
@@ -201,7 +201,7 @@
                 <span class="badge bg-danger text-white position-absolute top-0 start-0 m-3 rounded-2 px-2 py-1 small fw-medium">-{{ rp.sale }}%</span>
               }
               <div class="img-container p-3 d-flex align-items-center justify-content-center">
-                <img [src]="rp.image || 'assets/placeholder.png'" class="img-fluid" [alt]="rp.title">
+                <img [src]="(rp.image | resolveImageUrl) || 'assets/placeholder.png'" class="img-fluid" [alt]="rp.title">
               </div>
               <div class="card-body bg-white pt-2">
                 <h6 class="card-title fw-semibold text-dark mb-2">{{ rp.title }}</h6>
