@@ -192,7 +192,9 @@
     </div>
 
     <div class="form-actions">
-      <button type="submit" class="save-btn" [disabled]="saving()">{{ saving() ? 'Saving…' : 'Save Product' }}</button>
+      <button type="submit" class="save-btn" [disabled]="saving() || (editingId() !== null && editingDetail() === null)">
+        {{ saving() ? 'Saving…' : editingId() !== null && editingDetail() === null ? 'Loading…' : 'Save Product' }}
+      </button>
       <button type="button" class="cancel-btn" (click)="cancel()">Cancel</button>
     </div>
   </form>
