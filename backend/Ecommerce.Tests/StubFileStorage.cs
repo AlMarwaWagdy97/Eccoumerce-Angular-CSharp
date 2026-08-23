@@ -8,11 +8,15 @@ namespace Ecommerce.Tests;
 // returns a deterministic path, so services can be tested without touching disk.
 public class StubFileStorage(string savedPath = "/uploads/test/stub.jpg", Error? failWith = null) : IFileStorage
 {
-    private readonly string _savedPath = savedPath;
+    private string _savedPath = savedPath;
     private readonly Error? _failWith = failWith;
 
     public string? LastModule { get; private set; }
     public int SaveCallCount { get; private set; }
+
+    // Lets a single stub return a different path on the next call — needed when a
+    // test uploads more than one file and must tell the results apart by URL.
+    public void SetNextPath(string path) => _savedPath = path;
 
     public Task<Result<string>> SaveAsync(IFormFile file, string module, CancellationToken cancellationToken = default)
     {

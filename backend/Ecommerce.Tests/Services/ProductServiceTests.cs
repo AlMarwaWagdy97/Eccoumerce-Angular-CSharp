@@ -170,4 +170,114 @@ public class ProductServiceTests
         Assert.Equal(2, result.Value.TotalPages);
         Assert.Single(result.Value.Items);
     }
+
+    [Fact]
+    public async Task GetAdminDetailAsync_returns_the_gallery_ordered_by_sort()
+    {
+        await using var context = CreateContext();
+        var categoryId = await SeedCategoryAsync(context);
+        var storage = new StubFileStorage();
+        var service = new ProductService(context, storage);
+        var created = (await service.AddAsync(Request(categoryId))).Value;
+
+        storage.SetNextPath("/uploads/products/b.jpg");
+        await service.AddImagesAsync(created.Id, new[] { TestFiles.Image("b.jpg") });
+        storage.SetNextPath("/uploads/products/a.jpg");
+        await service.AddImagesAsync(created.Id, new[] { TestFiles.Image("a.jpg") });
+
+        var result = await service.GetAdminDetailAsync(created.Id);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(2, result.Value.Images.Count);
+        Assert.Equal("/uploads/products/b.jpg", result.Value.Images[0].Url);
+        Assert.Equal("/uploads/products/a.jpg", result.Value.Images[1].Url);
+        Assert.True(result.Value.Images[0].Sort < result.Value.Images[1].Sort);
+    }
+
+    [Fact]
+    public async Task GetAdminDetailAsync_fails_for_an_unknown_product()
+    {
+        await using var context = CreateContext();
+        var service = new ProductService(context, new StubFileStorage());
+
+        var result = await service.GetAdminDetailAsync(999);
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("Product.NotFound", result.Error.Code);
+    }
+
+    [Fact]
+    public async Task AddImagesAsync_saves_every_file_and_increments_sort()
+    {
+        await using var context = CreateContext();
+        var categoryId = await SeedCategoryAsync(context);
+        var storage = new StubFileStorage("/uploads/products/first.jpg");
+        var service = new ProductService(context, storage);
+        var created = (await service.AddAsync(Request(categoryId))).Value;
+
+        var result = await service.AddImagesAsync(created.Id, new[] { TestFiles.Image("a.jpg"), TestFiles.Image("b.jpg") });
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(2, result.Value.Count);
+        Assert.Equal(2, storage.SaveCallCount);
+        Assert.True(result.Value[1].Sort > result.Value[0].Sort);
+    }
+
+    [Fact]
+    public async Task AddImagesAsync_fails_for_an_unknown_product()
+    {
+        await using var context = CreateContext();
+        var service = new ProductService(context, new StubFileStorage());
+
+        var result = await service.AddImagesAsync(999, new[] { TestFiles.Image() });
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("Product.NotFound", result.Error.Code);
+    }
+
+    [Fact]
+    public async Task AddImagesAsync_fails_when_no_files_are_supplied()
+    {
+        await using var context = CreateContext();
+        var categoryId = await SeedCategoryAsync(context);
+        var service = new ProductService(context, new StubFileStorage());
+        var created = (await service.AddAsync(Request(categoryId))).Value;
+
+        var result = await service.AddImagesAsync(created.Id, Array.Empty<IFormFile>());
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("File.Empty", result.Error.Code);
+    }
+
+    [Fact]
+    public async Task DeleteImageAsync_removes_the_image_from_the_gallery()
+    {
+        await using var context = CreateContext();
+        var categoryId = await SeedCategoryAsync(context);
+        var service = new ProductService(context, new StubFileStorage());
+        var created = (await service.AddAsync(Request(categoryId))).Value;
+        var added = (await service.AddImagesAsync(created.Id, new[] { TestFiles.Image() })).Value;
+
+        var result = await service.DeleteImageAsync(created.Id, added[0].Id);
+
+        Assert.True(result.IsSuccess);
+        var detail = await service.GetAdminDetailAsync(created.Id);
+        Assert.Empty(detail.Value.Images);
+    }
+
+    [Fact]
+    public async Task DeleteImageAsync_fails_for_an_image_belonging_to_another_product()
+    {
+        await using var context = CreateContext();
+        var categoryId = await SeedCategoryAsync(context);
+        var service = new ProductService(context, new StubFileStorage());
+        var first = (await service.AddAsync(Request(categoryId, title: "First", slug: "first", sku: "SKU-F"))).Value;
+        var second = (await service.AddAsync(Request(categoryId, title: "Second", slug: "second", sku: "SKU-S"))).Value;
+        var added = (await service.AddImagesAsync(first.Id, new[] { TestFiles.Image() })).Value;
+
+        var result = await service.DeleteImageAsync(second.Id, added[0].Id);
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("Product.ImageNotFound", result.Error.Code);
+    }
 }

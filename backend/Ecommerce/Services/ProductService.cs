@@ -106,6 +106,37 @@ public class ProductService(ApplicationDbContext context, IFileStorage fileStora
             products.Select(p => p.Adapt<ProductResponse>()).ToList(), page, pageSize, totalCount, totalPages));
     }
 
+    public async Task<Result<AdminProductDetailResponse>> GetAdminDetailAsync(long id, CancellationToken cancellationToken = default)
+    {
+        var product = await _context.Products.AsNoTracking()
+            .Include(p => p.Images.OrderBy(i => i.Sort))
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (product is null)
+            return Result.Failure<AdminProductDetailResponse>(ProductErrors.ProductNotFound);
+
+        var response = new AdminProductDetailResponse(
+            product.Id,
+            product.CategoryId,
+            product.Title,
+            product.Slug,
+            product.Sku,
+            product.Price,
+            product.PriceAfterSale,
+            product.Sale,
+            product.Description,
+            product.Image,
+            product.Images.Select(i => new ProductImageResponse(i.Id, i.Url, i.Sort)).ToList(),
+            product.StockQuantity,
+            product.Sort,
+            product.Feature,
+            product.Status,
+            product.MetaDescription,
+            product.MetaKey);
+
+        return Result.Success(response);
+    }
+
     public async Task<Result<ProductResponse>> AddAsync(ProductRequest request, CancellationToken cancellationToken = default)
     {
         var isSkuExists = await _context.Products.AnyAsync(x => x.Sku == request.Sku, cancellationToken);
@@ -215,6 +246,53 @@ public class ProductService(ApplicationDbContext context, IFileStorage fileStora
             return Result.Failure(ProductErrors.ProductNotFound);
 
         product.Status = !product.Status;
+        await _context.SaveChangesAsync(cancellationToken);
+        return Result.Success();
+    }
+
+    public async Task<Result<IReadOnlyList<ProductImageResponse>>> AddImagesAsync(long productId, IReadOnlyList<IFormFile> files, CancellationToken cancellationToken = default)
+    {
+        var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == productId, cancellationToken);
+        if (product is null)
+            return Result.Failure<IReadOnlyList<ProductImageResponse>>(ProductErrors.ProductNotFound);
+
+        if (files.Count == 0)
+            return Result.Failure<IReadOnlyList<ProductImageResponse>>(FileErrors.EmptyFile);
+
+        var maxSort = await _context.ProductImages
+            .Where(x => x.ProductId == productId)
+            .Select(x => (int?)x.Sort)
+            .MaxAsync(cancellationToken) ?? 0;
+
+        var added = new List<ProductImage>();
+        foreach (var file in files)
+        {
+            var saved = await _fileStorage.SaveAsync(file, StorageModule, cancellationToken);
+            if (!saved.IsSuccess)
+                return Result.Failure<IReadOnlyList<ProductImageResponse>>(saved.Error);
+
+            maxSort++;
+            var image = new ProductImage { ProductId = productId, Url = saved.Value, Sort = maxSort };
+            added.Add(image);
+            await _context.ProductImages.AddAsync(image, cancellationToken);
+        }
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return Result.Success<IReadOnlyList<ProductImageResponse>>(
+            added.Select(i => new ProductImageResponse(i.Id, i.Url, i.Sort)).ToList());
+    }
+
+    public async Task<Result> DeleteImageAsync(long productId, long imageId, CancellationToken cancellationToken = default)
+    {
+        var image = await _context.ProductImages
+            .FirstOrDefaultAsync(x => x.Id == imageId && x.ProductId == productId, cancellationToken);
+        if (image is null)
+            return Result.Failure(ProductErrors.ProductImageNotFound);
+
+        // The DbContext hook turns this into a soft delete — ProductImage is
+        // AuditableEntity, same as every other Phase 2B/3 upload-backed entity.
+        _context.Remove(image);
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success();
     }
