@@ -1,12 +1,13 @@
-﻿using Ecommerce.Authorization;
 using Ecommerce.Contracts.Common;
 using Ecommerce.Contracts.Products;
 
 namespace Ecommerce.Controllers
 {
+    // Storefront-facing, unauthenticated, read-only.
+    // Every write action now lives on AdminProductsController behind
+    // AdminBearer + products.manage.
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
     public class ProductsController(IProductService productService) : ControllerBase
     {
         private readonly IProductService _productService = productService;
@@ -31,66 +32,6 @@ namespace Ecommerce.Controllers
             }
 
             var response = new ApiResponse<ProductDetailsResponse>(StatusCodes.Status200OK, "Product retrieved successfully.", result.Value);
-            return Ok(response);
-        }
-
-        [HttpPost("")]
-        [HasPermission(PermissionKeys.ProductsManage, AuthenticationSchemes = AdminAuthDefaults.Scheme)]
-        public async Task<IActionResult> Add([FromForm] ProductRequest request, CancellationToken cancellationToken)
-        {
-            var result = await _productService.AddAsync(request, cancellationToken);
-            if (!result.IsSuccess)
-            {
-                var errorResponse = new ApiResponse<object>(StatusCodes.Status409Conflict, result.Error.Description ?? "Product conflict occurred.");
-                return StatusCode(StatusCodes.Status409Conflict, errorResponse);
-            }
-
-            var response = new ApiResponse<ProductResponse>(StatusCodes.Status201Created, "Product created successfully.", result.Value);
-            return CreatedAtAction(nameof(Get), new { slug = result.Value.Slug }, response);
-        }
-        
-        [HttpPut("{id}")]
-        [HasPermission(PermissionKeys.ProductsManage, AuthenticationSchemes = AdminAuthDefaults.Scheme)]
-        public async Task<IActionResult> Update([FromRoute] long id, [FromForm] ProductRequest request, CancellationToken cancellationToken)
-        {
-            var result = await _productService.UpdateAsync(id, request, cancellationToken);
-            if (!result.IsSuccess)
-            {
-                var errorResponse = new ApiResponse<object>(StatusCodes.Status404NotFound, result.Error.Description ?? "Product not found.");
-                return NotFound(errorResponse);
-            }
-
-            var response = new ApiResponse<ProductResponse>(StatusCodes.Status200OK, "Product updated successfully.", result.Value);
-            return Ok(response);
-        }
-
-        [HttpDelete("{id}")]
-        [HasPermission(PermissionKeys.ProductsManage, AuthenticationSchemes = AdminAuthDefaults.Scheme)]
-        public async Task<IActionResult> Delete([FromRoute] long id, CancellationToken cancellationToken)
-        {
-            var result = await _productService.DeleteAsync(id, cancellationToken);
-            if (!result.IsSuccess)
-            {
-                var errorResponse = new ApiResponse<object>(StatusCodes.Status404NotFound, result.Error.Description ?? "Product not found.");
-                return NotFound(errorResponse);
-            }
-
-            var response = new ApiResponse<object>(StatusCodes.Status200OK, "Product deleted successfully.");
-            return Ok(response);
-        }
-
-        [HttpPut("{id}/toggleStatus")]
-        [HasPermission(PermissionKeys.ProductsManage, AuthenticationSchemes = AdminAuthDefaults.Scheme)]
-        public async Task<IActionResult> ToggleStatus([FromRoute] long id, CancellationToken cancellationToken)
-        {
-            var result = await _productService.ToggleStatusAsync(id, cancellationToken);
-            if (!result.IsSuccess)
-            {
-                var errorResponse = new ApiResponse<object>(StatusCodes.Status404NotFound, result.Error.Description ?? "Product not found.");
-                return NotFound(errorResponse);
-            }
-
-            var response = new ApiResponse<object>(StatusCodes.Status200OK, "Product status toggled successfully.");
             return Ok(response);
         }
     }
