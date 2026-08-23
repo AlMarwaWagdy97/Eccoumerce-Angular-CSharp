@@ -1,0 +1,199 @@
+<div class="panel-header">
+  <div>
+    <h1 class="page-title">Products</h1>
+    <p class="page-subtitle">Catalog — {{ totalCount() }} total.</p>
+  </div>
+  @if (!showForm()) {
+    <div class="header-actions">
+      <div class="search-box">
+        <input
+          type="search"
+          class="form-control"
+          placeholder="Search title or SKU…"
+          [value]="searchTerm()"
+          (input)="onSearchInput($event)"
+          (keyup.enter)="search()">
+        <button type="button" class="toggle-btn" (click)="search()">Search</button>
+      </div>
+      @if (canManage()) {
+        <button type="button" class="add-btn" (click)="startAdd()">+ Add Product</button>
+      }
+    </div>
+  }
+</div>
+
+@if (loading()) {
+  <div class="state-message">Loading products…</div>
+} @else if (!showForm()) {
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Title</th>
+        <th>SKU</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Status</th>
+        @if (canManage()) { <th>Actions</th> }
+      </tr>
+    </thead>
+    <tbody>
+      @for (product of products(); track product.id) {
+        <tr>
+          <td>
+            @if (product.image) {
+              <img class="thumb" [src]="imageUrl(product.image)" [alt]="product.title">
+            } @else {
+              <span class="thumb thumb-empty">—</span>
+            }
+          </td>
+          <td>{{ product.title }}</td>
+          <td class="muted">{{ product.sku }}</td>
+          <td>{{ categoryTitle(product.categoryId) }}</td>
+          <td>{{ product.price | currency }}</td>
+          <td>{{ product.stockQuantity }}</td>
+          <td>
+            <span class="pill" [class.pill-off]="!product.status">{{ product.status ? 'Active' : 'Hidden' }}</span>
+          </td>
+          @if (canManage()) {
+            <td class="actions">
+              <button type="button" (click)="startEdit(product)">Edit</button>
+              <button type="button" [disabled]="busyId() === product.id" (click)="toggleStatus(product)">Toggle</button>
+              <button type="button" class="danger" [disabled]="busyId() === product.id" (click)="remove(product)">Delete</button>
+            </td>
+          }
+        </tr>
+      } @empty {
+        <tr><td colspan="8" class="state-message">No products match this search.</td></tr>
+      }
+    </tbody>
+  </table>
+
+  @if (totalPages() > 1) {
+    <div class="pager">
+      <button type="button" [disabled]="page() === 1" (click)="goToPage(page() - 1)">Previous</button>
+      <span class="muted">Page {{ page() }} of {{ totalPages() }}</span>
+      <button type="button" [disabled]="page() === totalPages()" (click)="goToPage(page() + 1)">Next</button>
+    </div>
+  }
+}
+
+@if (showForm()) {
+  @if (error()) {
+    <div class="alert-error">{{ error() }}</div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="product-form">
+    <div class="field-row">
+      <div class="field-group">
+        <label>Title</label>
+        <input formControlName="title" type="text" class="form-control">
+      </div>
+      <div class="field-group">
+        <label>Slug</label>
+        <input formControlName="slug" type="text" class="form-control">
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>SKU</label>
+        <input formControlName="sku" type="text" class="form-control">
+      </div>
+      <div class="field-group">
+        <label>Category</label>
+        <select formControlName="categoryId" class="form-control">
+          @for (category of categories(); track category.id) {
+            <option [value]="category.id">{{ category.title }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>Price</label>
+        <input formControlName="price" type="number" step="0.01" class="form-control">
+      </div>
+      <div class="field-group">
+        <label>Price after sale</label>
+        <input formControlName="priceAfterSale" type="number" step="0.01" class="form-control">
+      </div>
+      <div class="field-group">
+        <label>Sale %</label>
+        <input formControlName="sale" type="number" class="form-control">
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>Stock quantity</label>
+        <input formControlName="stockQuantity" type="number" class="form-control">
+      </div>
+      <div class="field-group">
+        <label>Sort</label>
+        <input formControlName="sort" type="number" class="form-control">
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Description</label>
+      <textarea formControlName="description" rows="3" class="form-control"></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>Cover image</label>
+      @if (existingImage()) {
+        <img class="preview" [src]="imageUrl(existingImage())" alt="Current image">
+      }
+      <input type="file" accept="image/*" class="form-control" (change)="onFileSelected($event)">
+      <small class="muted">JPG, PNG or WebP, up to 2 MB. Leave empty to keep the current image.</small>
+    </div>
+
+    @if (editingId()) {
+      <div class="field-group">
+        <label>Gallery</label>
+        @if (editingDetail()?.images?.length) {
+          <div class="gallery-strip">
+            @for (image of editingDetail()!.images; track image.id) {
+              <div class="gallery-thumb">
+                <img [src]="imageUrl(image.url)" alt="Gallery image">
+                <button type="button" class="danger" [disabled]="deletingImageId() === image.id" (click)="removeGalleryImage(image.id)">Remove</button>
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="muted">No gallery images yet.</p>
+        }
+        <input type="file" accept="image/*" multiple class="form-control" (change)="onGalleryFilesSelected($event)">
+        <button type="button" class="toggle-btn" [disabled]="uploadingGallery() || !galleryFiles().length" (click)="uploadGalleryImages()">
+          {{ uploadingGallery() ? 'Uploading…' : 'Add to gallery' }}
+        </button>
+      </div>
+    } @else {
+      <p class="muted">Save the product first to add gallery images.</p>
+    }
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>Meta key</label>
+        <input formControlName="metaKey" type="text" class="form-control">
+      </div>
+      <div class="field-group">
+        <label>Meta description</label>
+        <input formControlName="metaDescription" type="text" class="form-control">
+      </div>
+    </div>
+
+    <div class="checkbox-row">
+      <label class="checkbox-field"><input formControlName="feature" type="checkbox"> Featured</label>
+      <label class="checkbox-field"><input formControlName="status" type="checkbox"> Active</label>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="save-btn" [disabled]="saving()">{{ saving() ? 'Saving…' : 'Save Product' }}</button>
+      <button type="button" class="cancel-btn" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+}
