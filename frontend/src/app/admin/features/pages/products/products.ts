@@ -49,7 +49,7 @@ export class Products {
   canManage = () => this.auth.hasPermission('products.manage');
 
   form = this.fb.nonNullable.group({
-    categoryId: [0, Validators.required],
+    categoryId: [0, [Validators.required, Validators.min(1)]],
     title: ['', Validators.required],
     slug: ['', Validators.required],
     sku: ['', Validators.required],
@@ -67,7 +67,10 @@ export class Products {
 
   constructor() {
     this.load();
-    this.categoryService.getCategories().subscribe(categories => this.categories.set(categories));
+    this.categoryService.getCategories().subscribe({
+      next: categories => this.categories.set(categories),
+      error: () => this.error.set('Could not load categories — check this admin role has category access.'),
+    });
   }
 
   private load(): void {
@@ -138,6 +141,7 @@ export class Products {
     this.selectedFile.set(null);
     this.existingImage.set(product.image ?? null);
     this.galleryFiles.set([]);
+    this.error.set('');
     this.form.reset({
       categoryId: product.categoryId,
       title: product.title,
@@ -158,10 +162,24 @@ export class Products {
 
     // The list response has no description or gallery — load the full
     // detail separately once the form is open.
-    this.productService.getProduct(product.id).subscribe(detail => {
-      this.editingDetail.set(detail);
-      this.form.patchValue({ description: detail.description ?? '' });
+    this.loadDetail(product.id);
+  }
+
+  private loadDetail(id: number): void {
+    this.productService.getProduct(id).subscribe({
+      next: detail => {
+        this.editingDetail.set(detail);
+        this.form.patchValue({ description: detail.description ?? '' });
+      },
+      error: () => this.error.set('Could not load this product\'s full details. Try again or cancel.'),
     });
+  }
+
+  retryLoadDetail(): void {
+    const id = this.editingId();
+    if (id === null) return;
+    this.error.set('');
+    this.loadDetail(id);
   }
 
   cancel(): void {

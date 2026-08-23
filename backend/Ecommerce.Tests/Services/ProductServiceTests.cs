@@ -108,6 +108,32 @@ public class ProductServiceTests
     }
 
     [Fact]
+    public async Task AddAsync_fails_for_an_unknown_category()
+    {
+        await using var context = CreateContext();
+        var service = new ProductService(context, new StubFileStorage());
+
+        var result = await service.AddAsync(Request(999999));
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal(CategoryErrors.CategoryNotFound.Code, result.Error.Code);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_fails_for_an_unknown_category()
+    {
+        await using var context = CreateContext();
+        var categoryId = await SeedCategoryAsync(context);
+        var service = new ProductService(context, new StubFileStorage());
+        var created = (await service.AddAsync(Request(categoryId))).Value;
+
+        var result = await service.UpdateAsync(created.Id, Request(999999, title: "Renamed", slug: "renamed", sku: created.Sku));
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal(CategoryErrors.CategoryNotFound.Code, result.Error.Code);
+    }
+
+    [Fact]
     public async Task UpdateAsync_keeps_the_existing_image_when_neither_a_file_nor_an_image_path_is_supplied()
     {
         await using var context = CreateContext();
@@ -244,6 +270,20 @@ public class ProductServiceTests
         var created = (await service.AddAsync(Request(categoryId))).Value;
 
         var result = await service.AddImagesAsync(created.Id, Array.Empty<IFormFile>());
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("File.Empty", result.Error.Code);
+    }
+
+    [Fact]
+    public async Task AddImagesAsync_fails_when_files_is_null()
+    {
+        await using var context = CreateContext();
+        var categoryId = await SeedCategoryAsync(context);
+        var service = new ProductService(context, new StubFileStorage());
+        var created = (await service.AddAsync(Request(categoryId))).Value;
+
+        var result = await service.AddImagesAsync(created.Id, null!);
 
         Assert.False(result.IsSuccess);
         Assert.Equal("File.Empty", result.Error.Code);

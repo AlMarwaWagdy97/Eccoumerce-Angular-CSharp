@@ -95,7 +95,7 @@ public class ProductService(ApplicationDbContext context, IFileStorage fileStora
         var totalCount = await query.CountAsync(cancellationToken);
 
         var products = await query
-            .OrderBy(x => x.Title)
+            .OrderBy(x => x.Title).ThenBy(x => x.Id)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
@@ -147,6 +147,10 @@ public class ProductService(ApplicationDbContext context, IFileStorage fileStora
         if (isSlugExists)
             return Result.Failure<ProductResponse>(ProductErrors.DuplicatedProductSlug);
 
+        var categoryExists = await _context.Categories.AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
+        if (!categoryExists)
+            return Result.Failure<ProductResponse>(CategoryErrors.CategoryNotFound);
+
         var imageResult = await ResolveImageAsync(request, currentImage: null, cancellationToken);
         if (!imageResult.IsSuccess)
             return Result.Failure<ProductResponse>(imageResult.Error);
@@ -185,6 +189,10 @@ public class ProductService(ApplicationDbContext context, IFileStorage fileStora
         var isSlugExists = await _context.Products.AnyAsync(x => x.Slug == request.Slug && x.Id != id, cancellationToken);
         if (isSlugExists)
             return Result.Failure<ProductResponse>(ProductErrors.DuplicatedProductSlug);
+
+        var categoryExists = await _context.Categories.AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
+        if (!categoryExists)
+            return Result.Failure<ProductResponse>(CategoryErrors.CategoryNotFound);
 
         var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (product is null)
@@ -256,7 +264,7 @@ public class ProductService(ApplicationDbContext context, IFileStorage fileStora
         if (product is null)
             return Result.Failure<IReadOnlyList<ProductImageResponse>>(ProductErrors.ProductNotFound);
 
-        if (files.Count == 0)
+        if (files is null || files.Count == 0)
             return Result.Failure<IReadOnlyList<ProductImageResponse>>(FileErrors.EmptyFile);
 
         var maxSort = await _context.ProductImages

@@ -20,6 +20,9 @@ public class AdminProductsController(IProductService productService) : Controlle
         CancellationToken cancellationToken = default)
     {
         var result = await _productService.GetAdminPageAsync(search, page, pageSize, cancellationToken);
+        if (!result.IsSuccess)
+            return BadRequest(new ApiResponse<object>(StatusCodes.Status400BadRequest, result.Error.Description ?? "Could not load products."));
+
         return Ok(new ApiResponse<ProductsPageResponse>(StatusCodes.Status200OK, "Products loaded.", result.Value));
     }
 
