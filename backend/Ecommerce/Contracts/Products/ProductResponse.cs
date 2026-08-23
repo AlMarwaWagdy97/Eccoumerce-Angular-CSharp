@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Contracts.Products
+namespace Ecommerce.Contracts.Products
 {
     public record class ProductResponse(
         long Id,
@@ -10,6 +10,7 @@
         double? PriceAfterSale,
         double? Sale,
         string? Image,
+        int StockQuantity,
         int? Sort,
         bool Feature,
         bool Status,

@@ -45,7 +45,7 @@ public class ProductSoftDeleteCleanupTests
         var (context, productId) = await SeedAsync();
         await using var _ = context;
 
-        var result = await new ProductService(context).DeleteAsync(productId);
+        var result = await new ProductService(context, new StubFileStorage()).DeleteAsync(productId);
 
         Assert.True(result.IsSuccess);
         Assert.Empty(await context.Favorites.ToListAsync());
@@ -57,7 +57,7 @@ public class ProductSoftDeleteCleanupTests
         var (context, productId) = await SeedAsync();
         await using var _ = context;
 
-        await new ProductService(context).DeleteAsync(productId);
+        await new ProductService(context, new StubFileStorage()).DeleteAsync(productId);
 
         Assert.Empty(await context.CartItems.ToListAsync());
     }
@@ -68,7 +68,7 @@ public class ProductSoftDeleteCleanupTests
         var (context, productId) = await SeedAsync();
         await using var _ = context;
 
-        await new ProductService(context).DeleteAsync(productId);
+        await new ProductService(context, new StubFileStorage()).DeleteAsync(productId);
 
         Assert.Empty(await context.Products.ToListAsync());
 
@@ -96,7 +96,7 @@ public class ProductSoftDeleteCleanupTests
         });
         await context.SaveChangesAsync();
 
-        await new ProductService(context).DeleteAsync(productId);
+        await new ProductService(context, new StubFileStorage()).DeleteAsync(productId);
 
         // Orders snapshot their product details, so history must survive untouched.
         var item = await context.OrderItems.SingleAsync();
