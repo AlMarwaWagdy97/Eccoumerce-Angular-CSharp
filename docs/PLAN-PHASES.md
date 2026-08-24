@@ -1,8 +1,8 @@
 # Plan Phases — Status Tracker
 
-**Last updated:** 2026-08-19
-**Current branch:** `phase2b-categories-clients-sliders`
-**Currently doing:** Phase 2B is complete — all 10 tasks done and every closing check passed. Ready to merge or move to Phase 3
+**Last updated:** 2026-08-24
+**Current branch:** `main`
+**Currently doing:** Phase 3 (Products admin) is complete — all 4 tasks done, final whole-branch review passed, merged to `main` and pushed to `origin/main`. Ready to move to Phase 4 (Orders admin) or Phase 5 (Dashboard/Reports).
 
 Legend: ✅ Done · 🔵 Doing now · ⬜ Not started · ⛔ Blocked
 
@@ -21,7 +21,7 @@ Legend: ✅ Done · 🔵 Doing now · ⬜ Not started · ⛔ Blocked
 | 1 | Admin: auth, roles & permissions, admins | `docs/superpowers/plans/2026-08-02-admin-phase1-auth-roles-admins.md` (20 tasks) | ✅ Done — all 20 tasks committed + 2 follow-up bug fixes |
 | **2A** | **Foundations: audit trail, soft-delete, file upload** | `docs/superpowers/plans/2026-08-12-admin-phase2a-foundations.md` (9 tasks) | ✅ **Done** — 9/9 tasks + 1 follow-up defect fix |
 | 2B | Categories, Clients, Sliders | `docs/superpowers/plans/2026-08-12-admin-phase2b-categories-clients-sliders.md` (10 tasks) | ✅ **Done** — 10/10 tasks + closing checks + 1 follow-up defect fix + 1 build-budget fix |
-| 3 | Products admin | not yet designed | ⬜ Not started |
+| 3 | Products admin | `docs/superpowers/specs/2026-08-20-admin-phase3-products-design.md`, `docs/superpowers/plans/2026-08-20-admin-phase3-products.md` (4 tasks) | ✅ **Done** — 4/4 tasks + final whole-branch review + 1 follow-up fix round; merged to `main` (`736bbba..0f772de`), pushed to `origin/main` |
 | 4 | Orders admin | not yet designed | ⬜ Not started |
 | 5 | Dashboard / Reports | not yet designed | ⬜ Not started |
 
@@ -128,7 +128,33 @@ with `wwwroot/uploads/`; and permission-gated `ProductsController` writes.
 
 ---
 
-## 4. Explicitly out of scope for Phase 2
+## 4. Phase 3 — Products Admin
+
+Progress: **4 done · 0 remaining** — plan complete, final whole-branch review passed, merged to `main`
+
+Executed via `superpowers:subagent-driven-development` (fresh implementer subagent per task, task-scoped review after each, final whole-branch review at the end).
+
+| Task | Area | Deliverable | Status |
+|---|---|---|---|
+| 1 | Backend | `ProductService` image upload, `StockQuantity`/`Status`/`Feature` honored on create (previously hardcoded), admin search + pagination (`GetAdminPageAsync`), `ProductRequestValidator` | ✅ Done — `7d0a298`; 9 new tests; task review: approved clean |
+| 2 | Backend | Product image gallery — `ProductImage` entity goes live (`GetAdminDetailAsync`/`AddImagesAsync`/`DeleteImageAsync`), ordered by `Sort` | ✅ Done — `770b803`; 7 new tests (16 total); task review: approved clean, verified genuine query-level ordering and cross-product delete isolation |
+| 3 | Backend | `AdminProductsController` (full CRUD + gallery endpoints, `products.view`/`products.manage` gated); public `ProductsController` trimmed to `GET`/`GET {slug}`, fully unauthenticated | ✅ Done — `112eb96`; auth-test file rewritten wholesale (127 total tests); task review: approved clean, security-sensitive lockdown verified end-to-end |
+| 4 | Frontend | Products admin page — search, pagination, create/edit form, cover image, gallery add/remove; nav + routes + SSR wiring | ✅ Done — `b9faaf3`, fix round `2f4788e` (Description data-loss race on quick Edit→Save, found in task review, fixed and re-verified clean) |
+
+**Final whole-branch review** (most capable model, range `736bbba..2f4788e`): verdict "Ready to merge with fixes." Verified independently (not just trusted): the "no migration needed" claim (checked actual migration files), authorization traced end-to-end from frontend through controller to service with no gap, soft-delete on gallery images works via the global filter, storefront reads unchanged. Found 5 Important + 3 Minor issues invisible to any single task's diff (a stuck-Save UX dead-end on a failed detail fetch, an untested new validator, a missing category-existence check the plan wrongly claimed already existed, an undeclared `categories.view` dependency plus a `categoryId: 0` validator bug, and a null-`imageFiles` NRE risk on the gallery-upload endpoint) — all fixed in one consolidated commit (`0f772de`, 137/137 tests) and confirmed by a scoped re-review.
+
+**Parked, non-blocking (ruling recorded, not fixed):** the new category-existence check is filtered by the global soft-delete filter, so editing a product whose category was later soft-deleted now fails (previously silent success) — this requires soft-deleting a category still referenced by products, an operational sequence `CategoryService.DeleteAsync` has never guarded against; it's a pre-existing category-lifecycle gap, not something Phase 3 introduced. Follow-up recommended: guard category soft-delete while referenced, or exempt unchanged-`CategoryId` updates from the existence check.
+
+**Closing checks — all passed (2026-08-24)**
+- ✅ `dotnet test backend/Ecommerce.Tests/Ecommerce.Tests.csproj` — 137/137 pass (on the worktree, and re-verified on the merged `main` result).
+- ✅ `npx tsc --noEmit -p frontend/tsconfig.app.json` — 0 errors (worktree and merged result).
+- ✅ Merged to `main` via clean fast-forward (`736bbba..0f772de`, 6 commits), pushed to `origin/main`.
+- ⬜ `npm run build` from `frontend/` (production build + bundle-budget check) — not run this pass; worth doing before Phase 4 in case the new admin page tips the budget again (raised once already in Phase 2B).
+- ⬜ Full manual browser walkthrough (admin login → Products CRUD → gallery → storefront `/products`/`/products/:slug` regression check) — not performed; verification for this phase relied on automated tests + two levels of code review rather than a manual pass. Worth doing opportunistically if touching this area again.
+
+---
+
+## 5. Explicitly out of scope for Phase 2
 
 - Products, Orders, Dashboard/Reports admin features (Phases 3–5).
 - "View deleted / restore" UI for soft-deleted entities.
@@ -139,7 +165,7 @@ with `wwwroot/uploads/`; and permission-gated `ProductsController` writes.
 
 ---
 
-## 5. Phase 2B closing checks — all passed (2026-08-19)
+## 6. Phase 2B closing checks — all passed (2026-08-19)
 
 - ✅ `dotnet test backend/Ecommerce.Tests/Ecommerce.Tests.csproj` — 106/106 pass.
 - ✅ `dotnet build backend/Ecommerce.slnx` — 0 errors.
@@ -168,11 +194,14 @@ with `wwwroot/uploads/`; and permission-gated `ProductsController` writes.
 - ✅ No manual `IsDeleted`/`CreatedById`/`UpdatedById`/`DeletedById` assignment anywhere in
   `backend/Ecommerce/Services` or `backend/Ecommerce/Controllers` — confirmed by search.
 
-**Next action:** Phase 2B is done. Branch `phase2b-categories-clients-sliders` is ready to
-merge into `main` (35 commits ahead, carrying all of 2A plus this plan's own work), or
-continue straight into **Phase 3 — Products admin** (not yet designed; would need its own
-plan doc first, following the pattern of `docs/superpowers/plans/2026-08-12-admin-phase2b-*.md`).
+**Next action (superseded 2026-08-24):** Phase 2B merged into `main` as part of Phase 3's
+base. Phase 3 — Products admin (see §4) is now also done, merged, and pushed. Next up:
+**Phase 4 — Orders admin** or **Phase 5 — Dashboard/Reports**, neither yet designed; either
+would need its own spec + plan doc first, following the pattern of
+`docs/superpowers/specs/2026-08-20-admin-phase3-products-design.md` /
+`docs/superpowers/plans/2026-08-20-admin-phase3-products.md`.
 
-Housekeeping note: the dev database holds two soft-deleted `Temp QA` roles (ids 3 and 5)
-left by the SQL-Server verification, and `frontend/src/app/site/core/guards/auth-guard.ts`
-has an uncommitted edit on `main` that predates this work and was never staged.
+Housekeeping note (from Phase 2B, still unresolved as of 2026-08-24): the dev database holds
+two soft-deleted `Temp QA` roles (ids 3 and 5) left by the SQL-Server verification, and
+`frontend/src/app/site/core/guards/auth-guard.ts` has an uncommitted edit on `main` that
+predates this work and was never staged (still present, unrelated to Phase 3).
