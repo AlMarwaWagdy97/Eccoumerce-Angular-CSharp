@@ -61,6 +61,7 @@ namespace Ecommerce
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderAdminService, OrderAdminService>();
+            services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped<IFavoriteService, FavoriteService>();
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<ICardService, CardService>();
