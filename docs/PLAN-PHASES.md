@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-08-25
 **Current branch:** `main`
-**Currently doing:** Phase 4 (Orders admin) is complete — all 3 tasks done, final whole-branch review passed, merged to `main` and pushed to `origin/main`. Ready to move to Phase 5 (Dashboard/Reports) — the last phase on the original roadmap.
+**Currently doing:** Phase 5 (Dashboard & Reports) is complete — all 3 tasks done, final whole-branch review passed, merged to `main` and pushed to `origin/main`. **This was the last phase on the original admin roadmap — all five phases (1, 2A, 2B, 3, 4, 5) are now done.**
 
 Legend: ✅ Done · 🔵 Doing now · ⬜ Not started · ⛔ Blocked
 
@@ -23,7 +23,7 @@ Legend: ✅ Done · 🔵 Doing now · ⬜ Not started · ⛔ Blocked
 | 2B | Categories, Clients, Sliders | `docs/superpowers/plans/2026-08-12-admin-phase2b-categories-clients-sliders.md` (10 tasks) | ✅ **Done** — 10/10 tasks + closing checks + 1 follow-up defect fix + 1 build-budget fix |
 | 3 | Products admin | `docs/superpowers/specs/2026-08-20-admin-phase3-products-design.md`, `docs/superpowers/plans/2026-08-20-admin-phase3-products.md` (4 tasks) | ✅ **Done** — 4/4 tasks + final whole-branch review + 1 follow-up fix round; merged to `main` (`736bbba..0f772de`), pushed to `origin/main` |
 | 4 | Orders admin | `docs/superpowers/specs/2026-08-24-admin-phase4-orders-design.md`, `docs/superpowers/plans/2026-08-25-admin-phase4-orders.md` (3 tasks) | ✅ **Done** — 3/3 tasks + final whole-branch review + 3 follow-up fix rounds; merged to `main` (`86549e2..5f065b0`), pushed to `origin/main` |
-| 5 | Dashboard / Reports | not yet designed | ⬜ Not started |
+| 5 | Dashboard / Reports | `docs/superpowers/specs/2026-08-25-admin-phase5-dashboard-reports-design.md`, `docs/superpowers/plans/2026-08-25-admin-phase5-dashboard-reports.md` (3 tasks) | ✅ **Done** — 3/3 tasks (all approved clean, no task-level fix rounds) + final whole-branch review + 1 follow-up fix round; merged to `main` (`f5ce6e7..beaef83`), pushed to `origin/main`. **Roadmap complete.** |
 
 ---
 
@@ -185,7 +185,38 @@ Executed via `superpowers:subagent-driven-development`, same as Phase 3. This ph
 
 ---
 
-## 6. Explicitly out of scope for Phase 2
+## 6. Phase 5 — Dashboard & Reports
+
+Progress: **3 done · 0 remaining** — plan complete, final whole-branch review passed, merged to `main`. **This closes the five-phase admin roadmap.**
+
+Executed via `superpowers:subagent-driven-development`, same as Phases 3-4. Unlike either of those, all 3 tasks were approved clean on the first task-level review — no per-task fix rounds. The final whole-branch review still found real work to do.
+
+| Task | Area | Deliverable | Status |
+|---|---|---|---|
+| 1 | Backend | `DashboardService` — KPI summary (revenue excl. cancelled, order/product/client counts, low-stock alert, 5 recent orders) + reports (order-status breakdown, 7-day revenue, top 5 products) | ✅ Done — `eb932a4`; approved clean, no fix round; 12 new tests |
+| 2 | Backend | `AdminDashboardController` at `api/Admin/Dashboard`, two endpoints gated separately (`dashboard.view`/`reports.view`) so a dashboard-only caller can't pull report data directly | ✅ Done — `fa51136`; approved clean, no fix round; 3 new auth tests |
+| 3 | Frontend | Real Dashboard page replacing the stub; fixes a pre-existing gap (dashboard route was the only admin route missing its permission guard) | ✅ Done — `0399087`; approved clean, no fix round |
+
+**Notable Task 1 deviation (ruled correct):** the brief's `GetTopProductsAsync` composed an unmaterialized SQL subquery; the implementer instead materializes filtered `OrderItem` rows before grouping client-side, working around an EF Core translation limit (composite-key `GroupBy` + multiple `Sum` aggregates in one `Select` often isn't translatable). Verified by two independent reviewers to preserve both the cancelled-order exclusion and the Phase-4-derived no-`Include`-on-required-navigation posture — a correct adaptation, not a shortcut.
+
+**Final whole-branch review** (most capable model, range `f5ce6e7..0399087`, then fix `beaef83`): found a **Critical** issue invisible to any single task's diff — Task 3's dashboard-route guard fix (itself correct) combined with a pre-existing pattern (every admin permission guard fails by redirecting to `/admin`) to create a genuine lockout: an admin role missing `dashboard.view` would fail any guarded route, get redirected to `/admin`, immediately fail `/admin`'s own new guard, and loop forever — reachable for real via a custom role created through the product's own Roles page. Fixed with a minimal, surgical change: the guard now detects it's failing on its own redirect target (`/admin`) and cancels navigation instead of looping, leaving every other route's guard behavior untouched. Also fixed: revenue-by-day had no upper date bound, so a future-dated order would silently vanish from the 7-day report while still counting in the Total Revenue KPI — the two numbers could disagree with no explanation. Plus 3 Minor polish items (a tradeoff comment, a "(excl. shipping)" label so Top Products revenue doesn't look like it should reconcile with the KPI card, a stable sort tiebreaker). All confirmed by a scoped re-review, including a careful trace of the actual Angular router semantics for the guard fix (not just a code-shape check).
+
+**A real environment complication, resolved without lasting impact:** Windows Smart App Control blocked test execution in this worktree partway through setup (confirmed reproducible — clean rebuild and a different directory both still blocked). The user chose to proceed rather than wait; the block cleared on its own before it affected Task 1's actual verification, and full independent build+test re-verification (by the controller, for every task) held for the rest of the run.
+
+**Parked, non-blocking (ruling recorded, not fixed):**
+- The lockout-loop fix's `/admin` string match is exact — a future query-stringed redirect to `/admin` (not produced by any current code path) would miss it and the original loop could resurface for that one path. Not fixable speculatively; flagged for a follow-up hardening if it ever becomes real.
+- `LowStockProductCount` includes inactive products — matches the approved spec verbatim, not a bug; left as-is.
+
+**Closing checks — all passed (2026-08-25)**
+- ✅ `dotnet test backend/Ecommerce.Tests/Ecommerce.Tests.csproj` — 180/180 pass (worktree and re-verified on the merged `main` result).
+- ✅ `npx tsc --noEmit -p frontend/tsconfig.app.json` — 0 errors (worktree and merged result).
+- ✅ Merged to `main` via clean fast-forward (`f5ce6e7..beaef83`, 4 commits), pushed to `origin/main`.
+- ⬜ `npm run build` from `frontend/` (production build + bundle-budget check) — not run this pass.
+- ⬜ Full manual browser walkthrough — not performed; verification relied on automated tests + three levels of code review (per-task ×2, final whole-branch) rather than a manual pass. Worth doing opportunistically, especially exercising the fixed lockout scenario (create a role missing `dashboard.view`, log in as it, confirm no loop) since that particular fix has no automated test coverage.
+
+---
+
+## 7. Explicitly out of scope for Phase 2
 
 - Products, Orders, Dashboard/Reports admin features (Phases 3–5).
 - "View deleted / restore" UI for soft-deleted entities.
@@ -196,7 +227,7 @@ Executed via `superpowers:subagent-driven-development`, same as Phase 3. This ph
 
 ---
 
-## 7. Phase 2B closing checks — all passed (2026-08-19)
+## 8. Phase 2B closing checks — all passed (2026-08-19)
 
 - ✅ `dotnet test backend/Ecommerce.Tests/Ecommerce.Tests.csproj` — 106/106 pass.
 - ✅ `dotnet build backend/Ecommerce.slnx` — 0 errors.
@@ -225,17 +256,27 @@ Executed via `superpowers:subagent-driven-development`, same as Phase 3. This ph
 - ✅ No manual `IsDeleted`/`CreatedById`/`UpdatedById`/`DeletedById` assignment anywhere in
   `backend/Ecommerce/Services` or `backend/Ecommerce/Controllers` — confirmed by search.
 
-**Next action (superseded 2026-08-25):** Phase 2B and Phase 3 are both merged into `main`.
-Phase 4 — Orders admin (see §5) is now also done, merged, and pushed. **Phase 5 —
-Dashboard/Reports** is the one remaining phase on the original roadmap; not yet designed,
-needs its own spec + plan doc first, following the pattern of
-`docs/superpowers/specs/2026-08-24-admin-phase4-orders-design.md` /
-`docs/superpowers/plans/2026-08-25-admin-phase4-orders.md`.
+**Next action (superseded 2026-08-25):** All five phases of the original admin roadmap are
+now done and merged into `main`: Phase 1 (auth/roles/admins), Phase 2A (audit/soft-delete/
+file-upload foundations), Phase 2B (Categories/Clients/Sliders), Phase 3 (Products), Phase 4
+(Orders), and Phase 5 (Dashboard/Reports, see §6). **There is no Phase 6 on the original plan.**
+Any further admin work (e.g. the follow-ups parked in §6 — the lockout-fix's query-string edge
+case, or a manual walkthrough of the fixed lockout scenario) is opportunistic cleanup, not a
+new roadmap phase, unless a new phase is explicitly scoped and designed from scratch.
 
 Housekeeping note (from Phase 2B, still unresolved as of 2026-08-25): the dev database holds
 two soft-deleted `Temp QA` roles (ids 3 and 5) left by the SQL-Server verification, and
 `frontend/src/app/site/core/guards/auth-guard.ts` has an uncommitted edit on `main` that
-predates this work and was never staged (still present, unrelated to Phases 3-4).
+predates this work and was never staged (still present, unrelated to Phases 3-5).
+
+Housekeeping note (from Phase 4, still open): the double-restock-under-concurrent-cancel risk
+in `OrderAdminService.UpdateStatusAsync` (no optimistic concurrency on `Order`, matching
+`OrderService.CreateAsync`'s existing stock-decrement pattern) was explicitly deferred — worth
+a dedicated concurrency pass across all stock-mutating paths if it's ever prioritized.
+
+Housekeeping note (from Phase 5, new): a `npm run build` production/bundle-budget check and a
+full manual browser walkthrough (including exercising the fixed dashboard-guard lockout
+scenario) were not performed for this phase — worth doing opportunistically.
 
 Housekeeping note (from Phase 4, new): the double-restock-under-concurrent-cancel risk in
 `OrderAdminService.UpdateStatusAsync` (no optimistic concurrency on `Order`, matching
