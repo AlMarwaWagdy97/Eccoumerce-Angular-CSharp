@@ -19,19 +19,15 @@ public class OrderAdminService(ApplicationDbContext context) : IOrderAdminServic
         if (!string.IsNullOrWhiteSpace(search))
         {
             var term = search.Trim().ToLower();
-            // Resolved as a plain, un-joined query against Users so a soft-deleted
-            // account's global filter can never silently drop matching Order rows —
-            // Order.User is a required navigation and querying through it here would.
-            var matchingUserIds = await _context.Users.AsNoTracking()
-                .Where(u => u.Email != null && u.Email.ToLower().Contains(term))
-                .Select(u => u.Id)
-                .ToListAsync(cancellationToken);
-
+            // A correlated semi-join (Any), not Include: this can only ADD matching
+            // Order rows, never drop one — unlike Include(x => x.User) on the
+            // required, soft-delete-filtered navigation (see the Task 1 fix in
+            // GetByOrderNumberAsync/UpdateStatusAsync below).
             query = query.Where(x =>
                 x.OrderNumber.ToLower().Contains(term) ||
                 x.ShipToName.ToLower().Contains(term) ||
                 x.ShipToPhone.ToLower().Contains(term) ||
-                matchingUserIds.Contains(x.UserId));
+                _context.Users.Any(u => u.Id == x.UserId && u.Email != null && u.Email.ToLower().Contains(term)));
         }
 
         if (status is not null)
@@ -68,9 +64,7 @@ public class OrderAdminService(ApplicationDbContext context) : IOrderAdminServic
         if (order is null)
             return Result.Failure<AdminOrderDetailResponse>(OrderErrors.OrderNotFound);
 
-        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == order.UserId, cancellationToken);
-
-        return Result.Success(MapDetail(order, user?.Email));
+        return Result.Success(MapDetail(order, await GetCustomerEmailAsync(order.UserId, cancellationToken)));
     }
 
     public async Task<Result<AdminOrderDetailResponse>> UpdateStatusAsync(string orderNumber, OrderStatus status, PaymentStatus paymentStatus, CancellationToken cancellationToken = default)
@@ -99,8 +93,13 @@ public class OrderAdminService(ApplicationDbContext context) : IOrderAdminServic
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == order.UserId, cancellationToken);
-        return Result.Success(MapDetail(order, user?.Email));
+        return Result.Success(MapDetail(order, await GetCustomerEmailAsync(order.UserId, cancellationToken)));
+    }
+
+    private async Task<string?> GetCustomerEmailAsync(string userId, CancellationToken cancellationToken)
+    {
+        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+        return user?.Email;
     }
 
     // OrderStatus is ordinal-ordered (Pending < Paid < Shipped < Delivered); Cancelled is a

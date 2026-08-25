@@ -24,6 +24,10 @@
   </div>
 </div>
 
+@if (error()) {
+  <div class="alert-error">{{ error() }}</div>
+}
+
 @if (loading()) {
   <div class="state-message">Loading orders…</div>
 } @else {
@@ -79,10 +83,6 @@
         <h2>{{ order.orderNumber }}</h2>
         <button type="button" class="cancel-btn" (click)="closeDetail()">Close</button>
       </div>
-
-      @if (error()) {
-        <div class="alert-error">{{ error() }}</div>
-      }
 
       <dl class="detail-grid">
         <div><dt>Customer</dt><dd>{{ order.customerName }}</dd></div>

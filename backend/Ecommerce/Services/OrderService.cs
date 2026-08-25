@@ -174,7 +174,7 @@ public class OrderService(ApplicationDbContext context) : IOrderService
             DateTime? completedOn = step.Status switch
             {
                 OrderStatus.Pending => order.CreatedOn,
-                _ when order.Status == step.Status => order.StatusUpdatedOn ?? order.CreatedOn,
+                _ when order.Status == step.Status => order.StatusUpdatedOn,
                 _ => null
             };
 

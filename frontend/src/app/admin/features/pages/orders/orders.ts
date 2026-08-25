@@ -14,6 +14,7 @@ const PAYMENT_STATUSES = ['Pending', 'Paid', 'Failed'];
 function legalNextOrderStatuses(current: string): string[] {
   if (current === 'Delivered' || current === 'Cancelled') return [current];
   const index = ORDER_STATUS_PROGRESSION.indexOf(current);
+  if (index < 0) return [current];
   return [...ORDER_STATUS_PROGRESSION.slice(index), 'Cancelled'];
 }
 
@@ -63,8 +64,12 @@ export class Orders {
         this.totalPages.set(data.totalPages);
         this.totalCount.set(data.totalCount);
         this.loading.set(false);
+        this.error.set('');
       },
-      error: () => this.loading.set(false),
+      error: () => {
+        this.loading.set(false);
+        this.error.set('Could not load orders. Try again.');
+      },
     });
   }
 
