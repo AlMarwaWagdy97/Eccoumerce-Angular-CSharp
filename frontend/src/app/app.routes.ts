@@ -31,6 +31,7 @@ import { Categories as AdminCategoriesComponent } from './admin/features/pages/c
 import { Products as AdminProductsComponent } from './admin/features/pages/products/products';
 import { ClientsComponent } from './admin/features/pages/clients/clients';
 import { SlidersComponent } from './admin/features/pages/sliders/sliders';
+import { Orders as AdminOrdersComponent } from './admin/features/pages/orders/orders';
 import { RolesComponent } from './admin/features/pages/roles/roles';
 import { adminAuthGuard } from './admin/core/guards/admin-auth-guard';
 import { adminPermissionGuard } from './admin/core/guards/admin-permission-guard';
@@ -51,6 +52,7 @@ export const routes: Routes = [
         { path: 'products', component: AdminProductsComponent, canActivate: [adminPermissionGuard('products.view')], title: 'Products' },
         { path: 'clients', component: ClientsComponent, canActivate: [adminPermissionGuard('clients.view')], title: 'Clients' },
         { path: 'sliders', component: SlidersComponent, canActivate: [adminPermissionGuard('sliders.view')], title: 'Sliders' },
+        { path: 'orders', component: AdminOrdersComponent, canActivate: [adminPermissionGuard('orders.view')], title: 'Orders' },
         { path: 'roles', component: RolesComponent, canActivate: [adminPermissionGuard('roles.manage')], title: 'Roles' },
         { path: 'admins', component: AdminsComponent, canActivate: [adminPermissionGuard('admins.manage')], title: 'Admins' },
     ]},

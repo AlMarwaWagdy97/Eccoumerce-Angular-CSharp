@@ -15,6 +15,7 @@ const NAV_ITEMS: AdminNavItem[] = [
   { label: 'Products', path: 'products', icon: 'bi-box-seam-fill', permission: 'products.view' },
   { label: 'Clients', path: 'clients', icon: 'bi-person-lines-fill', permission: 'clients.view' },
   { label: 'Sliders', path: 'sliders', icon: 'bi-images', permission: 'sliders.view' },
+  { label: 'Orders', path: 'orders', icon: 'bi-receipt', permission: 'orders.view' },
   { label: 'Roles', path: 'roles', icon: 'bi-shield-lock-fill', permission: 'roles.manage' },
   { label: 'Admins', path: 'admins', icon: 'bi-people-fill', permission: 'admins.manage' },
 ];

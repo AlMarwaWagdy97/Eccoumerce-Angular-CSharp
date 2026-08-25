@@ -1,0 +1,152 @@
+<!-- frontend/src/app/admin/features/pages/orders/orders.html -->
+<div class="panel-header">
+  <div>
+    <h1 class="page-title">Orders</h1>
+    <p class="page-subtitle">{{ totalCount() }} total.</p>
+  </div>
+  <div class="header-actions">
+    <div class="search-box">
+      <input
+        type="search"
+        class="form-control"
+        placeholder="Search order #, name, email, or mobile…"
+        [value]="searchTerm()"
+        (input)="onSearchInput($event)"
+        (keyup.enter)="search()">
+      <select class="form-control" [value]="statusFilter()" (change)="onStatusFilterChange($event)">
+        <option value="">All statuses</option>
+        @for (status of allOrderStatuses; track status) {
+          <option [value]="status">{{ status }}</option>
+        }
+      </select>
+      <button type="button" class="toggle-btn" (click)="search()">Search</button>
+    </div>
+  </div>
+</div>
+
+@if (loading()) {
+  <div class="state-message">Loading orders…</div>
+} @else {
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Order #</th>
+        <th>Customer</th>
+        <th>Total</th>
+        <th>Order Status</th>
+        <th>Payment</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (order of orders(); track order.id) {
+        <tr>
+          <td>{{ order.orderNumber }}</td>
+          <td>
+            {{ order.customerName }}
+            <div class="muted">{{ order.customerEmail }} · {{ order.customerMobile }}</div>
+          </td>
+          <td>{{ order.total | currency }}</td>
+          <td>
+            <span class="pill" [class.pill-off]="order.status === 'Cancelled'">{{ order.status }}</span>
+          </td>
+          <td>
+            <span class="pill" [class.pill-off]="order.paymentStatus === 'Failed'">{{ order.paymentStatus }}</span>
+          </td>
+          <td>{{ order.createdOn | date:'medium' }}</td>
+          <td class="actions">
+            <button type="button" [disabled]="busyOrderNumber() === order.orderNumber" (click)="view(order)">View</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr><td colspan="7" class="state-message">No orders match this search.</td></tr>
+      }
+    </tbody>
+  </table>
+
+  @if (totalPages() > 1) {
+    <div class="pager">
+      <button type="button" [disabled]="page() === 1" (click)="goToPage(page() - 1)">Previous</button>
+      <span class="muted">Page {{ page() }} of {{ totalPages() }}</span>
+      <button type="button" [disabled]="page() === totalPages()" (click)="goToPage(page() + 1)">Next</button>
+    </div>
+  }
+
+  @if (detail(); as order) {
+    <div class="detail-card">
+      <div class="detail-header">
+        <h2>{{ order.orderNumber }}</h2>
+        <button type="button" class="cancel-btn" (click)="closeDetail()">Close</button>
+      </div>
+
+      @if (error()) {
+        <div class="alert-error">{{ error() }}</div>
+      }
+
+      <dl class="detail-grid">
+        <div><dt>Customer</dt><dd>{{ order.customerName }}</dd></div>
+        <div><dt>Email</dt><dd>{{ order.customerEmail }}</dd></div>
+        <div><dt>Mobile</dt><dd>{{ order.customerMobile }}</dd></div>
+        <div><dt>Placed</dt><dd>{{ order.createdOn | date:'medium' }}</dd></div>
+        <div><dt>Payment method</dt><dd>{{ order.paymentMethod }}</dd></div>
+        <div><dt>Subtotal</dt><dd>{{ order.subTotal | currency }}</dd></div>
+        <div><dt>Shipping</dt><dd>{{ order.shippingCost | currency }}</dd></div>
+        <div><dt>Total</dt><dd>{{ order.total | currency }}</dd></div>
+      </dl>
+
+      <h3 class="section-title">Shipping address</h3>
+      <p class="address-block">
+        {{ order.shipToName }}<br>
+        {{ order.shipToPhone }}<br>
+        {{ order.shipToLine1 }}@if (order.shipToLine2) {, {{ order.shipToLine2 }}}<br>
+        {{ order.shipToCity }}, {{ order.shipToState }} {{ order.shipToPostalCode }}<br>
+        {{ order.shipToCountry }}
+      </p>
+
+      <h3 class="section-title">Items</h3>
+      <table class="data-table items-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Unit price</th>
+            <th>Qty</th>
+            <th>Line total</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of order.items; track item.productId) {
+            <tr>
+              <td>{{ item.productTitle }}</td>
+              <td>{{ item.unitPrice | currency }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.lineTotal | currency }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (canManage()) {
+        <div class="status-editor">
+          <div class="field-group">
+            <label>Order status</label>
+            <select class="form-control" [value]="statusDraft()" (change)="onStatusDraftChange($event)" [disabled]="isTerminal(order.status)">
+              @for (status of legalOrderStatuses(); track status) {
+                <option [value]="status">{{ status }}</option>
+              }
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Payment status</label>
+            <select class="form-control" [value]="paymentStatusDraft()" (change)="onPaymentStatusDraftChange($event)">
+              @for (status of paymentStatuses; track status) {
+                <option [value]="status">{{ status }}</option>
+              }
+            </select>
+          </div>
+          <button type="button" class="save-btn" [disabled]="saving()" (click)="saveStatus()">{{ saving() ? 'Saving…' : 'Save Status' }}</button>
+        </div>
+      }
+    </div>
+  }
+}
