@@ -156,7 +156,7 @@ public class OrderService(ApplicationDbContext context) : IOrderService
             var cancelledSteps = new[]
             {
                 new OrderTrackingStep(OrderStatus.Pending.ToString(), "Order placed", true, false, order.CreatedOn),
-                new OrderTrackingStep(OrderStatus.Cancelled.ToString(), "Order cancelled", true, true, null)
+                new OrderTrackingStep(OrderStatus.Cancelled.ToString(), "Order cancelled", true, true, order.StatusUpdatedOn)
             };
             return new OrderTrackingResponse(order.OrderNumber, order.Status.ToString(), order.CreatedOn, cancelledSteps);
         }
@@ -169,13 +169,22 @@ public class OrderService(ApplicationDbContext context) : IOrderService
             (Status: OrderStatus.Delivered, Label: "Delivered")
         };
 
-        var steps = progression.Select(step => new OrderTrackingStep(
-            step.Status.ToString(),
-            step.Label,
-            order.Status >= step.Status,
-            order.Status == step.Status,
-            step.Status == OrderStatus.Pending ? order.CreatedOn : null
-        )).ToList();
+        var steps = progression.Select(step =>
+        {
+            DateTime? completedOn = step.Status switch
+            {
+                OrderStatus.Pending => order.CreatedOn,
+                _ when order.Status == step.Status => order.StatusUpdatedOn ?? order.CreatedOn,
+                _ => null
+            };
+
+            return new OrderTrackingStep(
+                step.Status.ToString(),
+                step.Label,
+                order.Status >= step.Status,
+                order.Status == step.Status,
+                completedOn);
+        }).ToList();
 
         return new OrderTrackingResponse(order.OrderNumber, order.Status.ToString(), order.CreatedOn, steps);
     }

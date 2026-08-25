@@ -8,5 +8,6 @@ namespace Ecommerce.Errors
         public static readonly Error ProductNotFound = new("Order.ProductNotFound", "One or more products in the order were not found");
         public static readonly Error InsufficientStock = new("Order.InsufficientStock", "One or more products do not have enough stock");
         public static readonly Error UserNotAuthenticated = new("Order.UserNotAuthenticated", "The current user could not be identified");
+        public static readonly Error InvalidStatusTransition = new("Order.InvalidStatusTransition", "This order cannot move to the requested status from its current status");
     }
 }

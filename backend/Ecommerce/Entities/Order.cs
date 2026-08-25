@@ -7,6 +7,7 @@ public sealed class Order : AuditableEntity
     public string UserId { get; set; } = string.Empty;
 
     public OrderStatus Status { get; set; } = OrderStatus.Pending;
+    public DateTime? StatusUpdatedOn { get; set; }
     public PaymentMethod PaymentMethod { get; set; } = PaymentMethod.CashOnDelivery;
     public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Pending;
 
