@@ -32,6 +32,7 @@ public class DashboardService(ApplicationDbContext context) : IDashboardService
 
         var recentOrders = await _context.Orders.AsNoTracking()
             .OrderByDescending(x => x.CreatedOn)
+            .ThenByDescending(x => x.Id)
             .Take(RecentOrdersCount)
             .Select(x => new RecentOrderResponse(x.OrderNumber, x.ShipToName, x.Status.ToString(), x.Total, x.CreatedOn))
             .ToListAsync(cancellationToken);
@@ -71,7 +72,7 @@ public class DashboardService(ApplicationDbContext context) : IDashboardService
         var since = DateTime.UtcNow.Date.AddDays(-(RevenueByDayWindow - 1));
 
         var recentOrders = await _context.Orders.AsNoTracking()
-            .Where(x => x.Status != OrderStatus.Cancelled && x.CreatedOn >= since)
+            .Where(x => x.Status != OrderStatus.Cancelled && x.CreatedOn >= since && x.CreatedOn < since.AddDays(RevenueByDayWindow))
             .Select(x => new { x.CreatedOn, x.Total })
             .ToListAsync(cancellationToken);
 
@@ -91,6 +92,10 @@ public class DashboardService(ApplicationDbContext context) : IDashboardService
     // Filters via a subquery on Order.Id rather than accessing OrderItem.Order.Status
     // directly — avoids relying on required-navigation predicate translation, the same
     // defensive posture Phase 4 landed on after its Include-on-a-filtered-navigation defect.
+    // Materializes matching OrderItem rows before grouping (rather than grouping in SQL)
+    // because a composite-key GroupBy with multiple Sum aggregates in one Select often
+    // isn't translatable — cost scales with total non-cancelled order-item count, which is
+    // fine at current data volumes; revisit only if that's ever measured as slow.
     private async Task<IReadOnlyList<TopProductResponse>> GetTopProductsAsync(CancellationToken cancellationToken)
     {
         var nonCancelledOrderIds = _context.Orders.AsNoTracking()
