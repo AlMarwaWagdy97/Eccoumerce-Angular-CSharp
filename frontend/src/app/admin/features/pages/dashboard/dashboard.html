@@ -1,2 +1,126 @@
 <h1 class="page-title">Dashboard</h1>
-<p class="page-subtitle">Welcome back! The full overview (sales, orders, stock alerts) ships in a later phase.</p>
+<p class="page-subtitle">An overview of orders, products, and clients.</p>
+
+@if (summaryLoading()) {
+  <div class="state-message">Loading dashboard…</div>
+} @else if (summaryError()) {
+  <div class="alert-error">{{ summaryError() }}</div>
+} @else if (summary(); as data) {
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <span class="kpi-label">Total Revenue</span>
+      <span class="kpi-value">{{ data.totalRevenue | currency }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Total Orders</span>
+      <span class="kpi-value">{{ data.totalOrders }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Active Products</span>
+      <span class="kpi-value">{{ data.activeProductCount }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Clients</span>
+      <span class="kpi-value">{{ data.clientCount }}</span>
+    </div>
+    <div class="kpi-card" [class.kpi-warning]="data.lowStockProductCount > 0">
+      <span class="kpi-label">Low Stock</span>
+      <span class="kpi-value">{{ data.lowStockProductCount }}</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-heading">
+      <h2 class="section-title">Recent Orders</h2>
+      <a routerLink="/admin/orders" class="panel-link">View all orders</a>
+    </div>
+    @if (data.recentOrders.length) {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Order #</th>
+            <th>Customer</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (order of data.recentOrders; track order.orderNumber) {
+            <tr>
+              <td>{{ order.orderNumber }}</td>
+              <td>{{ order.customerName }}</td>
+              <td><span class="pill" [class.pill-off]="order.status === 'Cancelled'">{{ order.status }}</span></td>
+              <td>{{ order.total | currency }}</td>
+              <td>{{ order.createdOn | date:'medium' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <p class="state-message">No orders yet.</p>
+    }
+  </div>
+}
+
+@if (canViewReports()) {
+  <div class="panel">
+    <h2 class="section-title">Reports</h2>
+
+    @if (reportsLoading()) {
+      <div class="state-message">Loading reports…</div>
+    } @else if (reportsError()) {
+      <div class="alert-error">{{ reportsError() }}</div>
+    } @else if (reports(); as data) {
+      <div class="report-grid">
+        <div class="report-block">
+          <h3 class="report-title">Orders by Status</h3>
+          @if (data.ordersByStatus.length) {
+            <table class="data-table">
+              <thead><tr><th>Status</th><th>Count</th></tr></thead>
+              <tbody>
+                @for (row of data.ordersByStatus; track row.status) {
+                  <tr><td>{{ row.status }}</td><td>{{ row.count }}</td></tr>
+                }
+              </tbody>
+            </table>
+          } @else {
+            <p class="state-message">No orders yet.</p>
+          }
+        </div>
+
+        <div class="report-block">
+          <h3 class="report-title">Revenue — Last 7 Days</h3>
+          @if (data.revenueByDay.length) {
+            <table class="data-table">
+              <thead><tr><th>Date</th><th>Orders</th><th>Revenue</th></tr></thead>
+              <tbody>
+                @for (row of data.revenueByDay; track row.date) {
+                  <tr><td>{{ row.date | date:'mediumDate' }}</td><td>{{ row.orderCount }}</td><td>{{ row.revenue | currency }}</td></tr>
+                }
+              </tbody>
+            </table>
+          } @else {
+            <p class="state-message">No revenue data yet.</p>
+          }
+        </div>
+
+        <div class="report-block">
+          <h3 class="report-title">Top Products</h3>
+          @if (data.topProducts.length) {
+            <table class="data-table">
+              <thead><tr><th>Product</th><th>Qty Sold</th><th>Revenue</th></tr></thead>
+              <tbody>
+                @for (row of data.topProducts; track row.productId) {
+                  <tr><td>{{ row.productTitle }}</td><td>{{ row.quantitySold }}</td><td>{{ row.revenue | currency }}</td></tr>
+                }
+              </tbody>
+            </table>
+          } @else {
+            <p class="state-message">No sales yet.</p>
+          }
+        </div>
+      </div>
+    }
+  </div>
+}

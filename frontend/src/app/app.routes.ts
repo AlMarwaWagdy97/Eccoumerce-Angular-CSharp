@@ -47,7 +47,7 @@ export const routes: Routes = [
         { path: 'reset-password', component: AdminResetPasswordComponent, title: 'Reset Password' },
     ]},
     { path: 'admin', component: AdminLayoutComponent, canActivate: [adminAuthGuard], children: [
-        { path: '', component: DashboardComponent, title: 'Admin Dashboard' },
+        { path: '', component: DashboardComponent, canActivate: [adminPermissionGuard('dashboard.view')], title: 'Admin Dashboard' },
         { path: 'categories', component: AdminCategoriesComponent, canActivate: [adminPermissionGuard('categories.view')], title: 'Categories' },
         { path: 'products', component: AdminProductsComponent, canActivate: [adminPermissionGuard('products.view')], title: 'Products' },
         { path: 'clients', component: ClientsComponent, canActivate: [adminPermissionGuard('clients.view')], title: 'Clients' },

@@ -7,4 +7,128 @@
 
 .page-subtitle {
   color: $admin-muted;
+  margin-bottom: 1.5rem;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.kpi-card {
+  background: #fff;
+  border-radius: $admin-radius;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  &.kpi-warning {
+    background: rgba(#b3261e, 0.06);
+  }
+}
+
+.kpi-label {
+  color: $admin-muted;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.kpi-value {
+  color: $admin-text;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.panel {
+  margin-bottom: 1.5rem;
+}
+
+.panel-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.panel-link {
+  color: $admin-green;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+.section-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: $admin-text;
+  margin: 0 0 0.75rem;
+}
+
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.report-block {
+  background: #fff;
+  border-radius: $admin-radius;
+  padding: 1.25rem;
+}
+
+.report-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: $admin-text;
+  margin: 0 0 0.75rem;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    text-align: left;
+    padding: 0.6rem 0.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    font-size: 0.85rem;
+  }
+
+  th {
+    color: $admin-muted;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+}
+
+.pill {
+  background: rgba($admin-green, 0.12);
+  color: $admin-green;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+
+  &.pill-off {
+    background: rgba(#b3261e, 0.1);
+    color: #b3261e;
+  }
+}
+
+.state-message {
+  color: $admin-muted;
+  padding: 0.75rem 0;
+}
+
+.alert-error {
+  background: rgba(#b3261e, 0.08);
+  color: #b3261e;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
 }
