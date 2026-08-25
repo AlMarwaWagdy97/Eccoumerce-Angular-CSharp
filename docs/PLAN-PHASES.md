@@ -1,8 +1,8 @@
 # Plan Phases — Status Tracker
 
-**Last updated:** 2026-08-24
+**Last updated:** 2026-08-25
 **Current branch:** `main`
-**Currently doing:** Phase 3 (Products admin) is complete — all 4 tasks done, final whole-branch review passed, merged to `main` and pushed to `origin/main`. Ready to move to Phase 4 (Orders admin) or Phase 5 (Dashboard/Reports).
+**Currently doing:** Phase 4 (Orders admin) is complete — all 3 tasks done, final whole-branch review passed, merged to `main` and pushed to `origin/main`. Ready to move to Phase 5 (Dashboard/Reports) — the last phase on the original roadmap.
 
 Legend: ✅ Done · 🔵 Doing now · ⬜ Not started · ⛔ Blocked
 
@@ -22,7 +22,7 @@ Legend: ✅ Done · 🔵 Doing now · ⬜ Not started · ⛔ Blocked
 | **2A** | **Foundations: audit trail, soft-delete, file upload** | `docs/superpowers/plans/2026-08-12-admin-phase2a-foundations.md` (9 tasks) | ✅ **Done** — 9/9 tasks + 1 follow-up defect fix |
 | 2B | Categories, Clients, Sliders | `docs/superpowers/plans/2026-08-12-admin-phase2b-categories-clients-sliders.md` (10 tasks) | ✅ **Done** — 10/10 tasks + closing checks + 1 follow-up defect fix + 1 build-budget fix |
 | 3 | Products admin | `docs/superpowers/specs/2026-08-20-admin-phase3-products-design.md`, `docs/superpowers/plans/2026-08-20-admin-phase3-products.md` (4 tasks) | ✅ **Done** — 4/4 tasks + final whole-branch review + 1 follow-up fix round; merged to `main` (`736bbba..0f772de`), pushed to `origin/main` |
-| 4 | Orders admin | not yet designed | ⬜ Not started |
+| 4 | Orders admin | `docs/superpowers/specs/2026-08-24-admin-phase4-orders-design.md`, `docs/superpowers/plans/2026-08-25-admin-phase4-orders.md` (3 tasks) | ✅ **Done** — 3/3 tasks + final whole-branch review + 3 follow-up fix rounds; merged to `main` (`86549e2..5f065b0`), pushed to `origin/main` |
 | 5 | Dashboard / Reports | not yet designed | ⬜ Not started |
 
 ---
@@ -154,7 +154,38 @@ Executed via `superpowers:subagent-driven-development` (fresh implementer subage
 
 ---
 
-## 5. Explicitly out of scope for Phase 2
+## 5. Phase 4 — Orders Admin
+
+Progress: **3 done · 0 remaining** — plan complete, final whole-branch review passed, merged to `main`
+
+Executed via `superpowers:subagent-driven-development`, same as Phase 3. This phase's SDD run was the most eventful yet — every one of the 3 tasks needed at least one fix round.
+
+| Task | Area | Deliverable | Status |
+|---|---|---|---|
+| 1 | Backend | `OrderAdminService` — admin order list (search order#/name/email/mobile + status filter, paginated), detail, forward-only `OrderStatus` transitions + freely-editable `PaymentStatus`, restock-on-cancel, new `Order.StatusUpdatedOn` column | ✅ Done — `9d277a0`, fix round `433bc63` (see below); 18 new tests |
+| 2 | Backend | `AdminOrdersController` at `api/Admin/Orders`, keyed by `orderNumber`, gated `orders.view`/`orders.manage` | ✅ Done — `efc4c73`; approved clean, no fix round; 4 new auth tests |
+| 3 | Frontend | Orders admin page — search, status filter, pagination, detail panel with dual status editors | ✅ Done — `ebfdc3a`, fix round `173f9fa` (see below) |
+
+**Task 1 fix round:** task review caught a real EF Core defect — `Include(x => x.User)` on `Order.User` (a required navigation whose target `ApplicationUser` carries the global `!IsDeleted` filter) silently drops the *entire* `Order` row, not just nulls the navigation, when the customer account is soft-deleted. Only `GetByOrderNumberAsync` had been patched; `GetAllAsync` (would have hidden such orders from the admin list entirely) and `UpdateStatusAsync` (would have falsely reported `OrderNotFound`) still carried it. Fixed across all three methods by avoiding the navigation entirely — batch-loading/looking up customer emails via separate queries and passing them as parameters rather than mutating `order.User`. Confirmed the underlying implementer report's test-evidence was unreliable this round (claimed "1 failed", the controller's own independent re-run showed 16/16 clean) — a reminder that implementer self-reports need independent verification, not just trust.
+
+**Task 3 fix round:** task review caught a genuine async race in the frontend detail view — clicking **View** on order A then order B before A's fetch resolved let whichever response arrived last silently overwrite the detail panel, including discarding an in-progress status-dropdown selection; **Save** could then commit against the wrong order. Fixed with a request-token guard (only the latest `view()` call's response is ever applied).
+
+**Final whole-branch review** (most capable model, range `86549e2..173f9fa`, then fix `5f065b0`): verdict "Ready to merge with fixes." Verified independently: 159/159 tests, 0 tsc errors, all 8 Global Constraints hold, the one write endpoint (`UpdateStatusAsync`) has no authorization gap for a direct API caller. Found 4 Important issues invisible to any single task's diff — no enum validation on `UpdateOrderStatusRequest` (an out-of-range value would pass the ordinal transition check and permanently brick an order, and corrupt the customer-facing tracking page), a `?? order.CreatedOn` fallback in the tracking-timeline fix that showed a *wrong* date for every pre-migration order (worse than the `null` it replaced), zero test coverage for `OrderService.BuildTracking`, and a page-wide error surface that structurally could never render (nested inside a conditional that was false exactly when there was an error) — all fixed in one consolidated commit (`5f065b0`, 165/165 tests) and confirmed by a scoped re-review.
+
+**Parked, non-blocking (rulings recorded, not fixed):**
+- Two trivial, self-correcting issues introduced by the final fix commit itself: a stale error banner can linger through one extra list reload before self-clearing; one code comment cross-references a method a same-commit DRY refactor moved code out of. Neither affects behavior or data — deemed not worth a fourth review round.
+- Double-restock risk if two admins cancel the same order concurrently (no optimistic concurrency anywhere in the codebase — `OrderService.CreateAsync`'s stock decrement has the identical read-then-write shape). Explicitly out of scope for this branch; belongs in its own change if it's ever prioritized.
+
+**Closing checks — all passed (2026-08-25)**
+- ✅ `dotnet test backend/Ecommerce.Tests/Ecommerce.Tests.csproj` — 165/165 pass (worktree and re-verified on the merged `main` result).
+- ✅ `npx tsc --noEmit -p frontend/tsconfig.app.json` — 0 errors (worktree and merged result).
+- ✅ Merged to `main` via clean fast-forward (`86549e2..5f065b0`, 6 commits), pushed to `origin/main`.
+- ⬜ `npm run build` from `frontend/` (production build + bundle-budget check) — not run this pass.
+- ⬜ Full manual browser walkthrough — not performed; verification relied on automated tests + three levels of code review (per-task ×2, final whole-branch) rather than a manual pass.
+
+---
+
+## 6. Explicitly out of scope for Phase 2
 
 - Products, Orders, Dashboard/Reports admin features (Phases 3–5).
 - "View deleted / restore" UI for soft-deleted entities.
@@ -165,7 +196,7 @@ Executed via `superpowers:subagent-driven-development` (fresh implementer subage
 
 ---
 
-## 6. Phase 2B closing checks — all passed (2026-08-19)
+## 7. Phase 2B closing checks — all passed (2026-08-19)
 
 - ✅ `dotnet test backend/Ecommerce.Tests/Ecommerce.Tests.csproj` — 106/106 pass.
 - ✅ `dotnet build backend/Ecommerce.slnx` — 0 errors.
@@ -194,14 +225,20 @@ Executed via `superpowers:subagent-driven-development` (fresh implementer subage
 - ✅ No manual `IsDeleted`/`CreatedById`/`UpdatedById`/`DeletedById` assignment anywhere in
   `backend/Ecommerce/Services` or `backend/Ecommerce/Controllers` — confirmed by search.
 
-**Next action (superseded 2026-08-24):** Phase 2B merged into `main` as part of Phase 3's
-base. Phase 3 — Products admin (see §4) is now also done, merged, and pushed. Next up:
-**Phase 4 — Orders admin** or **Phase 5 — Dashboard/Reports**, neither yet designed; either
-would need its own spec + plan doc first, following the pattern of
-`docs/superpowers/specs/2026-08-20-admin-phase3-products-design.md` /
-`docs/superpowers/plans/2026-08-20-admin-phase3-products.md`.
+**Next action (superseded 2026-08-25):** Phase 2B and Phase 3 are both merged into `main`.
+Phase 4 — Orders admin (see §5) is now also done, merged, and pushed. **Phase 5 —
+Dashboard/Reports** is the one remaining phase on the original roadmap; not yet designed,
+needs its own spec + plan doc first, following the pattern of
+`docs/superpowers/specs/2026-08-24-admin-phase4-orders-design.md` /
+`docs/superpowers/plans/2026-08-25-admin-phase4-orders.md`.
 
-Housekeeping note (from Phase 2B, still unresolved as of 2026-08-24): the dev database holds
+Housekeeping note (from Phase 2B, still unresolved as of 2026-08-25): the dev database holds
 two soft-deleted `Temp QA` roles (ids 3 and 5) left by the SQL-Server verification, and
 `frontend/src/app/site/core/guards/auth-guard.ts` has an uncommitted edit on `main` that
-predates this work and was never staged (still present, unrelated to Phase 3).
+predates this work and was never staged (still present, unrelated to Phases 3-4).
+
+Housekeeping note (from Phase 4, new): the double-restock-under-concurrent-cancel risk in
+`OrderAdminService.UpdateStatusAsync` (no optimistic concurrency on `Order`, matching
+`OrderService.CreateAsync`'s existing stock-decrement pattern) was explicitly deferred —
+worth a dedicated concurrency pass across all stock-mutating paths if it's ever prioritized,
+not a one-off fix.
