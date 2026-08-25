@@ -130,7 +130,7 @@
         <div class="status-editor">
           <div class="field-group">
             <label>Order status</label>
-            <select class="form-control" [value]="statusDraft()" (change)="onStatusDraftChange($event)" [disabled]="isTerminal(order.status)">
+            <select class="form-control" [value]="statusDraft()" (change)="onStatusDraftChange($event)" [disabled]="isTerminal(order.status) || saving()">
               @for (status of legalOrderStatuses(); track status) {
                 <option [value]="status">{{ status }}</option>
               }
@@ -138,7 +138,7 @@
           </div>
           <div class="field-group">
             <label>Payment status</label>
-            <select class="form-control" [value]="paymentStatusDraft()" (change)="onPaymentStatusDraftChange($event)">
+            <select class="form-control" [value]="paymentStatusDraft()" (change)="onPaymentStatusDraftChange($event)" [disabled]="saving()">
               @for (status of paymentStatuses; track status) {
                 <option [value]="status">{{ status }}</option>
               }

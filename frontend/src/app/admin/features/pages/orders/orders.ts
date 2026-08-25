@@ -28,6 +28,7 @@ export class Orders {
   private auth = inject(AdminAuthServices);
 
   private readonly pageSize = 20;
+  private latestViewRequestId = 0;
 
   readonly paymentStatuses = PAYMENT_STATUSES;
   readonly allOrderStatuses = [...ORDER_STATUS_PROGRESSION, 'Cancelled'];
@@ -101,14 +102,21 @@ export class Orders {
     this.detail.set(null);
     this.error.set('');
     this.busyOrderNumber.set(order.orderNumber);
+
+    const requestId = ++this.latestViewRequestId;
     this.orderService.getOrder(order.orderNumber).subscribe({
       next: data => {
+        if (requestId !== this.latestViewRequestId) return;
         this.detail.set(data);
         this.statusDraft.set(data.status);
         this.paymentStatusDraft.set(data.paymentStatus);
         this.busyOrderNumber.set(null);
       },
-      error: () => this.busyOrderNumber.set(null),
+      error: () => {
+        if (requestId !== this.latestViewRequestId) return;
+        this.busyOrderNumber.set(null);
+        this.error.set('Could not load this order. Try again.');
+      },
     });
   }
 
