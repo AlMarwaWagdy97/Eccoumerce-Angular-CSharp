@@ -338,4 +338,43 @@ public class OrderAdminServiceTests
         Assert.False(result.IsSuccess);
         Assert.Equal("Order.NotFound", result.Error.Code);
     }
+
+    [Fact]
+    public async Task GetAllAsync_includes_orders_from_a_deleted_customer_account()
+    {
+        await using var context = CreateContext();
+        var user = await SeedUserAsync(context);
+        var categoryId = await SeedCategoryAsync(context);
+        var product = await SeedProductAsync(context, categoryId);
+        await SeedOrderAsync(context, user, product, orderNumber: "ORD-ORPHANLIST");
+
+        context.Users.Remove(user);
+        await context.SaveChangesAsync();
+        var service = new OrderAdminService(context);
+
+        var result = await service.GetAllAsync(null, null, 1, 20);
+
+        Assert.Equal(1, result.Value.TotalCount);
+        Assert.Equal("(deleted account)", result.Value.Items[0].CustomerEmail);
+    }
+
+    [Fact]
+    public async Task UpdateStatusAsync_succeeds_for_an_order_from_a_deleted_customer_account()
+    {
+        await using var context = CreateContext();
+        var user = await SeedUserAsync(context);
+        var categoryId = await SeedCategoryAsync(context);
+        var product = await SeedProductAsync(context, categoryId);
+        await SeedOrderAsync(context, user, product, orderNumber: "ORD-ORPHANUPD", status: OrderStatus.Pending);
+
+        context.Users.Remove(user);
+        await context.SaveChangesAsync();
+        var service = new OrderAdminService(context);
+
+        var result = await service.UpdateStatusAsync("ORD-ORPHANUPD", OrderStatus.Shipped, PaymentStatus.Pending);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal("Shipped", result.Value.Status);
+        Assert.Equal("(deleted account)", result.Value.CustomerEmail);
+    }
 }

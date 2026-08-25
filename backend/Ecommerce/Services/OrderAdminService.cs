@@ -14,16 +14,24 @@ public class OrderAdminService(ApplicationDbContext context) : IOrderAdminServic
         page = page < 1 ? 1 : page;
         pageSize = pageSize < 1 ? 20 : Math.Min(pageSize, MaxPageSize);
 
-        var query = _context.Orders.AsNoTracking().Include(x => x.User).AsQueryable();
+        var query = _context.Orders.AsNoTracking().AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(search))
         {
             var term = search.Trim().ToLower();
+            // Resolved as a plain, un-joined query against Users so a soft-deleted
+            // account's global filter can never silently drop matching Order rows —
+            // Order.User is a required navigation and querying through it here would.
+            var matchingUserIds = await _context.Users.AsNoTracking()
+                .Where(u => u.Email != null && u.Email.ToLower().Contains(term))
+                .Select(u => u.Id)
+                .ToListAsync(cancellationToken);
+
             query = query.Where(x =>
                 x.OrderNumber.ToLower().Contains(term) ||
                 x.ShipToName.ToLower().Contains(term) ||
                 x.ShipToPhone.ToLower().Contains(term) ||
-                (x.User != null && x.User.Email != null && x.User.Email.ToLower().Contains(term)));
+                matchingUserIds.Contains(x.UserId));
         }
 
         if (status is not null)
@@ -39,35 +47,35 @@ public class OrderAdminService(ApplicationDbContext context) : IOrderAdminServic
 
         var totalPages = totalCount == 0 ? 0 : (int)Math.Ceiling(totalCount / (double)pageSize);
 
-        return Result.Success(new OrdersPageResponse(
-            orders.Select(MapSummary).ToList(), page, pageSize, totalCount, totalPages));
+        var userIds = orders.Select(x => x.UserId).Distinct().ToList();
+        var users = await _context.Users.AsNoTracking()
+            .Where(x => userIds.Contains(x.Id))
+            .ToDictionaryAsync(x => x.Id, cancellationToken);
+
+        var items = orders.Select(o => MapSummary(o, users.TryGetValue(o.UserId, out var u) ? u.Email : null)).ToList();
+
+        return Result.Success(new OrdersPageResponse(items, page, pageSize, totalCount, totalPages));
     }
 
     public async Task<Result<AdminOrderDetailResponse>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default)
     {
         var order = await _context.Orders
+            .AsNoTracking()
             .Include(x => x.Items)
                 .ThenInclude(i => i.Product)
-            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.OrderNumber == orderNumber, cancellationToken);
 
         if (order is null)
             return Result.Failure<AdminOrderDetailResponse>(OrderErrors.OrderNotFound);
 
-        // Load the user separately with ignored query filters to handle soft-deleted accounts
-        if (order.UserId != null)
-        {
-            var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == order.UserId, cancellationToken);
-            order.User = user;
-        }
+        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == order.UserId, cancellationToken);
 
-        return Result.Success(MapDetail(order));
+        return Result.Success(MapDetail(order, user?.Email));
     }
 
     public async Task<Result<AdminOrderDetailResponse>> UpdateStatusAsync(string orderNumber, OrderStatus status, PaymentStatus paymentStatus, CancellationToken cancellationToken = default)
     {
         var order = await _context.Orders
-            .Include(x => x.User)
             .Include(x => x.Items)
                 .ThenInclude(i => i.Product)
             .FirstOrDefaultAsync(x => x.OrderNumber == orderNumber, cancellationToken);
@@ -90,7 +98,9 @@ public class OrderAdminService(ApplicationDbContext context) : IOrderAdminServic
         order.PaymentStatus = paymentStatus;
 
         await _context.SaveChangesAsync(cancellationToken);
-        return Result.Success(MapDetail(order));
+
+        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == order.UserId, cancellationToken);
+        return Result.Success(MapDetail(order, user?.Email));
     }
 
     // OrderStatus is ordinal-ordered (Pending < Paid < Shipped < Delivered); Cancelled is a
@@ -124,22 +134,22 @@ public class OrderAdminService(ApplicationDbContext context) : IOrderAdminServic
         }
     }
 
-    private static AdminOrderSummaryResponse MapSummary(Order order) => new(
+    private static AdminOrderSummaryResponse MapSummary(Order order, string? customerEmail) => new(
         order.Id,
         order.OrderNumber,
         order.ShipToName,
-        order.User?.Email ?? "(deleted account)",
+        customerEmail ?? "(deleted account)",
         order.ShipToPhone,
         order.Status.ToString(),
         order.PaymentStatus.ToString(),
         order.Total,
         order.CreatedOn);
 
-    private static AdminOrderDetailResponse MapDetail(Order order) => new(
+    private static AdminOrderDetailResponse MapDetail(Order order, string? customerEmail) => new(
         order.Id,
         order.OrderNumber,
         order.ShipToName,
-        order.User?.Email ?? "(deleted account)",
+        customerEmail ?? "(deleted account)",
         order.ShipToPhone,
         order.Status.ToString(),
         order.PaymentMethod.ToString(),
