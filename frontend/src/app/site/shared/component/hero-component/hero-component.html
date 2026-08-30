@@ -1,12 +1,41 @@
- <section class="hero-section position-relative text-white overflow-hidden mb-5">
-    <div class="container-fluid p-0">
-        <div class="hero-bg d-flex align-items-center px-4 px-md-5"
-            style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('assets/hero-bg.jpg'); height: 500px; background-size: cover; background-position: center;">
-            <div class="container text-start">
-                <h1 class="display-3 fw-bold mb-2">Tech Deals</h1>
-                <p class="fs-4 mb-4 opacity-90">Up to 40% off on premium electronics</p>
-                <button class="btn btn-teal btn-lg px-4 rounded-3 text-white fw-medium">Shop Now</button>
+<section class="hero-section position-relative text-white overflow-hidden mb-5">
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+
+        @if (slides().length > 1) {
+            <div class="carousel-indicators">
+                @for (slide of slides(); track slide.id; let i = $index) {
+                    <button type="button" data-bs-target="#heroCarousel" [attr.data-bs-slide-to]="i"
+                        [class.active]="i === 0" [attr.aria-current]="i === 0 ? 'true' : null"
+                        [attr.aria-label]="'Slide ' + (i + 1)"></button>
+                }
             </div>
+        }
+
+        <div class="carousel-inner">
+            @for (slide of slides(); track slide.id; let i = $index) {
+                <div class="carousel-item" [class.active]="i === 0">
+                    <div class="hero-bg d-flex align-items-center px-4 px-md-5"
+                        [style.background-image]="'linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(' + slide.imageUrl + ')'">
+                        <div class="container text-start">
+                            <h1 class="display-3 fw-bold mb-2">{{ slide.title }}</h1>
+                            @if (slide.link) {
+                                <a [href]="slide.link" class="btn btn-teal btn-lg px-4 rounded-3 text-white fw-medium">Shop Now</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
+
+        @if (slides().length > 1) {
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        }
     </div>
 </section>
