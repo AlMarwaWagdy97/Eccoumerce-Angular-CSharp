@@ -1,4 +1,4 @@
-@import '../../../shared/scss/variables';
+@use '../../../shared/scss/variables' as *;
 
 .form-title {
   font-weight: 800;

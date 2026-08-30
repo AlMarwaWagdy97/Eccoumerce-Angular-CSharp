@@ -1,4 +1,4 @@
-@import '../../../shared/scss/variables';
+@use '../../../shared/scss/variables' as *;
 
 .page-title {
   font-weight: 800;

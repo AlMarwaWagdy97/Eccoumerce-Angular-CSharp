@@ -1,5 +1,5 @@
 // frontend/src/app/admin/features/pages/orders/orders.scss
-@import '../../../shared/scss/variables';
+@use '../../../shared/scss/variables' as *;
 
 .panel-header {
   display: flex;

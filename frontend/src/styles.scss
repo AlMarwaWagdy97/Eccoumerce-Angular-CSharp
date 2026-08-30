@@ -1,4 +1,4 @@
-@import './app/site/shared/scss/variables.scss';
+@use './app/site/shared/scss/variables.scss' as *;
 
 $theme-colors: (
   "primary": $primary-teal,
